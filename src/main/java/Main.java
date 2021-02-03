@@ -1,3 +1,4 @@
+import backend.Assistant;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.control.Button;
@@ -25,6 +26,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage)  throws FileNotFoundException {
 
+        Assistant newAssistant = new Assistant();
+
+
         Image bg =new Image(new FileInputStream("src/assets/cliff-background.jpg"));
         ImageView iv = new ImageView(bg);
         iv.setFitHeight(600);
@@ -45,6 +49,7 @@ public class Main extends Application {
         startButton.setOnAction(event -> {
             System.out.println("Text: " + textField.getText());
             // Add an action when the button is pressed
+//            newAssistant.processQuery(textField.getText());
         });
         pane.getChildren().add(startButton);
 

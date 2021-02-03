@@ -11,7 +11,7 @@ public class Assistant {
     private BlockingQueue<Result> results;
     private Set<Thread> runningTasks;
 
-    Assistant(){
+    public Assistant(){
         skills = new HashSet<>();
         results = new LinkedBlockingQueue<>();
         runningTasks = new HashSet<>();
@@ -21,7 +21,7 @@ public class Assistant {
      * Push a query and process it
      * @param query
      */
-    void processQuery(String query){
+    public void processQuery(String query){
         //TODO: Modify this function such that it supports
         //            1) Using a threshold to determine if no skill can handle the query
         //            2) Ask the user to rephrase if more than 1 skill can handle the query

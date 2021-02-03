@@ -21,7 +21,7 @@ public abstract class SkillDispatcher {
      * Return a task to be queue for execution
      * @param tokens
      * @param resultsQueue
-     * @return a skill task to be executed
+     * @return a skill to be executed
      */
     public abstract Skill createTask(List<String> tokens, BlockingQueue<Result> resultsQueue);
 
