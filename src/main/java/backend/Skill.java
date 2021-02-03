@@ -8,7 +8,7 @@ public abstract class Skill implements Runnable{
     private List<String> queryTokens;
     private BlockingQueue<Result> outputChannel;
 
-    Skill(SkillDispatcher parent, List<String> tokens, BlockingQueue<Result> outputChannel){
+    public Skill(SkillDispatcher parent, List<String> tokens, BlockingQueue<Result> outputChannel){
         this.parent = parent;
         this.queryTokens = tokens;
         this.outputChannel = outputChannel;

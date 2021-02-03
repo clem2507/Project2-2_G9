@@ -10,7 +10,7 @@ import java.util.concurrent.BlockingQueue;
 public class PrintSkill extends SkillDispatcher {
     private String keyword = "print";
 
-    protected PrintSkill(String name) {
+    public PrintSkill(String name) {
         super(name);
     }
 
@@ -25,8 +25,15 @@ public class PrintSkill extends SkillDispatcher {
     }
 
     @Override
-    //TODO: this method is incomplete
     public Skill createTask(List<String> tokens, BlockingQueue<Result> resultsQueue) {
-        return null;
+        Skill skill = new Skill(new PrintSkill(getName()),tokens, resultsQueue) {
+            @Override
+            public void run() {
+                for (int x = 1; x<tokens.size(); x++){
+                    System.out.println(tokens.get(x) + " ");
+                }
+            }
+        };
+        return skill;
     }
 }

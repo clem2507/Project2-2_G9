@@ -48,7 +48,7 @@ public class Main extends Application {
         startButton.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 17));
         startButton.setOnAction(event -> {
             System.out.println("Text: " + textField.getText());
-            // Add an action when the button is pressed
+
 //            newAssistant.processQuery(textField.getText());
         });
         pane.getChildren().add(startButton);
