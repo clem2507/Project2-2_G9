@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Assistant {
-    private Set<Skill> skills;
+    private Set<SkillDispatcher> skills;
     private BlockingQueue<Result> results;
     private Set<Thread> runningTasks;
 
@@ -27,10 +27,10 @@ public class Assistant {
         //            2) Ask the user to rephrase if more than 1 skill can handle the query
         assert !skills.isEmpty();
         List<String> tokens = Arrays.stream(query.split("\\s+")).collect(Collectors.toList());
-        Skill selectedSkill = this.skills.stream()
+        SkillDispatcher selectedSkill = this.skills.stream()
                 .max(Comparator.comparingDouble(a -> a.weight(tokens)))
                 .orElseThrow();
-        Runnable task = selectedSkill.createTask(tokens, results);
+        Skill task = selectedSkill.createTask(tokens, results);
         Thread thread = new Thread(task);
         thread.start();
         runningTasks.add(thread);
@@ -93,7 +93,7 @@ public class Assistant {
      * Add a skill
      * @param skill skill to add
      */
-    void addSkill(Skill skill){
+    void addSkill(SkillDispatcher skill){
         assert !skills.contains(skill);
         assert skill.getName() != null;
         skills.add(skill);

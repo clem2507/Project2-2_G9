@@ -1,10 +1,10 @@
 package backend;
 
 public class Result {
-    private Skill sender;
+    private SkillDispatcher sender;
     private String message;
 
-    Result(Skill sender, String message){
+    Result(SkillDispatcher sender, String message){
         this.sender = sender;
         this.message = message;
     }
@@ -13,7 +13,7 @@ public class Result {
      * Return a reference to the skill that generated the output
      * @return reference to a skill
      */
-    public Skill getSender(){
+    public SkillDispatcher getSender(){
         return sender;
     }
 

@@ -3,47 +3,39 @@ package backend;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public abstract class Skill {
-    private final String name;
+public abstract class Skill implements Runnable{
+    private SkillDispatcher parent;
+    private List<String> queryTokens;
+    private BlockingQueue<Result> outputChannel;
 
-    protected Skill(String name) {
-        this.name = name;
+    Skill(SkillDispatcher parent, List<String> tokens, BlockingQueue<Result> outputChannel){
+        this.parent = parent;
+        this.queryTokens = tokens;
+        this.outputChannel = outputChannel;
     }
 
     /**
-     * Measure how sure the skill is that it can resolve the query correctly
-     * @param tokens list tokens in the query
-     * @return a number between 0.0 and 1.0
+     * Put a message into the output queue
+     * @param message
      */
-    public abstract double weight(List<String> tokens);
+    protected void pushMessage(String message){
+
+        try {
+            outputChannel.put(new Result(parent, message));
+        }
+
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     /**
-     * Return a task to be queue for execution
-     * @param tokens
-     * @param resultsQueue
-     * @return a skill task to be executed
+     * Return the sequence of tokens given to this task
+     * @return
      */
-    public abstract SkillTask createTask(List<String> tokens, BlockingQueue<Result> resultsQueue);
-
-    public String getName(){
-        return name;
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if(this == obj)
-            return true;
-
-        if(obj instanceof Skill)
-            return name.equals(((Skill) obj).getName());
-
-        return false;
+    protected List<String> getTokens(){
+        return queryTokens;
     }
 
 }
