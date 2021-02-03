@@ -48,7 +48,7 @@ public class Main extends Application {
         chatWindow = new Rectangle(500, 500);
         chatWindow.setTranslateX(250);
         chatWindow.setTranslateY(50);
-        chatWindow.setFill(Color.rgb(160, 160, 160, 0.6));
+        chatWindow.setFill(Color.rgb(160, 160, 160, 0.7));
         chatWindow.setStroke(Color.BLACK);
         chatWindow.setStrokeWidth(3);
         pane.getChildren().add(chatWindow);
@@ -115,11 +115,13 @@ public class Main extends Application {
         Text userText = new Text("User: " + text);
         userText.setFont(Font.font("Arial", FontWeight.BOLD,  FontPosture.REGULAR, 15));
         userText.setTranslateX(30);
+        userText.setFill(Color.WHITE);
         userText.setTranslateY(60*requestCounter);
 
         Text botText = new Text("Bot: bot's answer...");
         botText.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 15));
         botText.setTranslateX(30);
+        botText.setFill(Color.WHITE);
         botText.setTranslateY(userText.getTranslateY()+20);
 
         chatLayout.getChildren().addAll(userText, botText);
