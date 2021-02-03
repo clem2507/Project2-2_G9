@@ -77,6 +77,18 @@ public class Assistant {
         return results.poll(100, TimeUnit.MILLISECONDS);
     }
 
+    void pushMessage(String message){
+
+        try {
+            results.put(new Result(null, message));
+        }
+
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * Add a skill
      * @param skill skill to add

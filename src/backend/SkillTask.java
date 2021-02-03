@@ -18,7 +18,7 @@ public abstract class SkillTask implements Runnable{
      * Put a message into the output queue
      * @param message
      */
-    protected void pushOutput(String message){
+    protected void pushMessage(String message){
 
         try {
             outputChannel.put(new Result(parent, message));
