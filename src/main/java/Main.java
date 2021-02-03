@@ -1,15 +1,13 @@
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
 import javafx.stage.*;
-
-import java.io.IOException;
 
 public class Main extends Application {
 
@@ -23,6 +21,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+        // TODO: Add Background (I assume it can't find the jpg file, which is in 'assets')
+        Image bg = new Image("file:cliff-background.jpg");
+        ImageView iv = new ImageView(bg);
+        pane.getChildren().add(iv);
 
         textField = new TextField();
         textField.setPromptText("Input...");
