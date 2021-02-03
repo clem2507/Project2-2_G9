@@ -1,16 +1,18 @@
-package UI;
-
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
+import javafx.scene.text.*;
+import javafx.stage.*;
 
-public class Window extends Application {
+import java.io.IOException;
+
+public class Main extends Application {
+
     private Group pane = new Group();
 
     private final int WINDOW_WIDTH = 600;
