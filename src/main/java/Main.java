@@ -2,9 +2,14 @@ import backend.Assistant;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
@@ -17,43 +22,85 @@ public class Main extends Application {
 
     private Group pane = new Group();
 
-    private final int WINDOW_WIDTH = 600;
-    private final int WINDOW_HEIGHT = 600;
+    private final int WINDOW_WIDTH = 1000;
+    private final int WINDOW_HEIGHT = 700;
 
     private TextField textField;
-    private Button startButton;
+
+    private Rectangle chatWindow;
+    private Rectangle chatInputWindow;
+    private ScrollPane scrollPane;
+    private Group chatLayout;
+
+    private int requestCounter = 0;
 
     @Override
     public void start(Stage primaryStage)  throws FileNotFoundException {
 
         Assistant newAssistant = new Assistant();
 
-
         Image bg =new Image(new FileInputStream("src/assets/cliff-background.jpg"));
         ImageView iv = new ImageView(bg);
-        iv.setFitHeight(600);
-        iv.setFitWidth(600);
+        iv.setFitHeight(WINDOW_HEIGHT);
+        iv.setFitWidth(WINDOW_WIDTH);
         pane.getChildren().add(iv);
+
+        chatWindow = new Rectangle(500, 500);
+        chatWindow.setTranslateX(250);
+        chatWindow.setTranslateY(50);
+        chatWindow.setFill(Color.rgb(160, 160, 160, 0.9));
+        chatWindow.setStroke(Color.BLACK);
+        chatWindow.setStrokeWidth(3);
+        pane.getChildren().add(chatWindow);
+
+        chatInputWindow = new Rectangle(500, 100);
+        chatInputWindow.setTranslateX(250);
+        chatInputWindow.setTranslateY(550);
+        chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.9));
+        chatInputWindow.setStroke(Color.BLACK);
+        chatInputWindow.setStrokeWidth(3);
+        pane.getChildren().add(chatInputWindow);
 
         textField = new TextField();
         textField.setPromptText("Input...");
-        textField.setTranslateX(205);
-        textField.setTranslateY(250);
-        textField.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        textField.setFocusTraversable(false);
+        textField.setTranslateX(300);
+        textField.setTranslateY(580);
+        textField.setPrefSize(400, 40);
+        textField.setFont(Font.font("Arial", FontPosture.REGULAR, 16));
         pane.getChildren().add(textField);
 
-        startButton = new Button("start");
-        startButton.setTranslateX(270);
-        startButton.setTranslateY(300);
-        startButton.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 17));
-        startButton.setOnAction(event -> {
-            System.out.println("Text: " + textField.getText());
+        chatLayout = new Group();
 
-//            newAssistant.processQuery(textField.getText());
-        });
-        pane.getChildren().add(startButton);
+        scrollPane = new ScrollPane();
+        scrollPane.setContent(chatLayout);
+        scrollPane.setTranslateX(chatWindow.getTranslateX()+2);
+        scrollPane.setTranslateY(chatWindow.getTranslateY()+2);
+        scrollPane.setPrefSize(chatWindow.getWidth()-4, chatWindow.getHeight()-4);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+        pane.getChildren().add(scrollPane);
 
         Scene scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        scene.setOnKeyPressed(t -> {
+            KeyCode key = t.getCode();
+            switch (key) {
+                case ESCAPE:
+                    System.exit(0);
+                    break;
+                case ENTER:
+                    if (textField.getText().length() > 0) {
+                        requestCounter++;
+                        sendText(textField.getText());
+                        textField.setText("");
+                        // newAssistant.processQuery(textField.getText());
+                    }
+                    break;
+            }
+        });
 
         primaryStage.setResizable(false);
         primaryStage.setTitle("Digital Assistant");
@@ -62,8 +109,23 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    public void sendText(String text) {
+
+        Text userText = new Text("User: " + text);
+        userText.setFont(Font.font("Arial", FontWeight.BOLD,  FontPosture.REGULAR, 15));
+        userText.setTranslateX(30);
+        userText.setTranslateY(60*requestCounter);
+
+        Text botText = new Text("Bot: bot's answer...");
+        botText.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        botText.setTranslateX(30);
+        botText.setTranslateY(userText.getTranslateY()+20);
+
+        chatLayout.getChildren().addAll(userText, botText);
+    }
 
     public static void main(String[] args) {
         launch(args);
     }
 }
+
