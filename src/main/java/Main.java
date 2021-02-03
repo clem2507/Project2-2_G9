@@ -48,17 +48,17 @@ public class Main extends Application {
         chatWindow = new Rectangle(500, 500);
         chatWindow.setTranslateX(250);
         chatWindow.setTranslateY(50);
-        chatWindow.setFill(Color.rgb(160, 160, 160, 0.7));
-        chatWindow.setStroke(Color.WHITE);
-        chatWindow.setStrokeWidth(1);
+        chatWindow.setFill(Color.rgb(160, 160, 160, 0.6));
+        chatWindow.setStroke(Color.BLACK);
+        chatWindow.setStrokeWidth(3);
         pane.getChildren().add(chatWindow);
 
         chatInputWindow = new Rectangle(500, 100);
         chatInputWindow.setTranslateX(250);
         chatInputWindow.setTranslateY(550);
         chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.8));
-        chatInputWindow.setStroke(Color.WHITE);
-        chatInputWindow.setStrokeWidth(1);
+        chatInputWindow.setStroke(Color.BLACK);
+        chatInputWindow.setStrokeWidth(3);
         pane.getChildren().add(chatInputWindow);
 
         textField = new TextField();
@@ -67,7 +67,7 @@ public class Main extends Application {
         textField.setTranslateX(300);
         textField.setTranslateY(580);
         textField.setPrefSize(400, 40);
-        textField.setFont(Font.font("Calibri Light", FontPosture.REGULAR, 16));
+        textField.setFont(Font.font("Arial", FontPosture.REGULAR, 16));
         pane.getChildren().add(textField);
 
         chatLayout = new Group();
@@ -113,15 +113,13 @@ public class Main extends Application {
     public void sendText(String text) {
 
         Text userText = new Text("User: " + text);
-        userText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 19));
+        userText.setFont(Font.font("Arial", FontWeight.BOLD,  FontPosture.REGULAR, 15));
         userText.setTranslateX(30);
-        userText.setFill(Color.WHITE);
         userText.setTranslateY(60*requestCounter);
 
         Text botText = new Text("Bot: bot's answer...");
-        botText.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 19));
+        botText.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 15));
         botText.setTranslateX(30);
-        botText.setFill(Color.WHITE);
         botText.setTranslateY(userText.getTranslateY()+20);
 
         chatLayout.getChildren().addAll(userText, botText);
@@ -131,3 +129,4 @@ public class Main extends Application {
         launch(args);
     }
 }
+
