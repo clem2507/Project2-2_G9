@@ -9,6 +9,9 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
 import javafx.stage.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class Main extends Application {
 
     private Group pane = new Group();
@@ -20,11 +23,12 @@ public class Main extends Application {
     private Button startButton;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage)  throws FileNotFoundException {
 
-        // TODO: Add Background (I assume it can't find the jpg file, which is in 'assets')
-        Image bg = new Image("file:cliff-background.jpg");
+        Image bg =new Image(new FileInputStream("src/assets/cliff-background.jpg"));
         ImageView iv = new ImageView(bg);
+        iv.setFitHeight(600);
+        iv.setFitWidth(600);
         pane.getChildren().add(iv);
 
         textField = new TextField();
