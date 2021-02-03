@@ -48,7 +48,7 @@ public class Main extends Application {
         chatWindow = new Rectangle(500, 500);
         chatWindow.setTranslateX(250);
         chatWindow.setTranslateY(50);
-        chatWindow.setFill(Color.rgb(160, 160, 160, 0.9));
+        chatWindow.setFill(Color.rgb(160, 160, 160, 0.6));
         chatWindow.setStroke(Color.BLACK);
         chatWindow.setStrokeWidth(3);
         pane.getChildren().add(chatWindow);
@@ -56,7 +56,7 @@ public class Main extends Application {
         chatInputWindow = new Rectangle(500, 100);
         chatInputWindow.setTranslateX(250);
         chatInputWindow.setTranslateY(550);
-        chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.9));
+        chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.8));
         chatInputWindow.setStroke(Color.BLACK);
         chatInputWindow.setStrokeWidth(3);
         pane.getChildren().add(chatInputWindow);
@@ -77,6 +77,7 @@ public class Main extends Application {
         scrollPane.setTranslateX(chatWindow.getTranslateX()+2);
         scrollPane.setTranslateY(chatWindow.getTranslateY()+2);
         scrollPane.setPrefSize(chatWindow.getWidth()-4, chatWindow.getHeight()-4);
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setFitToHeight(true);
