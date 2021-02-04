@@ -6,9 +6,9 @@ import java.util.concurrent.BlockingQueue;
 public abstract class Skill implements Runnable{
     private final SkillDispatcher parent;
     private final List<String> queryTokens;
-    private final BlockingQueue<Result> outputChannel;
+    private final BlockingQueue<AssistantOutput> outputChannel;
 
-    public Skill(SkillDispatcher parent, List<String> tokens, BlockingQueue<Result> outputChannel){
+    public Skill(SkillDispatcher parent, List<String> tokens, BlockingQueue<AssistantOutput> outputChannel){
         this.parent = parent;
         this.queryTokens = tokens;
         this.outputChannel = outputChannel;
@@ -21,7 +21,7 @@ public abstract class Skill implements Runnable{
     protected void pushMessage(String message){
 
         try {
-            outputChannel.put(new Result(parent, message));
+            outputChannel.put(new AssistantOutput(parent, message));
         }
 
         catch (InterruptedException e) {

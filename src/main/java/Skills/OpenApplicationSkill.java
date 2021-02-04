@@ -1,6 +1,6 @@
 package Skills;
 
-import backend.Result;
+import backend.AssistantOutput;
 import backend.Skill;
 import backend.SkillDispatcher;
 
@@ -20,7 +20,7 @@ public class OpenApplicationSkill extends SkillDispatcher {
     }
 
     @Override
-    public Skill createTask(List<String> tokens, BlockingQueue<Result> resultsQueue) {
+    public Skill createTask(List<String> tokens, BlockingQueue<AssistantOutput> resultsQueue) {
         return new Skill(this, tokens, resultsQueue) {
             @Override
             public void run() {
