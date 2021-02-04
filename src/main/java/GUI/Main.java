@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -32,9 +33,14 @@ public class Main extends Application {
 
     private Rectangle chatWindow;
     private Rectangle chatInputWindow;
+
     private ScrollPane scrollPane;
-    private ScrollPane scrollPane2;
     private Group chatLayout;
+
+    private Button editBgButton;
+    private ScrollPane imagesScrollPane;
+    private Group imagesLayout;
+    private boolean flag = true;
 
     private int requestCounter = 0;
 
@@ -59,37 +65,73 @@ public class Main extends Application {
         pane.getChildren().add(iv);
 
         //Creating image view files for background menu
+        ImageView imgView = new ImageView(bg);
+        imgView.setTranslateX(1000);
+        imgView.setTranslateY(200);
+        imgView.setFitWidth(210);
+        imgView.setFitHeight(150);
+        imgView.setOnMousePressed(event -> {
+            iv.setImage(bg);
+        });
+
         Image bg1 = new Image(new FileInputStream("src/assets/bg1.jpg"));
         ImageView imgView1 = new ImageView(bg1);
-        imgView1.setFitWidth(200);
-        imgView1.setFitHeight(200);
+        imgView1.setTranslateX(1000);
+        imgView1.setTranslateY(370);
+        imgView1.setFitWidth(210);
+        imgView1.setFitHeight(150);
+        imgView1.setOnMousePressed(event -> {
+            iv.setImage(bg1);
+        });
+
         Image bg2 = new Image(new FileInputStream("src/assets/bg2.jpg"));
         ImageView imgView2 = new ImageView(bg2);
-        imgView2.setFitWidth(200);
-        imgView2.setFitHeight(200);
+        imgView2.setTranslateX(1000);
+        imgView2.setTranslateY(540);
+        imgView2.setFitWidth(210);
+        imgView2.setFitHeight(150);
+        imgView2.setOnMousePressed(event -> {
+            iv.setImage(bg2);
+        });
+
         Image bg3 = new Image(new FileInputStream("src/assets/bg3.jpg"));
         ImageView imgView3 = new ImageView(bg3);
-        imgView3.setFitWidth(200);
-        imgView3.setFitHeight(200);
-
-        Menu fileMenu = new Menu("Edit Background");
-
-        MenuItem item1 = new MenuItem("",imgView1);
-        MenuItem item2 = new MenuItem("", imgView2);
-        MenuItem item3 = new MenuItem("", imgView3);
-
-        fileMenu.getItems().addAll(item1, item2, item3);
-        //Creating a menu bar and adding menu to it.
-        MenuBar menuBar = new MenuBar(fileMenu);
-        menuBar.setTranslateX(1000);
-        menuBar.setTranslateY(40);
-        menuBar.setOpacity(0.7);
-        pane.getChildren().add(menuBar);
-
-        //TODO: Make it change the background according on selected item
-        item1.setOnAction(e -> {
-            System.out.println("Menu Item 1 Selected");
+        imgView3.setTranslateX(1000);
+        imgView3.setTranslateY(710);
+        imgView3.setFitWidth(210);
+        imgView3.setFitHeight(150);
+        imgView3.setOnMousePressed(event -> {
+            iv.setImage(bg3);
         });
+
+        imagesLayout = new Group();
+        imagesLayout.getChildren().addAll(imgView, imgView1, imgView2, imgView3);
+
+        imagesScrollPane = new ScrollPane();
+        imagesScrollPane.setContent(imagesLayout);
+        imagesScrollPane.setPrefSize(228, 250);
+        imagesScrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
+        imagesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        imagesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        imagesScrollPane.setFitToHeight(true);
+        imagesScrollPane.setFitToWidth(true);
+
+        editBgButton = new Button("Edit Background");
+        editBgButton.setTranslateX(970);
+        editBgButton.setTranslateY(40);
+        imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
+        imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
+        editBgButton.setOnAction(event -> {
+            if (flag) {
+                pane.getChildren().add(imagesScrollPane);
+                flag = false;
+            }
+            else {
+                pane.getChildren().remove(imagesScrollPane);
+                flag = true;
+            }
+        });
+        pane.getChildren().add(editBgButton);
 
         chatWindow = new Rectangle(500, 500);
         chatWindow.setTranslateX(350);
