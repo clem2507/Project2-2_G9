@@ -8,7 +8,7 @@ import java.util.concurrent.BlockingQueue;
 public abstract class SkillDispatcher {
     private final String uniqueName;
 
-    protected SkillDispatcher(String uniqueName) {
+    public SkillDispatcher(String uniqueName) {
         this.uniqueName = uniqueName;
     }
 

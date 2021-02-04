@@ -23,11 +23,13 @@ public class PrintSkill extends SkillDispatcher {
         return new Skill(this, tokens, resultsQueue) {
             @Override
             public void run() {
+                System.out.println("Running task...");
                 String output = "";
                 for (int x = 1; x < tokens.size(); x++){
                     output += tokens.get(x) + " ";
                 }
                 pushMessage(output);
+                System.out.println("End of task.");
             }
         };
     }
