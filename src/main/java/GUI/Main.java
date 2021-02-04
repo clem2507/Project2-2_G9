@@ -1,3 +1,5 @@
+package GUI;
+
 import backend.Assistant;
 import javafx.application.Application;
 import javafx.scene.*;
@@ -149,7 +151,7 @@ public class Main extends Application {
         Text userText = new Text("User: " + text);
         userText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 18));
         userText.setTranslateX(30);
-        userText.setTranslateY(60*requestCounter);
+        userText.setTranslateY(50*requestCounter);
         userText.setFill(Color.WHITE);
 
         Text botText = new Text("Bot: bot's answer...");
