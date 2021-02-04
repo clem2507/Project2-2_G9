@@ -1,6 +1,7 @@
 package nlp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -15,8 +16,16 @@ public class TokenPattern {
         pattern.add(set);
     }
 
+    public void addGeneric(){
+        pattern.add(Collections.EMPTY_SET);
+    }
+
     public boolean isAny(String token, int index){
-        return pattern.get(index).contains(token);
+        return pattern.get(index).contains(token) || isGeneric(index);
+    }
+
+    public boolean isGeneric(int index){
+        return pattern.get(index).isEmpty();
     }
 
 }
