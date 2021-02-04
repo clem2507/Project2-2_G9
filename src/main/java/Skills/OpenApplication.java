@@ -12,8 +12,8 @@ public class OpenApplication extends SkillDispatcher {
     private String keyword = "open";
 
 
-    protected OpenApplication(String name) {
-        super(name);
+    protected OpenApplication() {
+        super("OpenApp");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class OpenApplication extends SkillDispatcher {
 
     @Override
     public Skill createTask(List<String> tokens, BlockingQueue<Result> resultsQueue) {
-        Skill skill = new Skill(new PrintSkill(getUniqueName()),tokens, resultsQueue) {
+        return new Skill(this, tokens, resultsQueue) {
             @Override
             public void run() {
                 String application = null;
@@ -45,6 +45,5 @@ public class OpenApplication extends SkillDispatcher {
                 }
             }
         };
-        return skill;
     }
 }

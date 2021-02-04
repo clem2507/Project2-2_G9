@@ -1,5 +1,6 @@
 package GUI;
 
+import Skills.PrintSkill;
 import backend.Assistant;
 import javafx.application.Application;
 import javafx.scene.*;
@@ -44,10 +45,12 @@ public class Main extends Application {
     private SimpleDateFormat time;
     private SimpleDateFormat date;
 
+    private Assistant assistant;
+
     @Override
     public void start(Stage primaryStage)  throws FileNotFoundException {
-
-        Assistant newAssistant = new Assistant();
+        assistant = new Assistant();
+        assistant.addSkill(new PrintSkill());
 
         Image bg =new Image(new FileInputStream("src/assets/cliff-background.jpg"));
         ImageView iv = new ImageView(bg);
@@ -125,7 +128,7 @@ public class Main extends Application {
                         requestCounter++;
                         sendText(textField.getText());
                         textField.setText("");
-                        // newAssistant.processQuery(textField.getText());
+                        assistant.processQuery(textField.getText());
                     }
                     break;
             }

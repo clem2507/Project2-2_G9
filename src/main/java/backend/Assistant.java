@@ -39,7 +39,7 @@ public class Assistant {
     /**
      * Dispose tasks that already finished
      */
-    void cleanTaskPool(){
+    public void cleanTaskPool(){
         runningTasks = runningTasks.stream()
                 .filter(Thread::isAlive)
                 .collect(Collectors.toSet());
@@ -48,7 +48,7 @@ public class Assistant {
     /**
      * Interrupt all tasks and wait
      */
-    void interruptAndWait(){
+    public void interruptAndWait(){
         runningTasks
                 .forEach(Thread::interrupt);
         runningTasks.forEach(t -> {
@@ -64,7 +64,7 @@ public class Assistant {
      * Pull the oldest output and remove it, waits if empty
      * @return Result object
      */
-    Result getOutputOrWait() throws InterruptedException {
+    public Result getOutputOrWait() throws InterruptedException {
         return results.take();
     }
 
@@ -73,11 +73,11 @@ public class Assistant {
      * @return Result if queue is not empty, null otherwise
      * @throws InterruptedException
      */
-    Result getOutputOrContinue() throws InterruptedException {
+    public Result getOutputOrContinue() throws InterruptedException {
         return results.poll(100, TimeUnit.MILLISECONDS);
     }
 
-    void pushMessage(String message){
+    public void pushMessage(String message){
 
         try {
             results.put(new Result(null, message));
@@ -93,7 +93,7 @@ public class Assistant {
      * Add a skill
      * @param skill skill to add
      */
-    void addSkill(SkillDispatcher skill){
+    public void addSkill(SkillDispatcher skill){
         assert !skills.contains(skill);
         assert skill.getUniqueName() != null;
         skills.add(skill);
@@ -103,7 +103,7 @@ public class Assistant {
      * Removes a skill
      * @param skill skill to remove
      */
-    void removeSkill(Skill skill){
+    public void removeSkill(Skill skill){
         assert skills.contains(skill);
         skills.remove(skill);
     }
@@ -113,7 +113,7 @@ public class Assistant {
      * @param skill skill to check for
      * @return true if skill was found, false otherwise
      */
-    boolean hasSkill(Skill skill){
+    public boolean hasSkill(Skill skill){
         return skills.contains(skill);
     }
 
