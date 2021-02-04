@@ -1,5 +1,7 @@
 package backend;
 
+import nlp.Tokenizer;
+
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -22,6 +24,7 @@ public class Assistant {
      * @param query
      */
     public void processQuery(String query){
+        System.out.println(Tokenizer.tokenize(query));
         //TODO: Modify this function such that it supports
         //            1) Using a threshold to determine if no skill can handle the query
         //            2) Ask the user to rephrase if more than 1 skill can handle the query
