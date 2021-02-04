@@ -1,8 +1,8 @@
 package backend;
 
 public class Result {
-    private SkillDispatcher sender;
-    private String message;
+    private final SkillDispatcher sender;
+    private final String message;
 
     Result(SkillDispatcher sender, String message){
         this.sender = sender;

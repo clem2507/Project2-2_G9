@@ -28,7 +28,7 @@ public class OpenApplication extends SkillDispatcher {
 
     @Override
     public Skill createTask(List<String> tokens, BlockingQueue<Result> resultsQueue) {
-        Skill skill = new Skill(new PrintSkill(getName()),tokens, resultsQueue) {
+        Skill skill = new Skill(new PrintSkill(getUniqueName()),tokens, resultsQueue) {
             @Override
             public void run() {
                 String application = null;

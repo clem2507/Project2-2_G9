@@ -26,14 +26,14 @@ public class Assistant {
         //            1) Using a threshold to determine if no skill can handle the query
         //            2) Ask the user to rephrase if more than 1 skill can handle the query
         assert !skills.isEmpty();
-            List<String> tokens = Arrays.stream(query.split("\\s+")).collect(Collectors.toList());
-            SkillDispatcher selectedSkill = this.skills.stream()
-                    .max(Comparator.comparingDouble(a -> a.weight(tokens)))
-                    .orElseThrow();
-            Skill task = selectedSkill.createTask(tokens, results);
-            Thread thread = new Thread(task);
-            thread.start();
-            runningTasks.add(thread);
+        List<String> tokens = Arrays.stream(query.split("\\s+")).collect(Collectors.toList());
+        SkillDispatcher selectedSkill = this.skills.stream()
+                .max(Comparator.comparingDouble(a -> a.weight(tokens)))
+                .orElseThrow();
+        Skill task = selectedSkill.createTask(tokens, results);
+        Thread thread = new Thread(task);
+        thread.start();
+        runningTasks.add(thread);
     }
 
     /**
@@ -95,7 +95,7 @@ public class Assistant {
      */
     void addSkill(SkillDispatcher skill){
         assert !skills.contains(skill);
-        assert skill.getName() != null;
+        assert skill.getUniqueName() != null;
         skills.add(skill);
     }
 

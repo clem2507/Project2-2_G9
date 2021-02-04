@@ -26,7 +26,7 @@ public class PrintSkill extends SkillDispatcher {
 
     @Override
     public Skill createTask(List<String> tokens, BlockingQueue<Result> resultsQueue) {
-        Skill skill = new Skill(new PrintSkill(getName()),tokens, resultsQueue) {
+        Skill skill = new Skill(new PrintSkill(getUniqueName()),tokens, resultsQueue) {
             @Override
             public void run() {
                 for (int x = 1; x<tokens.size(); x++){

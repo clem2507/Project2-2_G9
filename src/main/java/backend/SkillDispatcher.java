@@ -1,13 +1,15 @@
 package backend;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
 public abstract class SkillDispatcher {
-    private final String name;
+    private final String uniqueName;
 
-    protected SkillDispatcher(String name) {
-        this.name = name;
+    protected SkillDispatcher(String uniqueName) {
+        this.uniqueName = uniqueName;
     }
 
     /**
@@ -15,7 +17,7 @@ public abstract class SkillDispatcher {
      * @param tokens list tokens in the query
      * @return a number between 0.0 and 1.0
      */
-    public abstract double weight(List<String> tokens);
+    public abstract double weight(List<String> tokens); //This will change soon!
 
     /**
      * Return a task to be queue for execution
@@ -25,13 +27,13 @@ public abstract class SkillDispatcher {
      */
     public abstract Skill createTask(List<String> tokens, BlockingQueue<Result> resultsQueue);
 
-    public String getName(){
-        return name;
+    public String getUniqueName(){
+        return uniqueName;
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return uniqueName.hashCode();
     }
 
     @Override
@@ -41,7 +43,7 @@ public abstract class SkillDispatcher {
             return true;
 
         if(obj instanceof SkillDispatcher)
-            return name.equals(((SkillDispatcher) obj).getName());
+            return uniqueName.equals(((SkillDispatcher) obj).getUniqueName());
 
         return false;
     }
