@@ -4,9 +4,7 @@ import Skills.PrintSkill;
 import backend.Assistant;
 import javafx.application.Application;
 import javafx.scene.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -35,6 +33,7 @@ public class Main extends Application {
     private Rectangle chatWindow;
     private Rectangle chatInputWindow;
     private ScrollPane scrollPane;
+    private ScrollPane scrollPane2;
     private Group chatLayout;
 
     private int requestCounter = 0;
@@ -52,11 +51,45 @@ public class Main extends Application {
         assistant = new Assistant();
         assistant.addSkill(new PrintSkill());
 
-        Image bg =new Image(new FileInputStream("src/assets/cliff-background.jpg"));
+        //Default Background
+        Image bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));
         ImageView iv = new ImageView(bg);
         iv.setFitHeight(WINDOW_HEIGHT);
         iv.setFitWidth(WINDOW_WIDTH);
         pane.getChildren().add(iv);
+
+        //Creating image view files for background menu
+        Image bg1 = new Image(new FileInputStream("src/assets/bg1.jpg"));
+        ImageView imgView1 = new ImageView(bg1);
+        imgView1.setFitWidth(200);
+        imgView1.setFitHeight(200);
+        Image bg2 = new Image(new FileInputStream("src/assets/bg2.jpg"));
+        ImageView imgView2 = new ImageView(bg2);
+        imgView2.setFitWidth(200);
+        imgView2.setFitHeight(200);
+        Image bg3 = new Image(new FileInputStream("src/assets/bg3.jpg"));
+        ImageView imgView3 = new ImageView(bg3);
+        imgView3.setFitWidth(200);
+        imgView3.setFitHeight(200);
+
+        Menu fileMenu = new Menu("Edit Background");
+
+        MenuItem item1 = new MenuItem("",imgView1);
+        MenuItem item2 = new MenuItem("", imgView2);
+        MenuItem item3 = new MenuItem("", imgView3);
+
+        fileMenu.getItems().addAll(item1, item2, item3);
+        //Creating a menu bar and adding menu to it.
+        MenuBar menuBar = new MenuBar(fileMenu);
+        menuBar.setTranslateX(1000);
+        menuBar.setTranslateY(40);
+        menuBar.setOpacity(0.7);
+        pane.getChildren().add(menuBar);
+
+        //TODO: Make it change the background according on selected item
+        item1.setOnAction(e -> {
+            System.out.println("Menu Item 1 Selected");
+        });
 
         chatWindow = new Rectangle(500, 500);
         chatWindow.setTranslateX(350);
