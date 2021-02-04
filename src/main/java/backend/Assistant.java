@@ -26,6 +26,7 @@ public class Assistant {
         //            1) Using a threshold to determine if no skill can handle the query
         //            2) Ask the user to rephrase if more than 1 skill can handle the query
         assert !skills.isEmpty();
+        System.out.println(query);
         List<String> tokens = Arrays.stream(query.split("\\s+")).collect(Collectors.toList());
         SkillDispatcher selectedSkill = this.skills.stream()
                 .max(Comparator.comparingDouble(a -> a.weight(tokens)))

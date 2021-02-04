@@ -29,6 +29,7 @@ public class PrintSkill extends SkillDispatcher {
                     output += tokens.get(x) + " ";
                 }
                 pushMessage(output);
+                System.out.println(output);
                 System.out.println("End of task.");
             }
         };
