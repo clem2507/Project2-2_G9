@@ -12,7 +12,7 @@ public class OpenApplication extends SkillDispatcher {
     private String keyword = "open";
 
 
-    protected OpenApplication() {
+    public OpenApplication() {
         super("OpenApp");
     }
 
@@ -31,7 +31,7 @@ public class OpenApplication extends SkillDispatcher {
         return new Skill(this, tokens, resultsQueue) {
             @Override
             public void run() {
-                String application = null;
+                String application = "";
                 for (int x = 1; x<tokens.size(); x++){
                     application = application + tokens.get(x) + " ";
                 }

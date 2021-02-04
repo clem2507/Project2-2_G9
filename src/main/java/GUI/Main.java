@@ -125,10 +125,10 @@ public class Main extends Application {
                     break;
                 case ENTER:
                     if (textField.getText().length() > 0) {
+                        assistant.processQuery(textField.getText());
                         requestCounter++;
                         sendText(textField.getText());
                         textField.setText("");
-                        assistant.processQuery(textField.getText());
                     }
                     break;
             }
