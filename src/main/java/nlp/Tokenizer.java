@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 public class Tokenizer {
 
     private static Stream<String> splitOn(String text, String delimiter){
-        StringTokenizer tokenizer = new StringTokenizer(text, "?", true);
+        StringTokenizer tokenizer = new StringTokenizer(text, delimiter, true);
         List<String> temp = new ArrayList<>();
 
         while(tokenizer.hasMoreTokens()){
