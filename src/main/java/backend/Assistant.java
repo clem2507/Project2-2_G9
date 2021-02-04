@@ -1,5 +1,7 @@
 package backend;
 
+import nlp.Tokenizer;
+
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -8,12 +10,12 @@ import java.util.stream.Collectors;
 
 public class Assistant {
     private Set<SkillDispatcher> skills;
-    private BlockingQueue<Result> results;
+    private BlockingQueue<AssistantOutput> assistantOutputs;
     private Set<Thread> runningTasks;
 
     public Assistant(){
         skills = new HashSet<>();
-        results = new LinkedBlockingQueue<>();
+        assistantOutputs = new LinkedBlockingQueue<>();
         runningTasks = new HashSet<>();
     }
 
@@ -22,6 +24,7 @@ public class Assistant {
      * @param query
      */
     public void processQuery(String query){
+        System.out.println(Tokenizer.tokenize(query));
         //TODO: Modify this function such that it supports
         //            1) Using a threshold to determine if no skill can handle the query
         //            2) Ask the user to rephrase if more than 1 skill can handle the query
@@ -31,7 +34,7 @@ public class Assistant {
         SkillDispatcher selectedSkill = this.skills.stream()
                 .max(Comparator.comparingDouble(a -> a.weight(tokens)))
                 .orElseThrow();
-        Skill task = selectedSkill.createTask(tokens, results);
+        Skill task = selectedSkill.createTask(tokens, assistantOutputs);
         Thread thread = new Thread(task);
         thread.start();
         runningTasks.add(thread);
@@ -65,8 +68,8 @@ public class Assistant {
      * Pull the oldest output and remove it, waits if empty
      * @return Result object
      */
-    public Result getOutputOrWait() throws InterruptedException {
-        return results.take();
+    public AssistantOutput getOutputOrWait() throws InterruptedException {
+        return assistantOutputs.take();
     }
 
     /**
@@ -74,14 +77,14 @@ public class Assistant {
      * @return Result if queue is not empty, null otherwise
      * @throws InterruptedException
      */
-    public Result getOutputOrContinue() throws InterruptedException {
-        return results.poll(100, TimeUnit.MILLISECONDS);
+    public AssistantOutput getOutputOrContinue() throws InterruptedException {
+        return assistantOutputs.poll(100, TimeUnit.MILLISECONDS);
     }
 
     public void pushMessage(String message){
 
         try {
-            results.put(new Result(null, message));
+            assistantOutputs.put(new AssistantOutput(null, message));
         }
 
         catch (InterruptedException e) {

@@ -1,10 +1,10 @@
 package backend;
 
-public class Result {
+public class AssistantOutput {
     private final SkillDispatcher sender;
     private final String message;
 
-    public Result(SkillDispatcher sender, String message){
+    public AssistantOutput(SkillDispatcher sender, String message){
         this.sender = sender;
         this.message = message;
     }
@@ -25,4 +25,8 @@ public class Result {
         return message;
     }
 
+    @Override
+    public String toString() {
+        return "[" + sender.toString() + "]: " + message;
+    }
 }

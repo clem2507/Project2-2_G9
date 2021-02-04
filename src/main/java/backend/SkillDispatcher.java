@@ -1,8 +1,6 @@
 package backend;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
 public abstract class SkillDispatcher {
@@ -25,7 +23,7 @@ public abstract class SkillDispatcher {
      * @param resultsQueue
      * @return a skill to be executed
      */
-    public abstract Skill createTask(List<String> tokens, BlockingQueue<Result> resultsQueue);
+    public abstract Skill createTask(List<String> tokens, BlockingQueue<AssistantOutput> resultsQueue);
 
     public String getUniqueName(){
         return uniqueName;
@@ -48,4 +46,8 @@ public abstract class SkillDispatcher {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return uniqueName;
+    }
 }
