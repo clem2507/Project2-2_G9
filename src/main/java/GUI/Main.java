@@ -3,6 +3,7 @@ package GUI;
 import Skills.PrintSkill;
 import backend.Assistant;
 import javafx.application.Application;
+import javafx.collections.ListChangeListener;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -160,6 +161,13 @@ public class Main extends Application {
 
         chatLayout = new Group();
 
+        chatLayout.getChildren().addListener(
+                (ListChangeListener.Change<? extends  Node> c) -> {
+                    chatLayout.layout();
+                    scrollPane.setVvalue(1.0d);
+                }
+        );
+
         scrollPane = new ScrollPane();
         scrollPane.setContent(chatLayout);
         scrollPane.setTranslateX(chatWindow.getTranslateX()+2);
@@ -170,6 +178,9 @@ public class Main extends Application {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
+        chatLayout.layout();
+        scrollPane.setVvalue(1.0d);
+
         pane.getChildren().add(scrollPane);
 
         currentDate = new Date();
@@ -226,19 +237,25 @@ public class Main extends Application {
 
     public void sendText(String text) {
 
+        currentDate = new Date();
+        Text messageTime = new Text(time.format(currentDate));
+        messageTime.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 12));
+        messageTime.setTranslateY(55*requestCounter);
+        messageTime.setFill(Color.BLACK);
+
         Text userText = new Text("User: " + text);
         userText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 18));
-        userText.setTranslateX(30);
-        userText.setTranslateY(50*requestCounter);
+        userText.setTranslateX(50);
+        userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
         Text botText = new Text("Bot: bot's answer...");
         botText.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 18));
-        botText.setTranslateX(30);
+        botText.setTranslateX(50);
         botText.setTranslateY(userText.getTranslateY()+20);
         botText.setFill(Color.WHITE);
 
-        chatLayout.getChildren().addAll(userText, botText);
+        chatLayout.getChildren().addAll(messageTime, userText, botText);
     }
 
     public void updateTime() {
