@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class Pattern {
 
-    public static List<String> breakPattern(String pattern){
+    private static List<String> breakPattern(String pattern){
         List<String> tokens = Arrays.asList(pattern.split("\\s+"));
         return tokens.stream()
                 .flatMap(t -> Tokenizer.splitOn(t, "<"))
@@ -14,8 +14,8 @@ public class Pattern {
                 .collect(Collectors.toList());
     }
 
-    public static List<String> groupByContent(List<String> pattern){
-        List<String> out = new ArrayList<>();
+    private static List<String> groupByContent(List<String> pattern){
+        List<String> contents = new ArrayList<>();
         String accumulator = "";
 
         for(String t : pattern){
@@ -23,11 +23,11 @@ public class Pattern {
             if(Arrays.asList(new String[]{"<", ",", ">"}).contains(t)){
 
                 if(!accumulator.isEmpty()){
-                    out.add(accumulator.trim());
+                    contents.add(accumulator.trim());
                     accumulator = "";
                 }
 
-                out.add(t);
+                contents.add(t);
             }
 
             else{
@@ -36,11 +36,11 @@ public class Pattern {
 
         }
 
-        return out;
+        return contents;
     }
 
-    public static List<Set<String>> groupInSlots(List<String> pattern){
-        List<Set<String>> out = new ArrayList<>();
+    private static List<Set<String>> groupInSlots(List<String> pattern){
+        List<Set<String>> slots = new ArrayList<>();
         Set<String> slot = null;
 
         for(String t : pattern){
@@ -52,7 +52,7 @@ public class Pattern {
 
             else if(t.equals(">")){
                 assert slot != null:"Misplaced '>'";
-                out.add(slot);
+                slots.add(slot);
                 slot = null;
             }
 
@@ -62,11 +62,35 @@ public class Pattern {
 
         }
 
-        return out;
+        return slots;
     }
 
-    public static List<Set<String>> parsePattern(String pattern){
+    public static List<Set<String>> parse(String pattern){
         return groupInSlots(groupByContent(breakPattern(pattern)));
+    }
+
+    public static boolean isParameter(String slotContent){
+        return false;
+    }
+
+    public static boolean isValidInt(String str){
+        return str.matches("^[+-]?\\d+$");
+    }
+
+    public static boolean isValidDay(String str){
+        return Arrays.asList(new String[]{
+                "monday",
+                "tuesday",
+                "wednesday",
+                "thursday",
+                "friday",
+                "saturday",
+                "sunday"
+        }).contains(str);
+    }
+
+    public static boolean isValidDate(String str){
+        return false;
     }
 
 }
