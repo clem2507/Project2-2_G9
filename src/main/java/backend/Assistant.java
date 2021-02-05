@@ -80,7 +80,7 @@ public class Assistant {
      * @throws InterruptedException
      */
     public AssistantOutput getOutputOrContinue() throws InterruptedException {
-        return assistantOutputs.poll(100, TimeUnit.MILLISECONDS);
+        return assistantOutputs.poll(0, TimeUnit.MILLISECONDS);
     }
 
     public void pushMessage(final String message){
