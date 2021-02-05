@@ -30,108 +30,118 @@ import java.util.Set;
 
 public class Main extends Application {
 
-    private Group pane = new Group();
+    final int WINDOW_WIDTH = 1200;
+    final int WINDOW_HEIGHT = 700;
+    int requestCounter = 0;
 
-    private final int WINDOW_WIDTH = 1200;
-    private final int WINDOW_HEIGHT = 700;
+    boolean flag = true;
 
-    private TextField textField;
+    Group pane = new Group();
+    Group imagesLayout;
+    Group chatLayout;
 
-    private Rectangle chatWindow;
-    private Rectangle chatInputWindow;
+    Scene scene;
 
-    private ScrollPane scrollPane;
-    private Group chatLayout;
+    TextField textField;
 
-    private Button editBgButton;
-    private ScrollPane imagesScrollPane;
-    private Group imagesLayout;
-    private boolean flag = true;
+    Rectangle chatWindow;
+    Rectangle chatInputWindow;
 
-    private int requestCounter = 0;
+    ScrollPane scrollPane;
+    ScrollPane imagesScrollPane;
 
-    private Text dateText;
-    private Text timeText;
-    private Date currentDate;
-    private SimpleDateFormat time;
-    private SimpleDateFormat date;
+    Button editBgButton;
 
-    private Assistant assistant;
+    Text dateText;
+    Text timeText;
+    Text welcomeText;
+    Text botText;
+
+    Image bg;
+    Image bg1;
+    Image bg2;
+    Image bg3;
+    Image bg4;
+    Image bg5;
+    Image robot;
+
+    ImageView iv;
+    ImageView imgView;
+    ImageView imgView1;
+    ImageView imgView2;
+    ImageView imgView3;
+    ImageView imgView4;
+    ImageView imgView5;
+    ImageView robotViewer;
+
+    Date currentDate;
+
+    SimpleDateFormat time;
+    SimpleDateFormat date;
+
+    Assistant assistant;
 
     @Override
     public void start(Stage primaryStage)  throws FileNotFoundException {
+
         assistant = new Assistant();
         assistant.addSkill(new SaySkill());
 
         //Default Background
-        Image bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));
-        ImageView iv = new ImageView(bg);
+        bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));
+        iv = new ImageView(bg);
         iv.setFitHeight(WINDOW_HEIGHT);
         iv.setFitWidth(WINDOW_WIDTH);
         pane.getChildren().add(iv);
 
         //Creating image view files for background menu
-        ImageView imgView = new ImageView(bg);
+        imgView = new ImageView(bg);
         imgView.setTranslateX(1000);
         imgView.setTranslateY(200);
         imgView.setFitWidth(210);
         imgView.setFitHeight(150);
-        imgView.setOnMousePressed(event -> {
-            if (iv.getImage()!=bg) {
-                pane.getChildren().remove(imagesScrollPane);
-                iv.setImage(bg);
-                flag = true;
-            }
-        });
 
-        Image bg1 = new Image(new FileInputStream("src/assets/bg1.jpg"));
-        ImageView imgView1 = new ImageView(bg1);
+        bg1 = new Image(new FileInputStream("src/assets/bg1.jpg"));
+        imgView1 = new ImageView(bg1);
         imgView1.setTranslateX(1000);
         imgView1.setTranslateY(370);
         imgView1.setFitWidth(210);
         imgView1.setFitHeight(150);
-        imgView1.setOnMousePressed(event -> {
-            if (iv.getImage()!=bg1) {
-                iv.setImage(bg1);
-                pane.getChildren().remove(imagesScrollPane);
-                flag = true;
-            }
-        });
 
-        Image bg2 = new Image(new FileInputStream("src/assets/bg2.jpg"));
-        ImageView imgView2 = new ImageView(bg2);
+        bg2 = new Image(new FileInputStream("src/assets/bg2.jpg"));
+        imgView2 = new ImageView(bg2);
         imgView2.setTranslateX(1000);
         imgView2.setTranslateY(540);
         imgView2.setFitWidth(210);
         imgView2.setFitHeight(150);
-        imgView2.setOnMousePressed(event -> {
-            if (iv.getImage()!=bg2) {
-                iv.setImage(bg2);
-                pane.getChildren().remove(imagesScrollPane);
-                flag = true;
-            }
-        });
 
-        Image bg3 = new Image(new FileInputStream("src/assets/bg3.jpg"));
-        ImageView imgView3 = new ImageView(bg3);
+        bg3 = new Image(new FileInputStream("src/assets/bg3.jpg"));
+        imgView3 = new ImageView(bg3);
         imgView3.setTranslateX(1000);
         imgView3.setTranslateY(710);
         imgView3.setFitWidth(210);
         imgView3.setFitHeight(150);
-        imgView3.setOnMousePressed(event -> {
-            if (iv.getImage()!=bg3) {
-                iv.setImage(bg3);
-                pane.getChildren().remove(imagesScrollPane);
-                flag = true;
-            }
-        });
+
+        bg4 = new Image(new FileInputStream("src/assets/bg4.jpg"));
+        imgView4 = new ImageView(bg4);
+        imgView4.setTranslateX(1000);
+        imgView4.setTranslateY(880);
+        imgView4.setFitWidth(210);
+        imgView4.setFitHeight(150);
+
+        bg5 = new Image(new FileInputStream("src/assets/bg5.jpg"));
+        imgView5 = new ImageView(bg5);
+        imgView5.setTranslateX(1000);
+        imgView5.setTranslateY(1050);
+        imgView5.setFitWidth(210);
+        imgView5.setFitHeight(150);
 
         imagesLayout = new Group();
-        imagesLayout.getChildren().addAll(imgView, imgView1, imgView2, imgView3);
+        imagesLayout.getChildren().addAll(imgView, imgView1, imgView2, imgView3, imgView4, imgView5);
 
         imagesScrollPane = new ScrollPane();
         imagesScrollPane.setContent(imagesLayout);
-        imagesScrollPane.setPrefSize(228, 250);
+        imagesScrollPane.setPrefSize(228, 550);
         imagesScrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
         imagesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         imagesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -143,22 +153,12 @@ public class Main extends Application {
         editBgButton.setTranslateY(40);
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
-        editBgButton.setOnAction(event -> {
-            if (flag) {
-                pane.getChildren().add(imagesScrollPane);
-                flag = false;
-            }
-            else {
-                pane.getChildren().remove(imagesScrollPane);
-                flag = true;
-            }
-        });
         pane.getChildren().add(editBgButton);
 
         chatWindow = new Rectangle(500, 500);
         chatWindow.setTranslateX(350);
         chatWindow.setTranslateY(50);
-        chatWindow.setFill(Color.rgb(160, 160, 160, 0.7));
+        chatWindow.setFill(Color.rgb(160, 160, 160, 0.75));
         chatWindow.setStroke(Color.WHITE);
         chatWindow.setStrokeWidth(1);
         pane.getChildren().add(chatWindow);
@@ -182,13 +182,6 @@ public class Main extends Application {
 
         chatLayout = new Group();
 
-        chatLayout.getChildren().addListener(
-                (ListChangeListener.Change<? extends  Node> c) -> {
-                    chatLayout.layout();
-                    scrollPane.setVvalue(1.0d);
-                }
-        );
-
         scrollPane = new ScrollPane();
         scrollPane.setContent(chatLayout);
         scrollPane.setTranslateX(chatWindow.getTranslateX()+2);
@@ -204,11 +197,26 @@ public class Main extends Application {
 
         pane.getChildren().add(scrollPane);
 
+        robot = new Image(new FileInputStream("src/assets/robot.png"));
+        robotViewer = new ImageView(robot);
+        robotViewer.setTranslateX(490);
+        robotViewer.setTranslateY(160);
+        robotViewer.setFitWidth(200);
+        robotViewer.setFitHeight(220);
+        pane.getChildren().add(robotViewer);
+
+        welcomeText = new Text("Hi DKE student, how can I help?");
+        welcomeText.setFont(Font.font("Zorque", FontWeight.BOLD,  FontPosture.REGULAR, 24));
+        welcomeText.setTranslateX(435);
+        welcomeText.setTranslateY(430);
+        welcomeText.setFill(Color.WHITE);
+        pane.getChildren().add(welcomeText);
+
         currentDate = new Date();
 
         time = new SimpleDateFormat("hh:mm:ss");
         timeText = new Text(time.format(currentDate));
-        timeText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 21));
+        timeText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 22));
         timeText.setTranslateX(30);
         timeText.setTranslateY(50);
         timeText.setFill(Color.WHITE);
@@ -216,30 +224,17 @@ public class Main extends Application {
 
         date = new SimpleDateFormat("dd/MM/yyyy");
         dateText = new Text(date.format(currentDate));
-        dateText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 21));
+        dateText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 22));
         dateText.setTranslateX(30);
         dateText.setTranslateY(90);
         dateText.setFill(Color.WHITE);
         pane.getChildren().add(dateText);
 
-        Scene scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        scene.setOnKeyPressed(t -> {
-            KeyCode key = t.getCode();
-            switch (key) {
-                case ESCAPE:
-                    System.exit(0);
-                    break;
-                case ENTER:
-                    if (textField.getText().length() > 0) {
-                        assistant.processQuery(textField.getText());
-                        requestCounter++;
-                        sendText(textField.getText());
-                        textField.setText("");
-                    }
-                    break;
-            }
-        });
+        Controller controller = new Controller(this);
+        controller.setChatController();
+        controller.setBackgroundController();
 
         primaryStage.setResizable(false);
         primaryStage.setTitle("Digital Assistant");
@@ -256,6 +251,10 @@ public class Main extends Application {
         mainThread.start();
     }
 
+    /**
+     * Display the request and the answer in the chat
+     * @param text query
+     */
     public void sendText(String text) {
 
         currentDate = new Date();
@@ -270,7 +269,7 @@ public class Main extends Application {
         userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
-        Text botText = new Text("Bot: bot's answer...");
+        botText = new Text("Bot: bot's answer...");
         botText.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 18));
         botText.setTranslateX(50);
         botText.setTranslateY(userText.getTranslateY()+20);
@@ -279,6 +278,9 @@ public class Main extends Application {
         chatLayout.getChildren().addAll(messageTime, userText, botText);
     }
 
+    /**
+     * Update the seconds for the time display
+     */
     public void updateTime() {
 
         try {
