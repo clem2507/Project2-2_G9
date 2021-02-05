@@ -137,7 +137,7 @@ public class Main extends Application {
 
         imagesScrollPane = new ScrollPane();
         imagesScrollPane.setContent(imagesLayout);
-        imagesScrollPane.setPrefSize(228, 250);
+        imagesScrollPane.setPrefSize(228, 290);
         imagesScrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
         imagesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         imagesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -147,6 +147,7 @@ public class Main extends Application {
         editBgButton = new Button("Edit Background");
         editBgButton.setTranslateX(970);
         editBgButton.setTranslateY(40);
+        editBgButton.setStyle( "-fx-background-color: ghostwhite; -fx-border-color: grey; -fx-border-radius: 0;" );
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
         pane.getChildren().add(editBgButton);
@@ -201,18 +202,18 @@ public class Main extends Application {
         robotViewer.setFitHeight(220);
         pane.getChildren().add(robotViewer);
 
-        robotInteraction = new Image(new FileInputStream("src/assets/conversationLayout.png"));
+        robotInteraction = new Image(new FileInputStream("src/assets/speechBubbleBot.png"));
         robotInteractionViewer = new ImageView(robotInteraction);
-        robotInteractionViewer.setTranslateX(855);
-        robotInteractionViewer.setTranslateY(345);
-        robotInteractionViewer.setFitWidth(180);
-        robotInteractionViewer.setFitHeight(140);
+        robotInteractionViewer.setTranslateX(880);
+        robotInteractionViewer.setTranslateY(390);
+        robotInteractionViewer.setFitWidth(150);
+        robotInteractionViewer.setFitHeight(100);
         pane.getChildren().add(robotInteractionViewer);
 
         robotInteractionText = new Text("Hi DKE student,\nhow can I help?");
-        robotInteractionText.setFont(Font.font("Zorque", FontWeight.BOLD,  FontPosture.REGULAR, 18));
-        robotInteractionText.setTranslateX(robotInteractionViewer.getTranslateX()+25);
-        robotInteractionText.setTranslateY(robotInteractionViewer.getTranslateY()+55);
+        robotInteractionText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        robotInteractionText.setTranslateX(robotInteractionViewer.getTranslateX()+20);
+        robotInteractionText.setTranslateY(robotInteractionViewer.getTranslateY()+30);
         robotInteractionText.setFill(Color.BLACK);
         pane.getChildren().add(robotInteractionText);
 

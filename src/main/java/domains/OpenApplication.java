@@ -30,11 +30,11 @@ public class OpenApplication extends Domain {
                     application = application + tokens.get(x) + " ";
                 }
 
-                Runtime runtime = Runtime.getRuntime();
+                // The user must say something like this: Open C:\\Users\\aysen\\AppData\\Roaming\\Spotify\\Spotify.exe
+                // This path is found when you right click the app, Properties -> Copy "Target"
                 try {
-                    runtime.exec( new String[] { "open" , "-a", application }) ;
-                }
-                catch (IOException e) {
+                    Process process = Runtime.getRuntime().exec(application);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
