@@ -174,7 +174,7 @@ public class Main extends Application {
         textField.setTranslateX(400);
         textField.setTranslateY(580);
         textField.setPrefSize(400, 40);
-        textField.setFont(Font.font("Calibri Light", FontPosture.REGULAR, 16));
+        textField.setFont(Font.font("Calibri", FontPosture.REGULAR, 16));
         pane.getChildren().add(textField);
 
         chatLayout = new Group();
@@ -269,13 +269,13 @@ public class Main extends Application {
         messageTime.setFill(Color.BLACK);
 
         userText = new Text("User: " + text);
-        userText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 18));
+        userText.setFont(Font.font("Calibri", FontWeight.BOLD,  FontPosture.REGULAR, 18));
         userText.setTranslateX(50);
         userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
         botText = new Text("Bot: bot's answer...");
-        botText.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 18));
+        botText.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 18));
         botText.setTranslateX(50);
         botText.setTranslateY(userText.getTranslateY()+20);
         botText.setFill(Color.WHITE);
