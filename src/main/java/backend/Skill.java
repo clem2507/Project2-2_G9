@@ -8,7 +8,7 @@ public abstract class Skill implements Runnable{
     private final List<String> queryTokens;
     private final BlockingQueue<AssistantOutput> outputChannel;
 
-    public Skill(SkillDispatcher parent, List<String> tokens, BlockingQueue<AssistantOutput> outputChannel){
+    public Skill(final SkillDispatcher parent, final List<String> tokens, final BlockingQueue<AssistantOutput> outputChannel){
         this.parent = parent;
         this.queryTokens = tokens;
         this.outputChannel = outputChannel;
@@ -18,7 +18,7 @@ public abstract class Skill implements Runnable{
      * Put a message into the output queue
      * @param message
      */
-    protected void pushMessage(String message){
+    protected void pushMessage(final String message){
 
         try {
             outputChannel.put(new AssistantOutput(parent, message));

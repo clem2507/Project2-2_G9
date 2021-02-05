@@ -4,7 +4,7 @@ public class AssistantOutput {
     private final SkillDispatcher sender;
     private final String message;
 
-    public AssistantOutput(SkillDispatcher sender, String message){
+    public AssistantOutput(final SkillDispatcher sender, final String message){
         this.sender = sender;
         this.message = message;
     }

@@ -6,7 +6,7 @@ import java.util.concurrent.BlockingQueue;
 public abstract class SkillDispatcher {
     private final String uniqueName;
 
-    public SkillDispatcher(String uniqueName) {
+    public SkillDispatcher(final String uniqueName) {
         this.uniqueName = uniqueName;
     }
 
@@ -15,7 +15,7 @@ public abstract class SkillDispatcher {
      * @param tokens list tokens in the query
      * @return a number between 0.0 and 1.0
      */
-    public abstract double weight(List<String> tokens); //This will change soon!
+    public abstract double weight(final List<String> tokens); //This will change soon!
 
     /**
      * Return a task to be queue for execution
@@ -35,7 +35,7 @@ public abstract class SkillDispatcher {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
 
         if(this == obj)
             return true;

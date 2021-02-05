@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public class Tokenizer {
 
-    private static Stream<String> splitOn(String text, String delimiter){
+    public static Stream<String> splitOn(final String text, final String delimiter){
         StringTokenizer tokenizer = new StringTokenizer(text, delimiter, true);
         List<String> temp = new ArrayList<>();
 
@@ -17,8 +17,8 @@ public class Tokenizer {
         return temp.stream();
     }
 
-    public static List<String> tokenize(String text){
-        //TODO: This is horribly inefficient, needs to be improved.
+    public static List<String> asTokenList(final String text){
+        //TODO: This is horribly inefficient, needs to be improved. (note to self)
         //  -Dennis
         List<String> tokens = Arrays.asList(text.split("\\s+"));
         return tokens.stream()
@@ -32,7 +32,19 @@ public class Tokenizer {
                 .flatMap(t -> splitOn(t, "^"))
                 .flatMap(t -> splitOn(t, "("))
                 .flatMap(t -> splitOn(t, ")"))
+                .flatMap(t -> splitOn(t, "="))
+                .flatMap(t -> splitOn(t, ">"))
+                .flatMap(t -> splitOn(t, "<"))
                 .collect(Collectors.toList());
+    }
+
+    public static String asString(final List<String> tokens){
+        String out = "";
+
+        for(String t : tokens)
+            out += t + " ";
+
+        return out.trim();
     }
 
 }

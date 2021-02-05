@@ -23,11 +23,13 @@ public class Assistant {
      * Push a query and process it
      * @param query
      */
-    public void processQuery(String query){
-        System.out.println(Tokenizer.tokenize(query));
+    public void processQuery(final String query){
+        System.out.println(Tokenizer.asTokenList(query));
         //TODO: Modify this function such that it supports
         //            1) Using a threshold to determine if no skill can handle the query
         //            2) Ask the user to rephrase if more than 1 skill can handle the query
+        //  (note to self)
+        //  -Dennis
         assert !skills.isEmpty();
         System.out.println(query);
         List<String> tokens = Arrays.stream(query.split("\\s+")).collect(Collectors.toList());
@@ -81,7 +83,7 @@ public class Assistant {
         return assistantOutputs.poll(100, TimeUnit.MILLISECONDS);
     }
 
-    public void pushMessage(String message){
+    public void pushMessage(final String message){
 
         try {
             assistantOutputs.put(new AssistantOutput(null, message));
@@ -97,7 +99,7 @@ public class Assistant {
      * Add a skill
      * @param skill skill to add
      */
-    public void addSkill(SkillDispatcher skill){
+    public void addSkill(final SkillDispatcher skill){
         assert !skills.contains(skill);
         assert skill.getUniqueName() != null;
         skills.add(skill);
@@ -107,7 +109,7 @@ public class Assistant {
      * Removes a skill
      * @param skill skill to remove
      */
-    public void removeSkill(Skill skill){
+    public void removeSkill(final Skill skill){
         assert skills.contains(skill);
         skills.remove(skill);
     }
@@ -117,7 +119,7 @@ public class Assistant {
      * @param skill skill to check for
      * @return true if skill was found, false otherwise
      */
-    public boolean hasSkill(Skill skill){
+    public boolean hasSkill(final Skill skill){
         return skills.contains(skill);
     }
 

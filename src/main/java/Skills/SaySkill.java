@@ -7,10 +7,10 @@ import backend.Skill;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public class PrintSkill extends SkillDispatcher {
+public class SaySkill extends SkillDispatcher {
 
-    public PrintSkill() {
-        super("PrintSomething");
+    public SaySkill() {
+        super("Say");
     }
 
     @Override

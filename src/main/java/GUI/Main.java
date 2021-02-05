@@ -1,7 +1,8 @@
 package GUI;
 
-import Skills.PrintSkill;
+import Skills.SaySkill;
 import backend.Assistant;
+
 import javafx.application.Application;
 import javafx.collections.ListChangeListener;
 import javafx.scene.*;
@@ -17,11 +18,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
 import javafx.stage.*;
+import nlp.Pattern;
+import nlp.Tokenizer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class Main extends Application {
 
@@ -56,7 +61,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage)  throws FileNotFoundException {
         assistant = new Assistant();
-        assistant.addSkill(new PrintSkill());
+        assistant.addSkill(new SaySkill());
 
         //Default Background
         Image bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));
