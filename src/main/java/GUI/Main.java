@@ -77,7 +77,11 @@ public class Main extends Application {
         imgView.setFitWidth(210);
         imgView.setFitHeight(150);
         imgView.setOnMousePressed(event -> {
-            iv.setImage(bg);
+            if (iv.getImage()!=bg) {
+                pane.getChildren().remove(imagesScrollPane);
+                iv.setImage(bg);
+                flag = true;
+            }
         });
 
         Image bg1 = new Image(new FileInputStream("src/assets/bg1.jpg"));
@@ -87,7 +91,11 @@ public class Main extends Application {
         imgView1.setFitWidth(210);
         imgView1.setFitHeight(150);
         imgView1.setOnMousePressed(event -> {
-            iv.setImage(bg1);
+            if (iv.getImage()!=bg1) {
+                iv.setImage(bg1);
+                pane.getChildren().remove(imagesScrollPane);
+                flag = true;
+            }
         });
 
         Image bg2 = new Image(new FileInputStream("src/assets/bg2.jpg"));
@@ -97,7 +105,11 @@ public class Main extends Application {
         imgView2.setFitWidth(210);
         imgView2.setFitHeight(150);
         imgView2.setOnMousePressed(event -> {
-            iv.setImage(bg2);
+            if (iv.getImage()!=bg2) {
+                iv.setImage(bg2);
+                pane.getChildren().remove(imagesScrollPane);
+                flag = true;
+            }
         });
 
         Image bg3 = new Image(new FileInputStream("src/assets/bg3.jpg"));
@@ -107,7 +119,11 @@ public class Main extends Application {
         imgView3.setFitWidth(210);
         imgView3.setFitHeight(150);
         imgView3.setOnMousePressed(event -> {
-            iv.setImage(bg3);
+            if (iv.getImage()!=bg3) {
+                iv.setImage(bg3);
+                pane.getChildren().remove(imagesScrollPane);
+                flag = true;
+            }
         });
 
         imagesLayout = new Group();
