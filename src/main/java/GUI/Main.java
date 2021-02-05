@@ -2,13 +2,10 @@ package GUI;
 
 import domains.SayThis;
 import backend.Assistant;
-
 import domains.Weather.CurrentWeather;
-import javafx.animation.FillTransition;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -20,8 +17,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
 import javafx.stage.*;
-import javafx.util.Duration;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
@@ -159,7 +154,7 @@ public class Main extends Application {
         editBgButton = new Button("Edit Background");
         editBgButton.setTranslateX(970);
         editBgButton.setTranslateY(40);
-        editBgButton.setStyle( "-fx-background-color: ghostwhite; -fx-border-color: grey; -fx-border-radius: 0;" );
+        editBgButton.setStyle( "-fx-background-color: linear-gradient(whitesmoke, whitesmoke, lightslategrey); -fx-border-color: grey; -fx-border-radius: 0;" );
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
         pane.getChildren().add(editBgButton);
@@ -172,8 +167,8 @@ public class Main extends Application {
         weatherWidget.setArcWidth(30);
         weatherWidget.setArcHeight(30);
         Stop[] stops = new Stop[] { new Stop(0, Color.LIGHTSKYBLUE), new Stop(1, Color.WHITESMOKE)};
-        LinearGradient lg1 = new LinearGradient(0, 0, 0, 1.5, true, CycleMethod.NO_CYCLE, stops);
-        weatherWidget.setFill(lg1);
+        LinearGradient lg = new LinearGradient(0, 0, 0, 1.56, true, CycleMethod.NO_CYCLE, stops);
+        weatherWidget.setFill(lg);
         pane.getChildren().add(weatherWidget);
 
         // TODO: Update the city based on the location of the user
@@ -184,7 +179,6 @@ public class Main extends Application {
         weatherCity.setFill(Color.WHITE);
         pane.getChildren().add(weatherCity);
 
-        // TODO: Update temperature every 30 mins
         String temp = CurrentWeather.getWeather("Maastricht");
         double d = Double.parseDouble(temp);
         double rounded = Math.round(d);
@@ -200,7 +194,7 @@ public class Main extends Application {
 
         GPS = new Image(new FileInputStream("src/assets/GPSpointer.png"));
         GPSView = new ImageView(GPS);
-        GPSView.setTranslateX(weatherCity.getTranslateX()+85);
+        GPSView.setTranslateX(weatherCity.getTranslateX()+95);
         GPSView.setTranslateY(weatherCity.getTranslateY()-18);
         GPSView.setFitWidth(30);
         GPSView.setFitHeight(20);
