@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public abstract class Skill implements Runnable{
-    private final SkillDispatcher parent;
+    private final Domain parent;
     private final List<String> queryTokens;
     private final BlockingQueue<AssistantOutput> outputChannel;
 
-    public Skill(final SkillDispatcher parent, final List<String> tokens, final BlockingQueue<AssistantOutput> outputChannel){
+    public Skill(final Domain parent, final List<String> tokens, final BlockingQueue<AssistantOutput> outputChannel){
         this.parent = parent;
         this.queryTokens = tokens;
         this.outputChannel = outputChannel;

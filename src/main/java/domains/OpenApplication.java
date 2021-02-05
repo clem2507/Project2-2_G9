@@ -1,18 +1,18 @@
-package Skills;
+package domains;
 
 import backend.AssistantOutput;
 import backend.Skill;
-import backend.SkillDispatcher;
-import backend.SkillNames;
+import backend.Domain;
+import backend.DomainNames;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public class OpenApplicationSkill extends SkillDispatcher {
+public class OpenApplication extends Domain {
 
-    public OpenApplicationSkill() {
-        super(SkillNames.OpenApp);
+    public OpenApplication() {
+        super(DomainNames.OpenApp);
     }
 
     @Override

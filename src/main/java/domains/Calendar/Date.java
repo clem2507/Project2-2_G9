@@ -1,4 +1,4 @@
-package Skills.Calendar;
+package domains.Calendar;
 
 public class Date {
     int year;

@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Assistant {
-    private Set<SkillDispatcher> skills;
+    private Set<Domain> skills;
     private BlockingQueue<AssistantOutput> assistantOutputs;
     private Set<Thread> runningTasks;
 
@@ -33,7 +33,7 @@ public class Assistant {
         assert !skills.isEmpty();
         System.out.println(query);
         List<String> tokens = Arrays.stream(query.split("\\s+")).collect(Collectors.toList());
-        SkillDispatcher selectedSkill = this.skills.stream()
+        Domain selectedSkill = this.skills.stream()
                 .max(Comparator.comparingDouble(a -> a.weight(tokens)))
                 .orElseThrow();
         Skill task = selectedSkill.createTask(tokens, assistantOutputs);
@@ -99,7 +99,7 @@ public class Assistant {
      * Add a skill
      * @param skill skill to add
      */
-    public void addSkill(final SkillDispatcher skill){
+    public void addSkill(final Domain skill){
         assert !skills.contains(skill);
         assert skill.getUniqueName() != null;
         skills.add(skill);

@@ -1,5 +1,5 @@
 package backend;
 
-public enum SkillNames {
+public enum DomainNames {
     Say, OpenApp
 }

@@ -1,10 +1,10 @@
 package backend;
 
 public class AssistantOutput {
-    private final SkillDispatcher sender;
+    private final Domain sender;
     private final String message;
 
-    public AssistantOutput(final SkillDispatcher sender, final String message){
+    public AssistantOutput(final Domain sender, final String message){
         this.sender = sender;
         this.message = message;
     }
@@ -13,7 +13,7 @@ public class AssistantOutput {
      * Return a reference to the skill that generated the output
      * @return reference to a skill
      */
-    public SkillDispatcher getSender(){
+    public Domain getSender(){
         return sender;
     }
 

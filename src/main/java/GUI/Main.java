@@ -1,6 +1,6 @@
 package GUI;
 
-import Skills.SaySkill;
+import domains.SayThis;
 import backend.Assistant;
 
 import javafx.application.Application;
@@ -81,7 +81,7 @@ public class Main extends Application {
     public void start(Stage primaryStage)  throws FileNotFoundException {
 
         assistant = new Assistant();
-        assistant.addSkill(new SaySkill());
+        assistant.addSkill(new SayThis());
 
         //Default Background
         bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));

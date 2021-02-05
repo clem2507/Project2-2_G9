@@ -1,17 +1,17 @@
-package Skills;
+package domains;
 
 import backend.AssistantOutput;
-import backend.SkillDispatcher;
+import backend.Domain;
 import backend.Skill;
-import backend.SkillNames;
+import backend.DomainNames;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public class SaySkill extends SkillDispatcher {
+public class SayThis extends Domain {
 
-    public SaySkill() {
-        super(SkillNames.Say);
+    public SayThis() {
+        super(DomainNames.Say);
     }
 
     @Override

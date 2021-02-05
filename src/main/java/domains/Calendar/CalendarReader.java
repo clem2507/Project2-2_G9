@@ -1,4 +1,4 @@
-package Skills.Calendar;
+package domains.Calendar;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -3,10 +3,10 @@ package backend;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public abstract class SkillDispatcher {
-    private final SkillNames uniqueName;
+public abstract class Domain {
+    private final DomainNames uniqueName;
 
-    public SkillDispatcher(final SkillNames uniqueName) {
+    public Domain(final DomainNames uniqueName) {
         this.uniqueName = uniqueName;
     }
 
@@ -25,7 +25,7 @@ public abstract class SkillDispatcher {
      */
     public abstract Skill createTask(List<String> tokens, BlockingQueue<AssistantOutput> resultsQueue);
 
-    public SkillNames getUniqueName(){
+    public DomainNames getUniqueName(){
         return uniqueName;
     }
 
@@ -40,8 +40,8 @@ public abstract class SkillDispatcher {
         if(this == obj)
             return true;
 
-        if(obj instanceof SkillDispatcher)
-            return uniqueName.equals(((SkillDispatcher) obj).getUniqueName());
+        if(obj instanceof Domain)
+            return uniqueName.equals(((Domain) obj).getUniqueName());
 
         return false;
     }
