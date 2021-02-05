@@ -3,6 +3,11 @@ package GUI;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class Controller {
 
@@ -70,6 +75,7 @@ public class Controller {
                 window.iv.setImage(window.bg1);
                 window.pane.getChildren().remove(window.imagesScrollPane);
                 window.flag = true;
+                window.botText.setText("That is a nice background that you chose. I like it!");
             }
         });
 

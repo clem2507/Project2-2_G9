@@ -55,6 +55,7 @@ public class Main extends Application {
     Text dateText;
     Text timeText;
     Text welcomeText;
+    Text botText;
 
     Image bg;
     Image bg1;
@@ -268,7 +269,7 @@ public class Main extends Application {
         userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
-        Text botText = new Text("Bot: bot's answer...");
+        botText = new Text("Bot: bot's answer...");
         botText.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 18));
         botText.setTranslateX(50);
         botText.setTranslateY(userText.getTranslateY()+20);
