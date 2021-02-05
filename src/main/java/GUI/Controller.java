@@ -3,11 +3,6 @@ package GUI;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 public class Controller {
 
@@ -39,16 +34,13 @@ public class Controller {
                         window.requestCounter++;
                         window.sendText(window.textField.getText());
                         window.textField.setText("");
-                        if (window.requestCounter == 1) {
-                            window.robotViewer.setTranslateX(925);
-                            window.robotViewer.setTranslateY(440);
-                            window.pane.getChildren().remove(window.welcomeText);
-                        }
+                        window.robotInteractionText.setText("Anything else?\nI'm available");
                     }
                     break;
             }
         });
 
+        // automatic scroll down
         window.chatLayout.getChildren().addListener(
                 (ListChangeListener.Change<? extends Node> c) -> {
                     window.chatLayout.layout();
@@ -66,6 +58,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg) {
                 window.pane.getChildren().remove(window.imagesScrollPane);
                 window.iv.setImage(window.bg);
+                window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -74,8 +67,8 @@ public class Controller {
             if (window.iv.getImage()!=window.bg1) {
                 window.iv.setImage(window.bg1);
                 window.pane.getChildren().remove(window.imagesScrollPane);
+                window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
-                window.botText.setText("That is a nice background that you chose. I like it!");
             }
         });
 
@@ -83,6 +76,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg2) {
                 window.iv.setImage(window.bg2);
                 window.pane.getChildren().remove(window.imagesScrollPane);
+                window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -91,6 +85,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg3) {
                 window.iv.setImage(window.bg3);
                 window.pane.getChildren().remove(window.imagesScrollPane);
+                window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -99,6 +94,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg4) {
                 window.iv.setImage(window.bg4);
                 window.pane.getChildren().remove(window.imagesScrollPane);
+                window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -107,6 +103,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg5) {
                 window.iv.setImage(window.bg5);
                 window.pane.getChildren().remove(window.imagesScrollPane);
+                window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
