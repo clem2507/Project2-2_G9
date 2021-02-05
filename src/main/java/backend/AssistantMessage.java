@@ -1,10 +1,10 @@
 package backend;
 
-public class AssistantOutput {
+public class AssistantMessage {
     private final Domain sender;
     private final String message;
 
-    public AssistantOutput(final Domain sender, final String message){
+    public AssistantMessage(final Domain sender, final String message){
         this.sender = sender;
         this.message = message;
     }

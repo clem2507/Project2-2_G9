@@ -6,22 +6,18 @@ import java.util.concurrent.BlockingQueue;
 public abstract class Skill implements Runnable{
     private final Domain parent;
     private final List<String> queryTokens;
-    private final BlockingQueue<AssistantOutput> outputChannel;
+    private final BlockingQueue<AssistantMessage> outputChannel;
 
-    public Skill(final Domain parent, final List<String> tokens, final BlockingQueue<AssistantOutput> outputChannel){
+    public Skill(final Domain parent, final List<String> tokens, final BlockingQueue<AssistantMessage> outputChannel){
         this.parent = parent;
         this.queryTokens = tokens;
         this.outputChannel = outputChannel;
     }
 
-    /**
-     * Put a message into the output queue
-     * @param message
-     */
     protected void pushMessage(final String message){
 
         try {
-            outputChannel.put(new AssistantOutput(parent, message));
+            outputChannel.put(new AssistantMessage(parent, message));
         }
 
         catch (InterruptedException e) {
@@ -30,10 +26,6 @@ public abstract class Skill implements Runnable{
 
     }
 
-    /**
-     * Return the sequence of tokens given to this task
-     * @return
-     */
     protected List<String> getTokens(){
         return queryTokens;
     }

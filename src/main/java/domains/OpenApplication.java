@@ -1,6 +1,6 @@
 package domains;
 
-import backend.AssistantOutput;
+import backend.AssistantMessage;
 import backend.Skill;
 import backend.Domain;
 import backend.DomainNames;
@@ -21,7 +21,7 @@ public class OpenApplication extends Domain {
     }
 
     @Override
-    public Skill createTask(List<String> tokens, BlockingQueue<AssistantOutput> resultsQueue) {
+    public Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue) {
         return new Skill(this, tokens, resultsQueue) {
             @Override
             public void run() {

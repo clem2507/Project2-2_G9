@@ -10,20 +10,9 @@ public abstract class Domain {
         this.uniqueName = uniqueName;
     }
 
-    /**
-     * Measure how sure the skill is that it can resolve the query correctly
-     * @param tokens list tokens in the query
-     * @return a number between 0.0 and 1.0
-     */
     public abstract double weight(final List<String> tokens); //This will change soon!
 
-    /**
-     * Return a task to be queue for execution
-     * @param tokens
-     * @param resultsQueue
-     * @return a skill to be executed
-     */
-    public abstract Skill createTask(List<String> tokens, BlockingQueue<AssistantOutput> resultsQueue);
+    public abstract Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue);
 
     public DomainNames getUniqueName(){
         return uniqueName;

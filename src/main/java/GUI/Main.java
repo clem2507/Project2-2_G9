@@ -81,7 +81,7 @@ public class Main extends Application {
     public void start(Stage primaryStage)  throws FileNotFoundException {
 
         assistant = new Assistant();
-        assistant.addSkill(new SayThis());
+        assistant.addDomain(new SayThis());
 
         //Default Background
         bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));
