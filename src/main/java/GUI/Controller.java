@@ -89,6 +89,22 @@ public class Controller {
             }
         });
 
+        window.imgView4.setOnMousePressed(event -> {
+            if (window.iv.getImage()!=window.bg4) {
+                window.iv.setImage(window.bg4);
+                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.flag = true;
+            }
+        });
+
+        window.imgView5.setOnMousePressed(event -> {
+            if (window.iv.getImage()!=window.bg5) {
+                window.iv.setImage(window.bg5);
+                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.flag = true;
+            }
+        });
+
         window.editBgButton.setOnAction(event -> {
             if (window.flag) {
                 window.pane.getChildren().add(window.imagesScrollPane);

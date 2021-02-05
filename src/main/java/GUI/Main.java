@@ -60,6 +60,8 @@ public class Main extends Application {
     Image bg1;
     Image bg2;
     Image bg3;
+    Image bg4;
+    Image bg5;
     Image robot;
 
     ImageView iv;
@@ -67,6 +69,8 @@ public class Main extends Application {
     ImageView imgView1;
     ImageView imgView2;
     ImageView imgView3;
+    ImageView imgView4;
+    ImageView imgView5;
     ImageView robotViewer;
 
     Date currentDate;
@@ -117,12 +121,26 @@ public class Main extends Application {
         imgView3.setFitWidth(210);
         imgView3.setFitHeight(150);
 
+        bg4 = new Image(new FileInputStream("src/assets/bg4.jpg"));
+        imgView4 = new ImageView(bg4);
+        imgView4.setTranslateX(1000);
+        imgView4.setTranslateY(880);
+        imgView4.setFitWidth(210);
+        imgView4.setFitHeight(150);
+
+        bg5 = new Image(new FileInputStream("src/assets/bg5.jpg"));
+        imgView5 = new ImageView(bg5);
+        imgView5.setTranslateX(1000);
+        imgView5.setTranslateY(1050);
+        imgView5.setFitWidth(210);
+        imgView5.setFitHeight(150);
+
         imagesLayout = new Group();
-        imagesLayout.getChildren().addAll(imgView, imgView1, imgView2, imgView3);
+        imagesLayout.getChildren().addAll(imgView, imgView1, imgView2, imgView3, imgView4, imgView5);
 
         imagesScrollPane = new ScrollPane();
         imagesScrollPane.setContent(imagesLayout);
-        imagesScrollPane.setPrefSize(228, 250);
+        imagesScrollPane.setPrefSize(228, 550);
         imagesScrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
         imagesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         imagesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
