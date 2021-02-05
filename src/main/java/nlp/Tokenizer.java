@@ -47,4 +47,8 @@ public class Tokenizer {
         return out.trim();
     }
 
+    public static String normalize(String text){
+        return asString(asTokenList(text));
+    }
+
 }
