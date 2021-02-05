@@ -3,17 +3,24 @@ package GUI;
 import domains.SayThis;
 import backend.Assistant;
 
+import domains.Weather.CurrentWeather;
+import javafx.animation.FillTransition;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
 import javafx.stage.*;
+import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,6 +45,7 @@ public class Main extends Application {
 
     Rectangle chatWindow;
     Rectangle chatInputWindow;
+    Rectangle weatherWidget;
 
     ScrollPane scrollPane;
     ScrollPane imagesScrollPane;
@@ -50,6 +58,8 @@ public class Main extends Application {
     Text userText;
     Text messageTime;
     Text robotInteractionText;
+    Text weatherCity;
+    Text weatherDegree;
 
     Image bg;
     Image bg1;
@@ -59,6 +69,7 @@ public class Main extends Application {
     Image bg5;
     Image robot;
     Image robotInteraction;
+    Image GPS;
 
     ImageView iv;
     ImageView imgView;
@@ -69,6 +80,7 @@ public class Main extends Application {
     ImageView imgView5;
     ImageView robotViewer;
     ImageView robotInteractionViewer;
+    ImageView GPSView;
 
     Date currentDate;
 
@@ -151,6 +163,48 @@ public class Main extends Application {
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
         pane.getChildren().add(editBgButton);
+
+        weatherWidget = new Rectangle(140, 80);
+        weatherWidget.setTranslateX(28);
+        weatherWidget.setTranslateY(130);
+        weatherWidget.setStroke(Color.WHITESMOKE);
+        weatherWidget.setStrokeWidth(0.6);
+        weatherWidget.setArcWidth(30);
+        weatherWidget.setArcHeight(30);
+        Stop[] stops = new Stop[] { new Stop(0, Color.LIGHTSKYBLUE), new Stop(1, Color.WHITESMOKE)};
+        LinearGradient lg1 = new LinearGradient(0, 0, 0, 1.5, true, CycleMethod.NO_CYCLE, stops);
+        weatherWidget.setFill(lg1);
+        pane.getChildren().add(weatherWidget);
+
+        // TODO: Update the city based on the location of the user
+        weatherCity = new Text("Maastricht");
+        weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        weatherCity.setTranslateX(weatherWidget.getTranslateX()+12);
+        weatherCity.setTranslateY(weatherWidget.getTranslateY()+26);
+        weatherCity.setFill(Color.WHITE);
+        pane.getChildren().add(weatherCity);
+
+        // TODO: Update temperature every 30 mins
+        String temp = CurrentWeather.getWeather("Maastricht");
+        double d = Double.parseDouble(temp);
+        double rounded = Math.round(d);
+        int i = (int) rounded;
+        String city = Integer.toString(i);
+        System.out.println(city);
+        weatherDegree = new Text(city + "°");
+        weatherDegree.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        weatherDegree.setTranslateX(weatherWidget.getTranslateX()+18);
+        weatherDegree.setTranslateY(weatherWidget.getTranslateY()+60);
+        weatherDegree.setFill(Color.WHITE);
+        pane.getChildren().add(weatherDegree);
+
+        GPS = new Image(new FileInputStream("src/assets/GPSpointer.png"));
+        GPSView = new ImageView(GPS);
+        GPSView.setTranslateX(weatherCity.getTranslateX()+85);
+        GPSView.setTranslateY(weatherCity.getTranslateY()-18);
+        GPSView.setFitWidth(30);
+        GPSView.setFitHeight(20);
+        pane.getChildren().add(GPSView);
 
         chatWindow = new Rectangle(500, 500);
         chatWindow.setTranslateX(350);
