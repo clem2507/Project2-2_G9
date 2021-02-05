@@ -4,29 +4,21 @@ import Skills.SaySkill;
 import backend.Assistant;
 
 import javafx.application.Application;
-import javafx.collections.ListChangeListener;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
 import javafx.stage.*;
-import nlp.Pattern;
-import nlp.Tokenizer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 public class Main extends Application {
 
@@ -54,8 +46,10 @@ public class Main extends Application {
 
     Text dateText;
     Text timeText;
-    Text welcomeText;
     Text botText;
+    Text userText;
+    Text messageTime;
+    Text robotInteractionText;
 
     Image bg;
     Image bg1;
@@ -64,6 +58,7 @@ public class Main extends Application {
     Image bg4;
     Image bg5;
     Image robot;
+    Image robotInteraction;
 
     ImageView iv;
     ImageView imgView;
@@ -73,6 +68,7 @@ public class Main extends Application {
     ImageView imgView4;
     ImageView imgView5;
     ImageView robotViewer;
+    ImageView robotInteractionViewer;
 
     Date currentDate;
 
@@ -141,7 +137,7 @@ public class Main extends Application {
 
         imagesScrollPane = new ScrollPane();
         imagesScrollPane.setContent(imagesLayout);
-        imagesScrollPane.setPrefSize(228, 550);
+        imagesScrollPane.setPrefSize(228, 250);
         imagesScrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
         imagesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         imagesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -199,18 +195,26 @@ public class Main extends Application {
 
         robot = new Image(new FileInputStream("src/assets/robot.png"));
         robotViewer = new ImageView(robot);
-        robotViewer.setTranslateX(490);
-        robotViewer.setTranslateY(160);
+        robotViewer.setTranslateX(980);
+        robotViewer.setTranslateY(440);
         robotViewer.setFitWidth(200);
         robotViewer.setFitHeight(220);
         pane.getChildren().add(robotViewer);
 
-        welcomeText = new Text("Hi DKE student, how can I help?");
-        welcomeText.setFont(Font.font("Zorque", FontWeight.BOLD,  FontPosture.REGULAR, 24));
-        welcomeText.setTranslateX(435);
-        welcomeText.setTranslateY(430);
-        welcomeText.setFill(Color.WHITE);
-        pane.getChildren().add(welcomeText);
+        robotInteraction = new Image(new FileInputStream("src/assets/conversationLayout.png"));
+        robotInteractionViewer = new ImageView(robotInteraction);
+        robotInteractionViewer.setTranslateX(855);
+        robotInteractionViewer.setTranslateY(345);
+        robotInteractionViewer.setFitWidth(180);
+        robotInteractionViewer.setFitHeight(140);
+        pane.getChildren().add(robotInteractionViewer);
+
+        robotInteractionText = new Text("Hi DKE student,\nhow can I help?");
+        robotInteractionText.setFont(Font.font("Zorque", FontWeight.BOLD,  FontPosture.REGULAR, 18));
+        robotInteractionText.setTranslateX(robotInteractionViewer.getTranslateX()+25);
+        robotInteractionText.setTranslateY(robotInteractionViewer.getTranslateY()+55);
+        robotInteractionText.setFill(Color.BLACK);
+        pane.getChildren().add(robotInteractionText);
 
         currentDate = new Date();
 
@@ -258,12 +262,12 @@ public class Main extends Application {
     public void sendText(String text) {
 
         currentDate = new Date();
-        Text messageTime = new Text(time.format(currentDate));
+        messageTime = new Text(time.format(currentDate));
         messageTime.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 12));
         messageTime.setTranslateY(55*requestCounter);
         messageTime.setFill(Color.BLACK);
 
-        Text userText = new Text("User: " + text);
+        userText = new Text("User: " + text);
         userText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 18));
         userText.setTranslateX(50);
         userText.setTranslateY(messageTime.getTranslateY()+2);
