@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public abstract class SkillDispatcher {
-    private final String uniqueName;
+    private final SkillNames uniqueName;
 
-    public SkillDispatcher(final String uniqueName) {
+    public SkillDispatcher(final SkillNames uniqueName) {
         this.uniqueName = uniqueName;
     }
 
@@ -25,7 +25,7 @@ public abstract class SkillDispatcher {
      */
     public abstract Skill createTask(List<String> tokens, BlockingQueue<AssistantOutput> resultsQueue);
 
-    public String getUniqueName(){
+    public SkillNames getUniqueName(){
         return uniqueName;
     }
 
@@ -48,6 +48,6 @@ public abstract class SkillDispatcher {
 
     @Override
     public String toString() {
-        return uniqueName;
+        return uniqueName.toString();
     }
 }

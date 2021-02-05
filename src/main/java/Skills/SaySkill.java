@@ -3,6 +3,7 @@ package Skills;
 import backend.AssistantOutput;
 import backend.SkillDispatcher;
 import backend.Skill;
+import backend.SkillNames;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -10,7 +11,7 @@ import java.util.concurrent.BlockingQueue;
 public class SaySkill extends SkillDispatcher {
 
     public SaySkill() {
-        super("Say");
+        super(SkillNames.Say);
     }
 
     @Override

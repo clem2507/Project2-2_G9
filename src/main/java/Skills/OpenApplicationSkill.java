@@ -3,6 +3,7 @@ package Skills;
 import backend.AssistantOutput;
 import backend.Skill;
 import backend.SkillDispatcher;
+import backend.SkillNames;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.concurrent.BlockingQueue;
 public class OpenApplicationSkill extends SkillDispatcher {
 
     public OpenApplicationSkill() {
-        super("OpenApp");
+        super(SkillNames.OpenApp);
     }
 
     @Override
