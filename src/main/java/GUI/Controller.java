@@ -34,7 +34,7 @@ public class Controller {
                         window.requestCounter++;
                         window.sendText(window.textField.getText());
                         window.textField.setText("");
-                        //window.robotInteractionText.setText("Anything else?\nI'm available");
+                        window.robotInteractionText.setText("Anything else?\nI'm free");
                     }
                     break;
             }
@@ -108,14 +108,10 @@ public class Controller {
             }
         });
 
-        window.editBgButton.setOnAction(event -> {
+        window.editBgButton.setOnMousePressed(event -> {
             if (window.flag) {
                 window.pane.getChildren().add(window.imagesScrollPane);
                 window.flag = false;
-                if(window.editBgButton.isPressed()){
-                    window.pane.getChildren().remove(window.imagesScrollPane);
-                    window.flag = true;
-                }
             }
             else {
                 window.pane.getChildren().remove(window.imagesScrollPane);

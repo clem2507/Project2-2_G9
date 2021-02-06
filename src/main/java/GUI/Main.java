@@ -38,6 +38,8 @@ public class Main extends Application {
 
     TextField textField;
 
+    String city;
+
     Rectangle chatWindow;
     Rectangle chatInputWindow;
     Rectangle weatherWidget;
@@ -154,7 +156,7 @@ public class Main extends Application {
         editBgButton = new Button("Edit Background");
         editBgButton.setTranslateX(970);
         editBgButton.setTranslateY(40);
-        editBgButton.setStyle( "-fx-background-color: linear-gradient(whitesmoke, whitesmoke, lightslategrey); -fx-border-color: grey; -fx-border-radius: 0;" );
+        editBgButton.setId("editBgButton");
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
         pane.getChildren().add(editBgButton);
@@ -172,23 +174,24 @@ public class Main extends Application {
         pane.getChildren().add(weatherWidget);
 
         // TODO: Update the city based on the location of the user
-        weatherCity = new Text("Maastricht");
+        city = "Maastricht";
+        weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
         weatherCity.setTranslateX(weatherWidget.getTranslateX()+12);
         weatherCity.setTranslateY(weatherWidget.getTranslateY()+26);
         weatherCity.setFill(Color.WHITE);
         pane.getChildren().add(weatherCity);
 
-        String temp = CurrentWeather.getWeather("Maastricht");
+        String temp = CurrentWeather.getWeather(city);
         double d = Double.parseDouble(temp);
         double rounded = Math.round(d);
         int i = (int) rounded;
-        String city = Integer.toString(i);
-        System.out.println(city);
-        weatherDegree = new Text(city + "°");
+        String temperature = Integer.toString(i);
+        System.out.println(temperature);
+        weatherDegree = new Text(temperature + "°");
         weatherDegree.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 30));
         weatherDegree.setTranslateX(weatherWidget.getTranslateX()+18);
-        weatherDegree.setTranslateY(weatherWidget.getTranslateY()+60);
+        weatherDegree.setTranslateY(weatherWidget.getTranslateY()+64);
         weatherDegree.setFill(Color.WHITE);
         pane.getChildren().add(weatherDegree);
 
@@ -284,6 +287,7 @@ public class Main extends Application {
         pane.getChildren().add(dateText);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        scene.getStylesheets().add("GUI/style.css");
 
         Controller controller = new Controller(this);
         controller.setChatController();
@@ -312,18 +316,18 @@ public class Main extends Application {
 
         currentDate = new Date();
         messageTime = new Text(time.format(currentDate));
-        messageTime.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 12));
+        messageTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
         messageTime.setTranslateY(55*requestCounter);
         messageTime.setFill(Color.BLACK);
 
         userText = new Text("User: " + text);
-        userText.setFont(Font.font("Calibri", FontWeight.BOLD,  FontPosture.REGULAR, 18));
+        userText.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 16));
         userText.setTranslateX(50);
         userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
         botText = new Text("Bot: bot's answer...");
-        botText.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 18));
+        botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
         botText.setTranslateX(50);
         botText.setTranslateY(userText.getTranslateY()+20);
         botText.setFill(Color.WHITE);
