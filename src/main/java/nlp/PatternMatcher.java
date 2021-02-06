@@ -8,24 +8,21 @@ public class PatternMatcher {
 
     // Method that matches parts of the query with parts of the pattern
     // Returns list of strings where first part is the part of the pattern and the second is the part of the query that matches it
-    public static List<Set<String>> patternMatch2(String pattern, String query) {
-        List<Set<String>> matchList = new ArrayList<>();
-        Set<String> match = new HashSet<>();
+    public static Map<Set<String>, String> patternMatch(String pattern, String query) {
+        Map<Set<String>, String> matchList = new HashMap<Set<String>, String>();
         List<Set<String>> patterns = Pattern.parse(pattern);
 
-        String completeSlot = "";
+        String matchedString = null;
         for (Set p : patterns) {
-            completeSlot = "<";
             for (Object s : p) {
-                completeSlot += (String) s + ", ";
                 // check whether part of query matches the string in the pattern.
                 // Then add to match
+                if (query.contains((String) s)) {
+                    matchedString = (String) s;
+                }
             }
-            completeSlot = completeSlot.substring(0, completeSlot.length() - 2);
-            completeSlot += ">";
-            match.add(completeSlot);
-            matchList.add(match);
-            match = new HashSet<>();
+            matchList.put(p, matchedString);
+            matchedString = null;
         }
 
         // For testing
@@ -39,7 +36,8 @@ public class PatternMatcher {
     }
 
     public static void main(String[] args) {
-        patternMatch2("<test, the words><param:day>", "hello");
+        Map<Set<String>, String> strings = patternMatch("<test, word><this><thing>", "test this thing");
+        System.out.println(strings);
     }
 
 }
