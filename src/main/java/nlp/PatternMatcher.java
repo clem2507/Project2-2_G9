@@ -19,6 +19,7 @@ public class PatternMatcher {
             for (Object s : p) {
                 completeSlot += (String) s + ", ";
                 // check whether part of query matches the string in the pattern.
+                // Then add to match
             }
             completeSlot = completeSlot.substring(0, completeSlot.length() - 2);
             completeSlot += ">";
