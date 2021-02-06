@@ -15,22 +15,15 @@ public class PatternMatcher {
         String matchedString = null;
         for (Set p : patterns) {
             for (Object s : p) {
-                // check whether part of query matches the string in the pattern.
-                // Then add to match
                 if (query.contains((String) s)) {
                     matchedString = (String) s;
                 }
+                // TODO: param patterns and 'empty' patterns (<...> or <#:3>)
             }
             matchList.put(p, matchedString);
             matchedString = null;
         }
 
-        // For testing
-        /*for (Set e: matchList) {
-            for (Object o : e) {
-                System.out.println(o);
-            }
-        }*/
 
         return matchList;
     }
