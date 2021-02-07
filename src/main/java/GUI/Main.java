@@ -163,7 +163,7 @@ public class Main extends Application {
         editBgButton = new Button("Edit Background");
         editBgButton.setTranslateX(970);
         editBgButton.setTranslateY(40);
-        editBgButton.setId("editBgButton");
+        editBgButton.setStyle(" -fx-background-radius: 30; -fx-background-insets: 0,1,1; -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ) ");
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
         pane.getChildren().add(editBgButton);
@@ -294,8 +294,6 @@ public class Main extends Application {
         pane.getChildren().add(dateText);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-        scene.getStylesheets().add(Paths.get("src/assets/style.css").toUri().toString());
 
         Controller controller = new Controller(this);
         controller.setChatController();
