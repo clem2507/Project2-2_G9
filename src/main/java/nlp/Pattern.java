@@ -134,20 +134,20 @@ public class Pattern {
         return SlotType.NONE;
     }
 
-    public static boolean match(String content, String token){
+    public static boolean matchContentWithString(String content, String str){
         ContentType cType = getContentType(content);
 
         if(cType.equals(ContentType.PARAMETER_INT))
-            return isValidInt(token);
+            return isValidInt(str);
 
         if(cType.equals(ContentType.PARAMETER_DAY))
-            return isValidDay(token);
+            return isValidDay(str);
 
         if(cType.equals(ContentType.PARAMETER_DATE))
-            return isValidDate(token);
+            return isValidDate(str);
 
         if(cType.equals(ContentType.STRING))
-            return content.equalsIgnoreCase(token);
+            return content.equalsIgnoreCase(str);
 
         throw new AssertionError("Content type undefined: " + content);
     }
