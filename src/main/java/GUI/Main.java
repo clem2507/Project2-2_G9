@@ -5,6 +5,8 @@ import backend.Assistant;
 import domains.Weather.CurrentLocation;
 import domains.Weather.CurrentWeather;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -293,6 +295,11 @@ public class Main extends Application {
         Controller controller = new Controller(this);
         controller.setChatController();
         controller.setBackgroundController();
+
+        primaryStage.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
         primaryStage.setResizable(false);
         primaryStage.setTitle("Digital Assistant");
