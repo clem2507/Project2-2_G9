@@ -28,13 +28,12 @@ public abstract class CurrentWeather {
 
             int ss = result.indexOf("temp")+6;
             for (int k = ss ; k <result.length(); k++){
-                if(isNumeric(String.valueOf(result.charAt(k)))|| result.charAt(k)=='.'){
+                if(isNumeric(String.valueOf(result.charAt(k)))|| result.charAt(k)=='.' || result.charAt(k)=='-'){
                     temp= temp+ result.charAt(k);
                 }else{
                     break;
                 }
             }
-//            System.out.println(result);
         }catch (IOException e){
             e.printStackTrace();
         }
