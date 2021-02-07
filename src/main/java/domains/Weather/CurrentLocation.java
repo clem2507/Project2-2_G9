@@ -26,10 +26,10 @@ public class CurrentLocation {
                      new java.util.Scanner(new java.net.URL(url).openStream())) {
 
             String result = s.useDelimiter("\\A").next();
-            int ss = result.indexOf("city")+7;
-            for (int k = ss ; k <result.length(); k++){
+            int ss = result.indexOf("city") + 7;
+            for (int k = ss; k < result.length(); k++) {
                 loc = loc + result.charAt(k);
-                if(k == (result.indexOf("lat")-4)){
+                if (k == (result.indexOf("lat") - 4)) {
                     break;
                 }
             }
@@ -41,54 +41,63 @@ public class CurrentLocation {
 
         // THIS PART IS USED SO IT PRINTS THE CORRECT OUTPUT WITHOUT JAVA UNICODE
         String newstr = "";
-        if(loc.contains("\\u00fc")) {
-            int index = loc.indexOf("\\")-1;
+        if (loc.contains("\\u00fc")) {
+            int index = loc.indexOf("\\") - 1;
             String replc = loc.replace("\\u00fc", "");
 
-            for (int i = 0; i < replc.length(); i++){
+            for (int i = 0; i < replc.length(); i++) {
                 newstr += replc.charAt(i);
-                if(i == index){
+                if (i == index) {
                     newstr += "u";
                 }
             }
+            System.out.println(newstr);
+            return newstr;
         }
 
-        if(loc.contains("\\u00c4")) {
-            int index = loc.indexOf("\\")-1;
+        if (loc.contains("\\u00c4")) {
+            int index = loc.indexOf("\\") - 1;
             String replc = loc.replace("\\u00c4", "");
 
-            for (int i = 0; i < replc.length(); i++){
+            for (int i = 0; i < replc.length(); i++) {
                 newstr += replc.charAt(i);
-                if(i == index){
+                if (i == index) {
                     newstr += "a";
                 }
             }
+            System.out.println(newstr);
+            return newstr;
         }
 
-        if(loc.contains("\\u00d6")) {
-            int index = loc.indexOf("\\")-1;
+        if (loc.contains("\\u00d6")) {
+            int index = loc.indexOf("\\") - 1;
             String replc = loc.replace("\\u00c6", "");
 
-            for (int i = 0; i < replc.length(); i++){
+            for (int i = 0; i < replc.length(); i++) {
                 newstr += replc.charAt(i);
-                if(i == index){
+                if (i == index) {
                     newstr += "o";
                 }
             }
+            System.out.println(newstr);
+            return newstr;
         }
 
-        if(loc.contains("\\u00df")) {
-            int index = loc.indexOf("\\")-1;
+        if (loc.contains("\\u00df")) {
+            int index = loc.indexOf("\\") - 1;
             String replc = loc.replace("\\u00df", "");
 
-            for (int i = 0; i < replc.length(); i++){
+            for (int i = 0; i < replc.length(); i++) {
                 newstr += replc.charAt(i);
-                if(i == index){
+                if (i == index) {
                     newstr += "ss";
                 }
             }
+            System.out.println(newstr);
+            return newstr;
+        } else {
+            System.out.println(loc);
+            return loc;
         }
-        System.out.println(newstr);
-        return newstr;
     }
 }
