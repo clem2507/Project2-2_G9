@@ -4,6 +4,8 @@ import domains.SayThis;
 import backend.Assistant;
 import domains.Weather.CurrentWeather;
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.LoadException;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -17,8 +19,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
 import javafx.stage.*;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -235,7 +242,7 @@ public class Main extends Application {
         scrollPane.setTranslateX(chatWindow.getTranslateX()+2);
         scrollPane.setTranslateY(chatWindow.getTranslateY()+2);
         scrollPane.setPrefSize(chatWindow.getWidth()-4, chatWindow.getHeight()-4);
-        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
+        scrollPane.setStyle(" -fx-background: transparent; -fx-background-color: transparent; ");
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setFitToHeight(true);
@@ -287,7 +294,8 @@ public class Main extends Application {
         pane.getChildren().add(dateText);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
-        scene.getStylesheets().add("GUI/style.css");
+
+        scene.getStylesheets().add(Paths.get("src/assets/style.css").toUri().toString());
 
         Controller controller = new Controller(this);
         controller.setChatController();
