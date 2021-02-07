@@ -152,4 +152,14 @@ public class Pattern {
         throw new AssertionError("Content type undefined: " + content);
     }
 
+    public static int getBlankSlotParameter(Set<String> slot){
+        assert getSlotType(slot).equals(SlotType.BLANK);
+        String content = slot.stream().findFirst().orElseThrow();
+
+        if(content == "...")
+            return -1;
+
+        return Integer.parseInt(content.substring(2));
+    }
+
 }
