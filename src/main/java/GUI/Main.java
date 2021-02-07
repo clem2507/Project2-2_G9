@@ -2,10 +2,9 @@ package GUI;
 
 import domains.SayThis;
 import backend.Assistant;
+import domains.Weather.CurrentLocation;
 import domains.Weather.CurrentWeather;
 import javafx.application.Application;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.fxml.LoadException;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -19,13 +18,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.*;
 import javafx.stage.*;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -94,7 +89,7 @@ public class Main extends Application {
     Assistant assistant;
 
     @Override
-    public void start(Stage primaryStage)  throws FileNotFoundException {
+    public void start(Stage primaryStage) throws IOException {
 
         assistant = new Assistant();
         assistant.addDomain(new SayThis());
@@ -175,13 +170,13 @@ public class Main extends Application {
         weatherWidget.setStrokeWidth(0.6);
         weatherWidget.setArcWidth(30);
         weatherWidget.setArcHeight(30);
-        Stop[] stops = new Stop[] { new Stop(0, Color.LIGHTSKYBLUE), new Stop(1, Color.WHITESMOKE)};
-        LinearGradient lg = new LinearGradient(0, 0, 0, 1.56, true, CycleMethod.NO_CYCLE, stops);
+        Stop[] stops = new Stop[] { new Stop(0, Color.SKYBLUE), new Stop(1, Color.WHITESMOKE)};
+        LinearGradient lg = new LinearGradient(0, 0, 0, 2.5, true, CycleMethod.NO_CYCLE, stops);
         weatherWidget.setFill(lg);
         pane.getChildren().add(weatherWidget);
 
         // TODO: Update the city based on the location of the user
-        city = "Maastricht";
+        city = CurrentLocation.getLocation();
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
         weatherCity.setTranslateX(weatherWidget.getTranslateX()+12);
@@ -195,10 +190,10 @@ public class Main extends Application {
         int i = (int) rounded;
         String temperature = Integer.toString(i);
         System.out.println(temperature);
-        weatherDegree = new Text(temperature + "°");
-        weatherDegree.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        weatherDegree = new Text(temperature + "'C");
+        weatherDegree.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 29));
         weatherDegree.setTranslateX(weatherWidget.getTranslateX()+18);
-        weatherDegree.setTranslateY(weatherWidget.getTranslateY()+64);
+        weatherDegree.setTranslateY(weatherWidget.getTranslateY()+60);
         weatherDegree.setFill(Color.WHITE);
         pane.getChildren().add(weatherDegree);
 
