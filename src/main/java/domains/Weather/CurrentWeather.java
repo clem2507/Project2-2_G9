@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public abstract class CurrentWeather {
+public class CurrentWeather {
 
     public static String getWeather(String city) {
         String APIKEY = "54cd4b7942fb66b79b3377b338e3a9b1";

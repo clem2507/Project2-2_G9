@@ -1,4 +1,4 @@
-package domains.Weather;
+package domains.Location;
 
 import java.io.BufferedReader;
 import java.io.IOException;

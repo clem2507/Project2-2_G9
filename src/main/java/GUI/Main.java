@@ -2,7 +2,7 @@ package GUI;
 
 import domains.SayThis;
 import backend.Assistant;
-import domains.Weather.CurrentLocation;
+import domains.Location.CurrentLocation;
 import domains.Weather.CurrentWeather;
 import javafx.application.Application;
 import javafx.application.Platform;
