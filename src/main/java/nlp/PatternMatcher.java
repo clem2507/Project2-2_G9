@@ -154,10 +154,6 @@ public class PatternMatcher {
                             break;
                         }
                     }
-
-                // DATE SLOT
-                }else if(Pattern.getContentType((String) s).equals(Pattern.ContentType.PARAMETER_DATE)) {
-
                 }
             }
             System.out.println("Query Left  : "+queryBuffer);
@@ -182,10 +178,10 @@ public class PatternMatcher {
     }
 
     public static void main(String[] args) {
-        String pattern = "<weather> <in> <...>";
-        String query = "What is the weather in maastricht";
-        Map<Set<String>, List<String>> strings = patternMatch(pattern , query);
-        System.out.println(strings);
+            String pattern = "<weather> <in> <...>";
+            String query = "What is the weather in maastricht";
+            Map<Set<String>, List<String>> strings = patternMatch(pattern , query);
+            System.out.println(strings);
 
     }
 
