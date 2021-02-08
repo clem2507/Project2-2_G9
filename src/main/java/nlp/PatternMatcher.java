@@ -15,10 +15,9 @@ public class PatternMatcher {
 
     /*
     TODO:
-     - Complete 'empty' patterns (<...>),
      - Date Pattern,
      - Change data type of output returned,
-     - Inspect ordering of sets (weird) [check longer strings first]
+     - Inspect ordering of sets (weird) [check longer strings first]--> might be better
      */
 
     public static Map<Set<String>, List<String>> patternMatch(String pattern, String query) {
@@ -31,27 +30,40 @@ public class PatternMatcher {
         for (Set p : patterns) {
             for (Object s : p) {
 
-                System.out.println(s);
+                System.out.println("being checked-->" + s);
                 // STRING SLOT
                 if (Pattern.getContentType((String) s).equals(Pattern.ContentType.STRING)) {
 
                     int objLength = ((String) s).length();
-                    String substring = queryBuffer.substring(0, objLength);
+                    String substring = "";
+                    if(queryBuffer.length() >= objLength){
+                        substring = queryBuffer.substring(0, objLength);
+
+                    }
+                    String temp = queryBuffer.toString();
+
 
 
                     if(patterns.indexOf(p)==0){
                         if(query.contains((String) s)){
                             int indexOf = query.indexOf((String) s) + objLength;
                             matchedString = Tokenizer.asTokenList((String) s);
+                            System.out.println("removed:   "+queryBuffer.substring(0 ,indexOf));
                             queryBuffer.replace( 0 ,indexOf ,"");
                             String newQ = queryBuffer.toString().trim();
                             queryBuffer = new StringBuffer(newQ);
                             break;
                         }
                     }else{
-                        if(s.equals(substring)){
+                        if(temp.contains((String) s)){
+
+                            if(patterns.indexOf(p) == 1){
+                                objLength = queryBuffer.length();
+                                System.out.println((objLength));
+                            }
                             matchedString = Tokenizer.asTokenList((String) s);
-                            queryBuffer.replace( 0 ,objLength ,"");
+                            System.out.println("removed:   "+queryBuffer.substring(temp.indexOf((String) s) ,objLength+temp.indexOf((String) s)));
+                            queryBuffer.replace(temp.indexOf((String) s) ,objLength+temp.indexOf((String) s) ,"");
                             String newQ = queryBuffer.toString().trim();
                             queryBuffer = new StringBuffer(newQ);
                             break;
@@ -88,7 +100,11 @@ public class PatternMatcher {
 
                     int objLength = lengthOfInt;
                     if(objLength!=0){
+                        if(patterns.indexOf(p) == patterns.size()){
+                            objLength = queryBuffer.length();
+                        }
                         matchedString = Tokenizer.asTokenList((String) s);
+                        System.out.println("removed:   "+queryBuffer.substring(0 ,objLength));
                         queryBuffer.replace( 0 ,objLength ,"");
                         String newQ = queryBuffer.toString().trim();
                         queryBuffer = new StringBuffer(newQ);
@@ -109,39 +125,55 @@ public class PatternMatcher {
                     if(!day.equals("")){
                         if (patterns.indexOf(p) == 0) {
                             matchedString = Tokenizer.asTokenList((String) s);
+                            System.out.println("removed:   "+queryBuffer.substring(0 ,indexOfString));
                             queryBuffer.replace( 0 ,indexOfString ,"");
                             String newQ = queryBuffer.toString().trim();
                             queryBuffer = new StringBuffer(newQ);
                             break;
                         }else{
+
+                            if(patterns.indexOf(p) == patterns.size()-1){
+                                lengthOfString = queryBuffer.length();
+                            }
+
                             matchedString = Tokenizer.asTokenList((String) s);
-                            queryBuffer.replace( 0 ,lengthOfString ,"");
+                            String temp = queryBuffer.toString();
+                            System.out.println("removed:   "+queryBuffer.substring(temp.indexOf(day) ,lengthOfString));
+                            queryBuffer.replace(temp.indexOf(day) ,lengthOfString ," ");
                             String newQ = queryBuffer.toString().trim();
                             queryBuffer = new StringBuffer(newQ);
+
                             break;
                         }
                     }
-                }else if(Pattern.getContentType((String) s).equals(Pattern.ContentType.WHITESPACE)) {
-                    //get the next set, find it in query, remove anything until that set is met
-                    //if not met, remove until end of the sentence =)
-                    int indexOfNextSet = patterns.indexOf(p);
-                    Set nextSet = patterns.get(indexOfNextSet);
-                    int lengthToBeReplaced = 0;
-                    for (Object x : nextSet) {
 
-                    }
-                }else if(Pattern.getContentType((String) s).equals(Pattern.ContentType.WHITESPACE)) {
+                // DATE SLOT
+                }else if(Pattern.getContentType((String) s).equals(Pattern.ContentType.PARAMETER_DATE)) {
 
                 }
             }
+            System.out.println("Query Left  : "+queryBuffer);
+
             matchList.put(p, matchedString);
             matchedString = null;
         }
+
+
+        if(queryBuffer.length()!=0){
+            for(Set p: patterns){
+                if(p.contains("...")){
+                    matchedString = Tokenizer.asTokenList((queryBuffer.toString()));
+                    matchList.put(p, matchedString);
+                }
+            }
+            System.out.println("Not Empty");
+        }
+        System.out.println(queryBuffer);
         return matchList;
     }
 
     public static void main(String[] args) {
-        Map<Set<String>, List<String>> strings = patternMatch("<remind me in, remind me> <param:day> <in, on> ", "remind me tuesday on");
+        Map<Set<String>, List<String>> strings = patternMatch("<remind me, set reminder> <...> <on, in> <param:day>", "set reminder to do groceries on sunday");
         System.out.println(strings);
     }
 
