@@ -57,10 +57,10 @@ public class PatternMatcher {
                     }else{
                         if(temp.contains((String) s)){
 
-                            if(patterns.indexOf(p) == 1){
-                                objLength = queryBuffer.length();
-                                System.out.println((objLength));
-                            }
+//                            if(patterns.indexOf(p) == 1){
+//                                objLength = queryBuffer.length();
+//                                System.out.println((objLength));
+//                            }
                             matchedString = Tokenizer.asTokenList((String) s);
                             System.out.println("removed:   "+queryBuffer.substring(temp.indexOf((String) s) ,objLength+temp.indexOf((String) s)));
                             queryBuffer.replace(temp.indexOf((String) s) ,objLength+temp.indexOf((String) s) ,"");
@@ -74,11 +74,11 @@ public class PatternMatcher {
                 } else if(Pattern.getContentType((String) s).equals(Pattern.ContentType.PARAMETER_INT)){
 
                     int lengthOfInt = 0 ;
-
+                    int intStartIndex = 0;
                     if(patterns.indexOf(p)==0){
-                        int intStartIndex = 0;
-                        for(int x = 0; x < query.length(); x++){
-                            if(Character.isDigit(query.charAt(x))){
+
+                        for(int x = 0; x < queryBuffer.length(); x++){
+                            if(Character.isDigit(queryBuffer.charAt(x))){
                                 intStartIndex = x;
                                 break;
                             }
@@ -89,23 +89,31 @@ public class PatternMatcher {
                             }
                             lengthOfInt = x + 1;
                         }
+
                     }else{
-                        for (int x = 0 ; x < queryBuffer.length(); x++){
-                            if(!Pattern.isValidInt(Character.toString(queryBuffer.charAt(x)))){
+                        for(int x = 0; x < queryBuffer.length(); x++){
+                            if(Character.isDigit(queryBuffer.charAt(x))){
+                                intStartIndex = x;
                                 break;
                             }
-                            lengthOfInt = x+1;
+                        }
+                        StringBuilder sb = new StringBuilder();
+                        for(char c : queryBuffer.toString().toCharArray()) {
+                            if (Character.isDigit(c)) {
+                                sb.append(c);
+                                lengthOfInt++;
+                            }
                         }
                     }
 
-                    int objLength = lengthOfInt;
+                    int objLength = lengthOfInt+intStartIndex;
                     if(objLength!=0){
                         if(patterns.indexOf(p) == patterns.size()){
                             objLength = queryBuffer.length();
                         }
                         matchedString = Tokenizer.asTokenList((String) s);
-                        System.out.println("removed:   "+queryBuffer.substring(0 ,objLength));
-                        queryBuffer.replace( 0 ,objLength ,"");
+                        System.out.println("removed:   "+queryBuffer.substring(intStartIndex ,objLength));
+                        queryBuffer.replace( intStartIndex ,objLength ,"");
                         String newQ = queryBuffer.toString().trim();
                         queryBuffer = new StringBuffer(newQ);
                         break;
@@ -164,34 +172,21 @@ public class PatternMatcher {
                 if(p.contains("...")){
                     matchedString = Tokenizer.asTokenList((queryBuffer.toString()));
                     matchList.put(p, matchedString);
+                    queryBuffer.replace(0,queryBuffer.length(),"");
                 }
             }
-            System.out.println("Not Empty");
         }
-        System.out.println(queryBuffer);
+
+        System.out.println("Query Left  : "+queryBuffer);
         return matchList;
     }
 
     public static void main(String[] args) {
-        Map<Set<String>, List<String>> strings = patternMatch("<remind me, set reminder> <...> <on, in> <param:day>", "set reminder to do groceries on sunday");
+        String pattern = "<remind me, set reminder> <param:int> <on, in> ";
+        String query = "set reminder 5 to do groceries on";
+        Map<Set<String>, List<String>> strings = patternMatch(pattern , query);
         System.out.println(strings);
+
     }
 
 }
-//                else {
-//                    List<String> tokens = Tokenizer.asTokenList(queryBuffer.toString());
-//                    // Also doesn't work with multi-string parameters
-//                    for (String token : tokens) {
-//                        if(Pattern.match((String) s, token)) {
-//                            matchedString.add(token);
-//                            break;
-//                        }
-//                    }
-//                }
-
-//                    if (query.contains((String) s)) {
-//                        matchedString = Tokenizer.asTokenList((String) s);
-//                        strIndex = query.indexOf((String) s);
-//                        // Removing matched part from the query
-//                        //query = query.substring(strIndex + ((String) s).length(), query.length());
-//                    }
