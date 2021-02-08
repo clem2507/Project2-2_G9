@@ -45,7 +45,7 @@ public class PatternMatcher {
 
 
                     if(patterns.indexOf(p)==0){
-                        if(query.contains((String) s)){
+                        if(query.toLowerCase().contains(((String) s).toLowerCase())){
                             int indexOf = query.indexOf((String) s) + objLength;
                             matchedString = Tokenizer.asTokenList((String) s);
                             System.out.println("removed:   "+queryBuffer.substring(0 ,indexOf));
@@ -55,7 +55,7 @@ public class PatternMatcher {
                             break;
                         }
                     }else{
-                        if(temp.contains((String) s)){
+                        if(temp.toLowerCase().contains(((String) s).toLowerCase())){
 
 //                            if(patterns.indexOf(p) == 1){
 //                                objLength = queryBuffer.length();
@@ -182,8 +182,8 @@ public class PatternMatcher {
     }
 
     public static void main(String[] args) {
-        String pattern = "<remind me, set reminder> <param:int> <on, in> ";
-        String query = "set reminder 5 to do groceries on";
+        String pattern = "<weather> <in> <...>";
+        String query = "What is the weather in maastricht";
         Map<Set<String>, List<String>> strings = patternMatch(pattern , query);
         System.out.println(strings);
 
