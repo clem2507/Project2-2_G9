@@ -8,9 +8,9 @@ public class PatternMatcher {
 
     /**
      Method that matches parts of the query with parts of the pattern
-     @param: pattern from the domain
-     @param: query input from user
-     @return: map where each pair consists of the pattern slot and the tokens from the query that match it
+     @param pattern from the domain
+     @param query input from user
+     @return map where each pair consists of the pattern slot and the tokens from the query that match it
      */
 
     /*
