@@ -4,6 +4,7 @@ import backend.AssistantMessage;
 import backend.Domain;
 import backend.DomainNames;
 import backend.Skill;
+import nlp.MatchedSequence;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -13,18 +14,12 @@ public class FindWeather extends Domain {
         super(DomainNames.FindWeather);
     }
 
-    @Override
-    public double weight(List<String> tokens) {
-        return 0;
-    }
-
     /*
     Assuming (for now) the weather Query always looks like : "Weather in <City>"
     So all words after "in" make up a name of a city
      */
 
-    @Override
-    public Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue) {
+    /*public Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue) {
         return new Skill(this, tokens, resultsQueue) {
             @Override
             public void run() {
@@ -43,5 +38,10 @@ public class FindWeather extends Domain {
                 System.out.println(message);
             }
         };
+    }*/
+
+    @Override
+    public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> resultsQueue) {
+        return null;
     }
 }

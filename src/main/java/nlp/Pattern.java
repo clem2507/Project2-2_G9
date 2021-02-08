@@ -12,7 +12,7 @@ public class Pattern {
     }
 
     public enum ContentType{
-        STRING, PARAMETER_INT, PARAMETER_DAY, PARAMETER_DATE, WHITESPACE
+        STRING, PARAMETER_INT, PARAMETER_DAY, WHITESPACE
     }
 
     private static List<String> breakPattern(String pattern){
@@ -24,16 +24,25 @@ public class Pattern {
                 .collect(Collectors.toList());
     }
 
-    private static List<String> groupByContent(List<String> pattern){
+    private static List<String> groupByContent(List<String> pattern) throws NLPError {
         List<String> contents = new ArrayList<>();
         String accumulator = "";
+        int openSlots = 0; // This is to keep track of misplaced '<' and '>'
 
         for(String t : pattern){
 
             if(Arrays.asList(new String[]{"<", ",", ">"}).contains(t)){
 
+                if(t.equals("<")){
+                    openSlots++;
+                }
+
+                else if(t.equals(">")){
+                    openSlots--;
+                }
+
                 if(!accumulator.isEmpty()){
-                    contents.add(accumulator.trim());
+                    contents.add(accumulator.trim().toLowerCase());
                     accumulator = "";
                 }
 
@@ -46,22 +55,38 @@ public class Pattern {
 
         }
 
+        if(openSlots < 0){
+            throw new NLPError("Missing '<'");
+        }
+
+        else if(openSlots > 0){
+            throw new NLPError("Missing '>'");
+        }
+
         return contents;
     }
 
-    private static List<Set<String>> groupInSlots(List<String> pattern){
+    private static List<Set<String>> groupInSlots(List<String> pattern) throws NLPError {
         List<Set<String>> slots = new ArrayList<>();
         Set<String> slot = null;
 
         for(String t : pattern){
 
             if(t.equals("<")){
-                assert slot == null:"Misplaced '<'";
+
+                if(slot != null) {
+                    throw new NLPError("Misplaced '<'");
+                }
+
                 slot = new HashSet<>();
             }
 
             else if(t.equals(">")){
-                assert slot != null:"Misplaced '>'";
+
+                if(slot == null) {
+                    throw new NLPError("Misplaced '>'");
+                }
+
                 slots.add(slot);
                 slot = null;
             }
@@ -71,7 +96,6 @@ public class Pattern {
             }
 
         }
-
         return slots;
     }
 
@@ -91,11 +115,7 @@ public class Pattern {
         }).contains(str.toLowerCase());
     }
 
-    public static boolean isValidDate(String str){
-        return str.matches("^((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$");
-    }
-
-    public static List<Set<String>> parse(String pattern){
+    public static List<Set<String>> parse(String pattern) throws NLPError {
         return groupInSlots(groupByContent(breakPattern(pattern)));
     }
 
@@ -106,9 +126,6 @@ public class Pattern {
 
         if(content.equals("param:day"))
             return ContentType.PARAMETER_DAY;
-
-        if(content.equals("param:date"))
-            return ContentType.PARAMETER_DATE;
 
         if(content.equals("...") || (content.startsWith("#:") && isValidInt(content.substring(2)))){
             return ContentType.WHITESPACE;
@@ -134,32 +151,35 @@ public class Pattern {
         return SlotType.NONE;
     }
 
-    public static boolean matchContentWithString(String content, String str){
-        ContentType cType = getContentType(content);
+    public static int getBlankSlotParameter(Set<String> slot) throws NLPError {
 
-        if(cType.equals(ContentType.PARAMETER_INT))
-            return isValidInt(str);
+        if(!getSlotType(slot).equals(SlotType.BLANK)){
+            throw new NLPError("Illegal operation on solid slot, solid slots contain no parameters");
+        }
 
-        if(cType.equals(ContentType.PARAMETER_DAY))
-            return isValidDay(str);
-
-        if(cType.equals(ContentType.PARAMETER_DATE))
-            return isValidDate(str);
-
-        if(cType.equals(ContentType.STRING))
-            return content.equalsIgnoreCase(str);
-
-        throw new AssertionError("Content type undefined: " + content);
-    }
-
-    public static int getBlankSlotParameter(Set<String> slot){
-        assert getSlotType(slot).equals(SlotType.BLANK);
         String content = slot.stream().findFirst().orElseThrow();
 
-        if(content == "...")
+        if(content.equals("..."))
             return -1;
 
         return Integer.parseInt(content.substring(2));
+    }
+
+    public static int getContentLength(String content){
+
+        if(getContentType(content).equals(ContentType.STRING)){
+            return Tokenizer.asTokenList(content).size();
+        }
+
+        if(getContentType(content).equals(ContentType.PARAMETER_INT)){
+            return 1;
+        }
+
+        if(getContentType(content).equals(ContentType.PARAMETER_DAY)){
+            return 1;
+        }
+
+        return -1;
     }
 
 }

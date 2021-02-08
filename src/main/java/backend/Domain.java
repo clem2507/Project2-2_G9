@@ -1,18 +1,42 @@
 package backend;
 
+import nlp.MatchedSequence;
+import nlp.Pattern;
+import nlp.PatternMatcher;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+import java.util.stream.Collectors;
 
 public abstract class Domain {
     private final DomainNames uniqueName;
+    private final List<String> patterns;
 
     public Domain(final DomainNames uniqueName) {
+        this.patterns = new ArrayList<>();
         this.uniqueName = uniqueName;
     }
 
-    public abstract double weight(final List<String> tokens); //This will change soon!
+    public void addPattern(String newPattern){
+        patterns.add(newPattern);
+    }
 
-    public abstract Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue);
+    public List<String> getPatterns(){
+        return new ArrayList<>(patterns);
+    }
+
+    public MatchedSequence matchQuery(String query){
+        return patterns.stream()
+                .map(p -> PatternMatcher.compile(p, query))
+                .filter(Objects::nonNull)
+                .max(Comparator.comparingDouble(MatchedSequence::useRatio))
+                .orElse(null);
+    }
+
+    public abstract Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel);
 
     public DomainNames getUniqueName(){
         return uniqueName;

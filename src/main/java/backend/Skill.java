@@ -5,12 +5,10 @@ import java.util.concurrent.BlockingQueue;
 
 public abstract class Skill implements Runnable{
     private final Domain parent;
-    private final List<String> queryTokens;
     private final BlockingQueue<AssistantMessage> outputChannel;
 
-    public Skill(final Domain parent, final List<String> tokens, final BlockingQueue<AssistantMessage> outputChannel){
+    public Skill(final Domain parent, final BlockingQueue<AssistantMessage> outputChannel){
         this.parent = parent;
-        this.queryTokens = tokens;
         this.outputChannel = outputChannel;
     }
 
@@ -24,10 +22,6 @@ public abstract class Skill implements Runnable{
             e.printStackTrace();
         }
 
-    }
-
-    protected List<String> getTokens(){
-        return queryTokens;
     }
 
 }

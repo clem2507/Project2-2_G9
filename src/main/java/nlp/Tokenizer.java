@@ -35,6 +35,8 @@ public class Tokenizer {
                 .flatMap(t -> splitOn(t, "="))
                 .flatMap(t -> splitOn(t, ">"))
                 .flatMap(t -> splitOn(t, "<"))
+                .flatMap(t -> splitOn(t, ":"))
+                .map(String::toLowerCase)
                 .collect(Collectors.toList());
     }
 

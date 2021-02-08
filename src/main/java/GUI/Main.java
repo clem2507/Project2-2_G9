@@ -92,9 +92,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
         assistant = new Assistant();
-        assistant.addDomain(new SayThis());
 
         //Default Background
         bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));

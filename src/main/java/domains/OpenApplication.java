@@ -4,6 +4,7 @@ import backend.AssistantMessage;
 import backend.Skill;
 import backend.Domain;
 import backend.DomainNames;
+import nlp.MatchedSequence;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,13 +16,7 @@ public class OpenApplication extends Domain {
         super(DomainNames.OpenApp);
     }
 
-    @Override
-    public double weight(List<String> tokens) {
-        return tokens.get(0).toLowerCase().equals("open")? 1.0:0.0;
-    }
-
-    @Override
-    public Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue) {
+    /*public Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue) {
         return new Skill(this, tokens, resultsQueue) {
             @Override
             public void run() {
@@ -39,5 +34,10 @@ public class OpenApplication extends Domain {
                 }
             }
         };
+    }*/
+
+    @Override
+    public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> resultsQueue) {
+        return null;
     }
 }

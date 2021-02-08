@@ -1,5 +1,8 @@
 package backend;
 
+import domains.Location.FindMe;
+import domains.SayThis;
+import nlp.MatchedSequence;
 import nlp.Tokenizer;
 
 import java.util.*;
@@ -17,25 +20,40 @@ public class Assistant {
         domains = new HashSet<>();
         outputChannel = new LinkedBlockingQueue<>();
         runningSkills = new HashSet<>();
+
+        addDomain(new SayThis());
+        addDomain(new FindMe());
     }
 
     public void processQuery(final String query){
-        System.out.println(Tokenizer.asTokenList(query));
-        //TODO: Modify this function such that it supports
-        //            1) Using a threshold to determine if no skill can handle the query
-        //            2) Ask the user to rephrase if more than 1 skill can handle the query
-        //  (note to self)
-        //  -Dennis
         assert !domains.isEmpty();
-        System.out.println(query);
-        List<String> tokens = Arrays.stream(query.split("\\s+")).collect(Collectors.toList());
-        Domain selectedDomain = this.domains.stream()
-                .max(Comparator.comparingDouble(a -> a.weight(tokens)))
-                .orElseThrow();
-        Skill skill = selectedDomain.dispatchSkill(tokens, outputChannel);
-        Thread thread = new Thread(skill);
-        thread.start();
-        runningSkills.add(thread);
+        Domain selectedDomain = null;
+        MatchedSequence obtainedSequence = null;
+
+        for(Domain d : domains){
+            final MatchedSequence sequence = d.matchQuery(query);
+
+            if(sequence != null && (obtainedSequence == null || sequence.useRatio() > obtainedSequence.useRatio())){
+                selectedDomain = d;
+                obtainedSequence = sequence;
+            }
+
+        }
+
+        if(selectedDomain != null){
+            System.out.println("Selected Domain: " + selectedDomain.getUniqueName());
+            Skill skill = selectedDomain.dispatchSkill(obtainedSequence, outputChannel);
+            Thread thread = new Thread(skill);
+            thread.start();
+            runningSkills.add(thread);
+        }
+
+        else{
+            // In the future, here is where the assistant will invoke the fallback system with user defined responses
+            System.out.println("Query not understood");
+            pushMessage("Query not understood");
+        }
+
     }
 
     public void cleanSkillPool(){

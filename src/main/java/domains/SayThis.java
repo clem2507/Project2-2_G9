@@ -4,6 +4,7 @@ import backend.AssistantMessage;
 import backend.Domain;
 import backend.Skill;
 import backend.DomainNames;
+import nlp.MatchedSequence;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -12,26 +13,33 @@ public class SayThis extends Domain {
 
     public SayThis() {
         super(DomainNames.Say);
+
+        // Define patterns for this domain in the constructor
+        addPattern("<say> <...>");
+        // Multiple patterns are supported
     }
 
     @Override
-    public double weight(List<String> tokens) {
-        return tokens.get(0).toLowerCase().equals("print")? 1.0:0.0;
-    }
+    public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
+        // Now request the parts of the query matched with the <...> (i.e. empty slot)
+        String str = sequence.getStringAt(1); // Matches with the empty slot are guaranteed to be String or null
 
-    @Override
-    public Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue) {
-        return new Skill(this, tokens, resultsQueue) {
+        // Check if str is null inside of the task. Never return null. Once a domain is committed to generate an
+        // output (i.e. at least one pattern matched with the query), it *must* dispatch a skill
+        return new Skill(this, outputChannel) {
             @Override
             public void run() {
-                System.out.println("Running task...");
-                String output = "";
-                for (int x = 1; x < tokens.size(); x++){
-                    output += tokens.get(x) + " ";
+
+                if(str != null) {
+                    pushMessage(str);
+                    System.out.println(str);
                 }
-                pushMessage(output);
-                System.out.println(output);
-                System.out.println("End of task.");
+
+                else{
+                    pushMessage("You gave me nothing to say");
+                    System.out.println("You gave me nothing to say");
+                }
+
             }
         };
     }
