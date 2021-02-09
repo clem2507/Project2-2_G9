@@ -12,6 +12,8 @@ import java.util.concurrent.BlockingQueue;
 public class FindWeather extends Domain {
     public FindWeather() {
         super(DomainNames.FindWeather);
+        addPattern("<weather> <in, at> <...>");
+
     }
 
     /*
@@ -19,29 +21,30 @@ public class FindWeather extends Domain {
     So all words after "in" make up a name of a city
      */
 
-    /*public Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue) {
-        return new Skill(this, tokens, resultsQueue) {
+    @Override
+    public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
+        String city = sequence.getStringAt(2);
+        String str = "The weather in " + city + " is ";
+        return new Skill(this, outputChannel) {
             @Override
             public void run() {
 
-                //TODO: This is inefficient and should be modified.
-                String city = "";
-                int in = tokens.indexOf("in");
-                for (int i = in+1 ; i <tokens.size(); i++){
-                    city = city + tokens.get(i) + " ";
+                if(!city.isEmpty()){
+                    String weather = CurrentWeather.getWeather(city);
+                    if(weather!=""){
+                        pushMessage(str+weather+"'C");
+                        System.out.println(str+weather+"'C");
+                    }else{
+                        pushMessage("Can't find the weather in " + city);
+                        System.out.println("Can't find the weather in " + city);
+
+                    }
+                }else{
+                    pushMessage("Please enter a city name");
+                    System.out.println("Please enter a city name");
                 }
 
-                String temp = CurrentWeather.getWeather(city);
-                String message = "Weather in " + city + " is " + temp + "C";
-
-                pushMessage(message);
-                System.out.println(message);
             }
         };
-    }*/
-
-    @Override
-    public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> resultsQueue) {
-        return null;
     }
 }
