@@ -18,7 +18,7 @@ public class CurrentLocation {
         String IP = ip;
         String API_KEY = "at_ldDTidowL2yO5ZA62ys6ixEWmG9Rh";
         String API_URL = "https://geo.ipify.org/api/v1?";
-        String url = API_URL + "&apiKey=" + API_KEY + "&ipAddress=" + IP;
+        String url = API_URL + "&apiKey=" + API_KEY;
 
         String loc = "";
 
