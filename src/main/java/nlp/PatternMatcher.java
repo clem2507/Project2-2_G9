@@ -25,7 +25,7 @@ public class PatternMatcher {
                 // If the content is of type INT or DAY
                 if(
                         (Pattern.getContentType(content).equals(Pattern.ContentType.PARAMETER_INT) && Pattern.isValidInt(tokens.get(i)))
-                        || (Pattern.getContentType(content).equals(Pattern.ContentType.PARAMETER_DAY) && Pattern.isValidDay(tokens.get(i)))
+                                || (Pattern.getContentType(content).equals(Pattern.ContentType.PARAMETER_DAY) && Pattern.isValidDay(tokens.get(i)))
                 ){
                     startsAt = i; // There is a match at i
                     break; // Stop iterating
@@ -46,196 +46,136 @@ public class PatternMatcher {
                 .max(Comparator.comparingInt(a -> a.getValue() - a.getKey())); // Get longest match in (slot, tokens[matchFrom:~])
     }
 
-    /**
-     Method that matches parts of the query with parts of the pattern
-     @param pattern from the domain
-     @param query input from user
-     @return map where each pair consists of the pattern slot and the tokens from the query that match it
-     */
+    public static MatchedSequence matchPatternWithString(final String pattern, final String query) throws NLPError {
+        //TODO: This function is too long. There must be a way to split this algorithm into smaller parts
+        List<String> tokens = Tokenizer.asTokenList(query); // Break query into tokens
+        List<Set<String>> slots = Pattern.parse(pattern); // Parse pattern into slots (sets of strings)
+        MatchedSequence output = new MatchedSequence(
+                Collections.unmodifiableList(tokens)
+        ); // The sequence of (slot, tokens) that we will return
+        int lastMatchBegins = 0, lastMatchEnds = 0; // Keep track of where we did the last match
 
-    /*
-    TODO:
-     - Date Pattern,
-     - Change data type of output returned,
-     - Inspect ordering of sets (weird) [check longer strings first]--> might be better
-     */
+        for(int slot_i = 0; slot_i < slots.size(); slot_i++){ // Iterate over the slots
+            final int matchFrom = lastMatchEnds;
+            Set<String> slot = slots.get(slot_i); // Current slot
 
-    public static List<Map.Entry<Set<String>, List<String>>> patternMatch(String pattern, String query) throws NLPError {
-        List<Map.Entry<Set<String>, List<String>>> matchList = new ArrayList<>();
-        List<Set<String>> patterns = Pattern.parse(pattern);
-        StringBuffer queryBuffer = new StringBuffer(query.trim());
+            if(Pattern.getSlotType(slot).equals(Pattern.SlotType.SOLID)) { // If slot is SOLID
+                Optional<Map.Entry<Integer, Integer>> range = matchSlotWithTokens(slot, tokens.subList(matchFrom, tokens.size()));
+                // NOTE: Here we match the longest content in slot to prevent contents that are substrings of longer
+                // contents from interfering. (i.e. "remind me to" is a super-string of "remind me")
 
-        List<String> matchedString = null;
+                if (range.isPresent()) { // If such match exists
+                    // We extract the matched indexes and apply the offset
+                    int startsAt = range.get().getKey() + lastMatchEnds;
+                    int endsAt = range.get().getValue() + lastMatchEnds;
 
-        for (Set p : patterns) {
-            for (Object s : p) {
-
-                System.out.println("being checked-->" + s);
-                // STRING SLOT
-                if (Pattern.getContentType((String) s).equals(Pattern.ContentType.STRING)) {
-
-                    int objLength = ((String) s).length();
-                    String substring = "";
-                    if(queryBuffer.length() >= objLength){
-                        substring = queryBuffer.substring(0, objLength);
-
-                    }
-                    String temp = queryBuffer.toString();
-
-
-
-                    if(patterns.indexOf(p)==0){
-                        if(query.toLowerCase().contains(((String) s).toLowerCase())){
-                            int indexOf = query.indexOf((String) s) + objLength;
-                            matchedString = Tokenizer.asTokenList((String) s);
-                            System.out.println("removed:   "+queryBuffer.substring(0 ,indexOf));
-                            queryBuffer.replace( 0 ,indexOf ,"");
-                            String newQ = queryBuffer.toString().trim();
-                            queryBuffer = new StringBuffer(newQ);
-                            break;
-                        }
-                    }else{
-                        if(temp.toLowerCase().contains(((String) s).toLowerCase())){
-
-//                            if(patterns.indexOf(p) == 1){
-//                                objLength = queryBuffer.length();
-//                                System.out.println((objLength));
-//                            }
-                            matchedString = Tokenizer.asTokenList((String) s);
-                            System.out.println("removed:   "+queryBuffer.substring(temp.indexOf((String) s) ,objLength+temp.indexOf((String) s)));
-                            queryBuffer.replace(temp.indexOf((String) s) ,objLength+temp.indexOf((String) s) ,"");
-                            String newQ = queryBuffer.toString().trim();
-                            queryBuffer = new StringBuffer(newQ);
-                            break;
-                        }
+                    // Then we check two cases:
+                    //  a) It is the first slot, and thus no need to check if this slot's match is consecutive to the previous match
+                    //  b) This match starts right where the previous one ends, and thus is consecutive
+                    if (slot_i == 0 || (lastMatchEnds == startsAt)){
+                        lastMatchBegins = startsAt; lastMatchEnds = endsAt; // Register where the last match occurred
+                        Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
+                                slot,
+                                tokens.subList(startsAt, endsAt)
+                        ); // Pack this match into a pair
+                        output.add(element); // Push the pair into the output sequence
+                        continue; // Move to the next slot
                     }
 
-                    // INTEGER SLOT
-                } else if(Pattern.getContentType((String) s).equals(Pattern.ContentType.PARAMETER_INT)){
-
-                    int lengthOfInt = 0 ;
-                    int intStartIndex = 0;
-                    if(patterns.indexOf(p)==0){
-
-                        for(int x = 0; x < queryBuffer.length(); x++){
-                            if(Character.isDigit(queryBuffer.charAt(x))){
-                                intStartIndex = x;
-                                break;
-                            }
-                        }
-                        for (int x = intStartIndex ; x < queryBuffer.length(); x++) {
-                            if (!Pattern.isValidInt(Character.toString(queryBuffer.charAt(x)))) {
-                                break;
-                            }
-                            lengthOfInt = x + 1;
-                        }
-
-                    }else{
-                        for(int x = 0; x < queryBuffer.length(); x++){
-                            if(Character.isDigit(queryBuffer.charAt(x))){
-                                intStartIndex = x;
-                                break;
-                            }
-                        }
-                        StringBuilder sb = new StringBuilder();
-                        for(char c : queryBuffer.toString().toCharArray()) {
-                            if (Character.isDigit(c)) {
-                                sb.append(c);
-                                lengthOfInt++;
-                            }
-                        }
-                    }
-
-                    int objLength = lengthOfInt+intStartIndex;
-                    if(objLength!=0){
-                        if(patterns.indexOf(p) == patterns.size()){
-                            objLength = queryBuffer.length();
-                        }
-                        matchedString = Tokenizer.asTokenList((String) s);
-                        System.out.println("removed:   "+queryBuffer.substring(intStartIndex ,objLength));
-                        queryBuffer.replace( intStartIndex ,objLength ,"");
-                        String newQ = queryBuffer.toString().trim();
-                        queryBuffer = new StringBuffer(newQ);
-                        break;
-                    }
-
-                    // DAY SLOT
-                } else if(Pattern.getContentType((String) s).equals(Pattern.ContentType.PARAMETER_DAY)) {
-                    String day = "";
-                    for(String word: query.split(" ")){
-                        if(Pattern.isValidDay(word)){
-                            day = word;
-                        }
-                    }
-                    int lengthOfString = day.length();
-                    int indexOfString = query.indexOf(day) + lengthOfString;
-
-                    if(!day.equals("")){
-                        if (patterns.indexOf(p) == 0) {
-                            matchedString = Tokenizer.asTokenList((String) s);
-                            System.out.println("removed:   "+queryBuffer.substring(0 ,indexOfString));
-                            queryBuffer.replace( 0 ,indexOfString ,"");
-                            String newQ = queryBuffer.toString().trim();
-                            queryBuffer = new StringBuffer(newQ);
-                            break;
-                        }else{
-
-                            if(patterns.indexOf(p) == patterns.size()-1){
-                                lengthOfString = queryBuffer.length();
-                            }
-
-                            matchedString = Tokenizer.asTokenList((String) s);
-                            String temp = queryBuffer.toString();
-                            System.out.println("removed:   "+queryBuffer.substring(temp.indexOf(day) ,lengthOfString));
-                            queryBuffer.replace(temp.indexOf(day) ,lengthOfString ," ");
-                            String newQ = queryBuffer.toString().trim();
-                            queryBuffer = new StringBuffer(newQ);
-
-                            break;
-                        }
-                    }
                 }
-            }
-            System.out.println("Query Left  : "+queryBuffer);
 
-            Map.Entry<Set<String>, List<String>> pair = new AbstractMap.SimpleEntry<>((Set<String>)p, matchedString);
-            matchList.add(pair);
-            matchedString = null;
+                return null; // If a solid slot has no match, then stop and return null
+            }
+
+            else if(Pattern.getSlotType(slot).equals(Pattern.SlotType.BLANK)){ // If slot is BLANK
+                int limit = Pattern.getBlankSlotParameter(slot); // Read the blank slot's parameter
+                // NOTE: The limit is bounded to be [1, Integer.MAX_VALUE/2]. If <...> or <#:n> where n < 1, then
+                // limit = Integer.MAX_VALUE/2 (this is akin to saying limit = +infinity - We devide by 2 to prevent
+                // integer overflow when doing calculations with -limit-)
+                Set<String> nextSlot = slot_i < slots.size() - 1? slots.get(slot_i + 1):null; // Get the next slot
+                // NOTE: IF there is not next slot, then we assign null
+
+                if(nextSlot == null){ // If there is no next slot
+                    Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
+                            slot,
+                            tokens.subList(
+                                    matchFrom,
+                                    Math.min(tokens.size(), matchFrom + limit)
+                            )
+                    ); // Get the remaining list of tokens up to the end, or up to limit, if limit != -1
+                    output.add(element); // Add pair to the sequence
+                }
+
+                else{ // If there is next slot
+
+                    if(Pattern.getSlotType(nextSlot).equals(Pattern.SlotType.BLANK)){
+                        throw new NLPError("Illegal declaration, consecutive blank slots");
+                    }
+
+                    Optional<Map.Entry<Integer, Integer>> range = matchSlotWithTokens(
+                            nextSlot,
+                            tokens.subList(matchFrom, tokens.size())
+                    ); // We match the next slot
+
+                    if(range.isPresent()){ // If there is a match
+                        // Just like above, we adjust to the offset
+                        int startsAt = range.get().getKey() + lastMatchEnds;
+                        int endsAt = range.get().getValue() + lastMatchEnds;
+
+                        // Then we have to check if the next slot does not completely overlap the blank slot
+                        // If the next slot matches right after the previous slot, then the blank slot is empty
+                        if(startsAt - matchFrom > 0){
+
+                            if(startsAt - matchFrom > limit) {
+                                // If limit is specified and the blank slot matches with more than -limit- tokens
+                                // then stop and return null
+                                return null;
+                            }
+
+                            // Now we add the chunk of tokens between the previous slot and the next slot as
+                            // matches of the blank slot
+                            Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
+                                    slot,
+                                    tokens.subList(
+                                            matchFrom,
+                                            startsAt
+                                    )
+                            );
+                            output.add(element);
+                            lastMatchBegins = matchFrom;
+                            lastMatchEnds = startsAt;
+                            continue;
+                        }
+
+                        else{ // We add the empty blank slot into the sequence
+                            Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
+                                    slot,
+                                    null
+                            );
+                            output.add(element);
+                            continue;
+                        }
+
+                    }
+
+                    return null; // If there is no match for the next slot, we can early stop
+                }
+
+            }
+
+            else{
+                throw new NLPError("Undefined slot type in position " + Integer.toString(slot_i));
+            }
+
         }
 
-
-        if(queryBuffer.length()!=0){
-            for(Set p: patterns){
-                if(p.contains("...")){
-                    matchedString = Tokenizer.asTokenList((queryBuffer.toString()));
-                    Map.Entry<Set<String>, List<String>> pair = new AbstractMap.SimpleEntry<>((Set<String>)p, matchedString);
-                    matchList.add(pair);
-                    queryBuffer.replace(0,queryBuffer.length(),"");
-                }
-            }
-        }
-
-        System.out.println("Query Left  : "+queryBuffer);
-        return matchList;
+        return output;
     }
 
     public static MatchedSequence compile(String pattern, String query){
 
         try {
-            // First we get the matched sequence (i.e. pairs of (slot, tokens)
-            List<Map.Entry<Set<String>, List<String>>> sequence = patternMatch(pattern, query);
-
-            // Since the matcher returns null when there is no match, we check for that
-            if(sequence != null){
-                // We translate the return type of the pattern matcher to our comfortable MatchedSequence
-                MatchedSequence matchedSequence = new MatchedSequence(Tokenizer.asTokenList(query));
-                matchedSequence.addAll(sequence);
-                // NOTE: This part of the code does not follow Oracle's Java Coding Conventions standards, since
-                // MatchedSequence is not entirely defined in the constructor. This will change in future updates
-                return matchedSequence;
-            }
-
-            return null; // If no match, then null
+            return matchPatternWithString(pattern, query);
         }
 
         // Since the matcher will throw a NLPError in case of a problem while parsing, we have to account for this
@@ -244,16 +184,6 @@ public class PatternMatcher {
             return null;
         }
 
-    }
-
-    public static void main(String[] args){
-        String p = "<hello> <world>";
-        String q = "asfsdf hello world sdfsdf";
-        try {
-            System.out.println(patternMatch(p, q));
-        } catch (NLPError nlpError) {
-            nlpError.printStackTrace();
-        }
     }
 
 }
