@@ -8,14 +8,6 @@ import java.net.URL;
 public class CurrentLocation {
     public static String getLocation() throws IOException {
 
-        // Get IP address
-        URL whatismyip = new URL("http://checkip.amazonaws.com");
-        BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
-
-        String ip = in.readLine();
-
-        // Get location based on IP
-        String IP = ip;
         String API_KEY = "at_m5i0t9AxZ4tvBszOg56sYNdRG56Rm";
         String API_URL = "https://ip-geolocation.whoisxmlapi.com/api/v1?";
         String url = API_URL + "apiKey=" + API_KEY;
@@ -33,13 +25,12 @@ public class CurrentLocation {
                     break;
                 }
             }
-            // System.out.println(s.useDelimiter("\\A").next());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
 
-        // THIS PART IS USED SO IT PRINTS THE CORRECT OUTPUT WITHOUT JAVA UNICODE
+        // THIS PART IS USED SO IT PRINTS THE CORRECT OUTPUT WITHOUT JAVA UNICODE, i.e. \u00fc is actually "ü"
         String newstr = "";
         if (loc.contains("\\u00fc")) {
             int index = loc.indexOf("\\") - 1;
