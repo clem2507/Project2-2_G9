@@ -2,6 +2,7 @@ package backend;
 
 import domains.Location.FindMe;
 import domains.SayThis;
+import domains.Weather.FindWeather;
 import nlp.MatchedSequence;
 
 import java.util.*;
@@ -23,6 +24,7 @@ public class Assistant {
 
         addDomain(new SayThis());
         addDomain(new FindMe());
+        addDomain(new FindWeather());
     }
 
     public void processQuery(final String query){
