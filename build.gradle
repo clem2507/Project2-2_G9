@@ -20,7 +20,7 @@ dependencies {
 }
 
 javafx {
-    modules = [ 'javafx.controls', 'javafx.fxml']
+    modules = [ 'javafx.controls', 'javafx.graphics', 'javafx.swing', 'javafx.base', 'javafx.fxml']
     version = '11.0.2'
 }
 
