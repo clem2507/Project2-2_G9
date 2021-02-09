@@ -16,9 +16,9 @@ public class CurrentLocation {
 
         // Get location based on IP
         String IP = ip;
-        String API_KEY = "at_ldDTidowL2yO5ZA62ys6ixEWmG9Rh";
-        String API_URL = "https://geo.ipify.org/api/v1?";
-        String url = API_URL + "&apiKey=" + API_KEY;
+        String API_KEY = "at_m5i0t9AxZ4tvBszOg56sYNdRG56Rm";
+        String API_URL = "https://ip-geolocation.whoisxmlapi.com/api/v1?";
+        String url = API_URL + "apiKey=" + API_KEY;
 
         String loc = "";
 
