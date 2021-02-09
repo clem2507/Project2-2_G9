@@ -25,13 +25,13 @@ public class Pattern {
     }
 
     private static List<String> groupByContent(List<String> pattern) throws NLPError {
-        List<String> contents = new ArrayList<>();
-        String accumulator = "";
+        List<String> contents = new ArrayList<>(); // List of tokens put together as either delimiters or contents
+        String accumulator = ""; // Current content
         int openSlots = 0; // This is to keep track of misplaced '<' and '>'
 
-        for(String t : pattern){
+        for(String t : pattern){ // Iterate over tokens
 
-            if(Arrays.asList(new String[]{"<", ",", ">"}).contains(t)){
+            if(Arrays.asList(new String[]{"<", ",", ">"}).contains(t)){ // If the token is a delimiter
 
                 if(t.equals("<")){
                     openSlots++;
@@ -41,62 +41,64 @@ public class Pattern {
                     openSlots--;
                 }
 
-                if(!accumulator.isEmpty()){
-                    contents.add(accumulator.trim().toLowerCase());
-                    accumulator = "";
+                if(!accumulator.isEmpty()){ // If there is a content being parsed
+                    contents.add(accumulator.trim().toLowerCase()); // Add it to the list
+                    accumulator = ""; // Then start over with the remaining set of tokens
                 }
 
-                contents.add(t);
+                contents.add(t); // Add delimiter to the list
             }
 
             else{
-                accumulator += t + " ";
+                // TODO: The accumulator could be replaced with a StringBuilder for better performance
+                accumulator += t + " "; // Accumulate token
             }
 
         }
 
-        if(openSlots < 0){
-            throw new NLPError("Missing '<'");
+        if(openSlots < 0){ // If there are more closing clauses (i.e. '>') than opening clauses (i.e. '<')
+            throw new NLPError("Missing '<'"); // Throw NLPError
         }
 
-        else if(openSlots > 0){
-            throw new NLPError("Missing '>'");
+        else if(openSlots > 0){ // If there are more opening clauses (i.e. '>') than closing clauses (i.e. '<')
+            throw new NLPError("Missing '>'"); // Throw NLPError
         }
 
-        return contents;
+        return contents; // Return grouped tokens
     }
 
     private static List<Set<String>> groupInSlots(List<String> pattern) throws NLPError {
-        List<Set<String>> slots = new ArrayList<>();
-        Set<String> slot = null;
+        List<Set<String>> slots = new ArrayList<>(); // List of sets (i.e. slots)
+        Set<String> slot = null; // Current slot we are working with
 
-        for(String t : pattern){
+        for(String t : pattern){ // Iterate over the tokens
 
-            if(t.equals("<")){
+            if(t.equals("<")){ // If the token is an opening clause '<'
 
                 if(slot != null) {
                     throw new NLPError("Misplaced '<'");
                 }
 
-                slot = new HashSet<>();
+                slot = new HashSet<>(); // Create a new working set
             }
 
-            else if(t.equals(">")){
+            else if(t.equals(">")){ // If the token is a closing clause '>'
 
                 if(slot == null) {
                     throw new NLPError("Misplaced '>'");
                 }
 
-                slots.add(slot);
-                slot = null;
+                slots.add(slot); // Add the current working set to the list
+                slot = null; // Start over for the next slot
             }
 
-            else if(!t.equals(",")){
-                slot.add(t);
+            else if(!t.equals(",")){ // If the token is a conjunction clause ','
+                slot.add(t); // Att token to the working set
             }
 
         }
-        return slots;
+
+        return slots; // Return list of slots
     }
 
     public static boolean isValidInt(String str){
@@ -160,9 +162,10 @@ public class Pattern {
         String content = slot.stream().findFirst().orElseThrow();
 
         if(content.equals("..."))
-            return -1;
+            return Integer.MAX_VALUE/2;
 
-        return Integer.parseInt(content.substring(2));
+        int value = Integer.parseInt(content.substring(2));
+        return value > 0? value:(Integer.MAX_VALUE/2);
     }
 
     public static int getContentLength(String content){

@@ -16,6 +16,8 @@ public class SayThis extends Domain {
 
         // Define patterns for this domain in the constructor
         addPattern("<say> <...>");
+        addPattern("<repeat> <...>");
+        addPattern("<print> <...>");
         // Multiple patterns are supported
     }
 

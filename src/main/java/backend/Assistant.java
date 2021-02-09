@@ -3,7 +3,6 @@ package backend;
 import domains.Location.FindMe;
 import domains.SayThis;
 import nlp.MatchedSequence;
-import nlp.Tokenizer;
 
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
@@ -15,6 +14,7 @@ public class Assistant {
     private Set<Domain> domains;
     private BlockingQueue<AssistantMessage> outputChannel;
     private Set<Thread> runningSkills;
+    private FallbackInterpreter fallback;
 
     public Assistant(){
         domains = new HashSet<>();
@@ -26,13 +26,15 @@ public class Assistant {
     }
 
     public void processQuery(final String query){
-        assert !domains.isEmpty();
-        Domain selectedDomain = null;
-        MatchedSequence obtainedSequence = null;
+        Domain selectedDomain = null; // Best domain matched so far
+        MatchedSequence obtainedSequence = null; // Best matched sequence so far
 
-        for(Domain d : domains){
-            final MatchedSequence sequence = d.matchQuery(query);
+        for(Domain d : domains){ // Iterate ove the domains
+            final MatchedSequence sequence = d.matchQuery(query); // Match the query with the 'best' pattern in the domain
+            // NOTE: 'best' means that the domain passed the 'two questions test' and the information use ratio
+            // (i.e. matched tokens / query length ratio) is the highest
 
+            // If the sequence is a match and it is a better match than obtainedSequence or it is the first match
             if(sequence != null && (obtainedSequence == null || sequence.useRatio() > obtainedSequence.useRatio())){
                 selectedDomain = d;
                 obtainedSequence = sequence;
@@ -40,18 +42,34 @@ public class Assistant {
 
         }
 
-        if(selectedDomain != null){
+        if(selectedDomain != null){ // If a domained matched
             System.out.println("Selected Domain: " + selectedDomain.getUniqueName());
-            Skill skill = selectedDomain.dispatchSkill(obtainedSequence, outputChannel);
+            Skill skill = selectedDomain.dispatchSkill(obtainedSequence, outputChannel); // Declare skill
+
+            // Send skill to run in the background
             Thread thread = new Thread(skill);
             thread.start();
             runningSkills.add(thread);
         }
 
         else{
+
+            if(fallback == null)
+                return; //Temporary, while there is no FallbackInterpreter defined
+
             // In the future, here is where the assistant will invoke the fallback system with user defined responses
-            System.out.println("Query not understood");
-            pushMessage("Query not understood");
+            // NOTE: A third system in place will be added later on. A system of lower hierarchy than the fallback
+            // system will be responsible for interpreting unstructured sentences with vague meaning.
+            String fallbackResponse = fallback.processQuery(query);
+
+            if(fallbackResponse != null){
+                pushMessage(fallbackResponse);
+            }
+
+            else{
+                pushMessage("Query not understood");
+            }
+
         }
 
     }
@@ -107,6 +125,10 @@ public class Assistant {
 
     public boolean hasDomain(final Domain domain){
         return domains.contains(domain);
+    }
+
+    public void notifyOfNewPath(String path){
+        fallback.notifyNewPath(path);
     }
 
 }

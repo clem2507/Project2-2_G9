@@ -17,6 +17,9 @@ public class FindMe extends Domain {
         addPattern("<find me>");
         addPattern("<where am I>");
         addPattern("<what, which, where> <is my> <location, position, localization>");
+
+        // Now, if someone types "get my location" or "tell me my location" or something like that
+        addPattern("<find, tell, get> <#:2> <location, position, localization>"); // This pattern will match
     }
 
     @Override
