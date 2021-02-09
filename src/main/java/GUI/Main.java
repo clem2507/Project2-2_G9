@@ -333,11 +333,16 @@ public class Main extends Application {
         userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
+
         try {
-            botText = new Text(assistant.getOutputOrWait().getMessage());
+            AssistantMessage hi = assistant.getOutputOrContinue();
+            if(hi != null) {
+                botText = new Text(hi.getMessage());
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
 
         botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
         botText.setTranslateX(50);
