@@ -6,7 +6,6 @@ import backend.Skill;
 import backend.DomainNames;
 import nlp.MatchedSequence;
 
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class SayThis extends Domain {

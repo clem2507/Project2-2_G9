@@ -43,7 +43,6 @@ public class Assistant {
         }
 
         if(selectedDomain != null){ // If a domained matched
-            System.out.println("Selected Domain: " + selectedDomain.getUniqueName());
             Skill skill = selectedDomain.dispatchSkill(obtainedSequence, outputChannel); // Declare skill
 
             // Send skill to run in the background
