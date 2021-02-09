@@ -32,7 +32,7 @@ public class SayThis extends Domain {
             @Override
             public void run() {
 
-                if(str != null) {
+                if(!str.isEmpty()) {
                     pushMessage(str);
                     System.out.println(str);
                 }

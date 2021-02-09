@@ -102,7 +102,7 @@ public class PatternMatcher {
                                     matchFrom,
                                     Math.min(tokens.size(), matchFrom + limit)
                             )
-                    ); // Get the remaining list of tokens up to the end, or up to limit, if limit != -1
+                    ); // Get the remaining list of tokens up to the end, or up to limit, if limit < 1
                     output.add(element); // Add pair to the sequence
                 }
 
@@ -150,7 +150,7 @@ public class PatternMatcher {
                         else{ // We add the empty blank slot into the sequence
                             Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
                                     slot,
-                                    null
+                                    Collections.emptyList()
                             );
                             output.add(element);
                             continue;
