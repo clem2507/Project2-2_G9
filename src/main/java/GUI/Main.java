@@ -1,5 +1,6 @@
 package GUI;
 
+import backend.AssistantMessage;
 import domains.SayThis;
 import backend.Assistant;
 import domains.Location.CurrentLocation;
@@ -332,11 +333,17 @@ public class Main extends Application {
         userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
-        botText = new Text("Bot: bot's answer...");
+        try {
+            botText = new Text(assistant.getOutputOrWait().getMessage());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
         botText.setTranslateX(50);
         botText.setTranslateY(userText.getTranslateY()+20);
         botText.setFill(Color.WHITE);
+
 
         chatLayout.getChildren().addAll(messageTime, userText, botText);
     }
