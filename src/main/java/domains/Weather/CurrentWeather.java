@@ -35,7 +35,7 @@ public class CurrentWeather {
                 }
             }
         }catch (IOException e){
-            e.printStackTrace();
+
         }
         return temp;
     }
