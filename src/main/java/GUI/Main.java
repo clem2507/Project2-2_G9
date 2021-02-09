@@ -339,7 +339,7 @@ public class Main extends Application {
             if(hi != null) {
                 botText = new Text(hi.getMessage());
             }
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
