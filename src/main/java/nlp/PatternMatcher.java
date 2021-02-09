@@ -20,8 +20,8 @@ public class PatternMatcher {
      - Inspect ordering of sets (weird) [check longer strings first]--> might be better
      */
 
-    public static Map<Set<String>, List<String>> patternMatch(String pattern, String query) {
-        Map<Set<String>, List<String>> matchList = new HashMap<Set<String>, List<String>>();
+    public static List<AbstractMap.SimpleEntry<Set<String>, List<String>>> patternMatch(String pattern, String query) {
+        List<AbstractMap.SimpleEntry<Set<String>, List<String>>> matchList = new ArrayList<AbstractMap.SimpleEntry<Set<String>, List<String>>>();
         List<Set<String>> patterns = Pattern.parse(pattern);
         StringBuffer queryBuffer = new StringBuffer(query.trim());
 
@@ -158,7 +158,7 @@ public class PatternMatcher {
             }
             System.out.println("Query Left  : "+queryBuffer);
 
-            matchList.put(p, matchedString);
+            matchList.add(new AbstractMap.SimpleEntry<Set<String>, List<String>>(p, matchedString));
             matchedString = null;
         }
 
@@ -167,7 +167,7 @@ public class PatternMatcher {
             for(Set p: patterns){
                 if(p.contains("...")){
                     matchedString = Tokenizer.asTokenList((queryBuffer.toString()));
-                    matchList.put(p, matchedString);
+                    matchList.add(new AbstractMap.SimpleEntry<Set<String>, List<String>>(p, matchedString));
                     queryBuffer.replace(0,queryBuffer.length(),"");
                 }
             }
@@ -178,11 +178,13 @@ public class PatternMatcher {
     }
 
     public static void main(String[] args) {
-            String pattern = "<weather> <in> <...>";
-            String query = "What is the weather in maastricht";
-            Map<Set<String>, List<String>> strings = patternMatch(pattern , query);
-            System.out.println(strings);
-
+        String pattern = "<weather> <in> <...>";
+        String query = "What is the weather in maastricht";
+        List<AbstractMap.SimpleEntry<Set<String>, List<String>>> list = patternMatch(pattern , query);
+        System.out.println("main");
+        for (AbstractMap.SimpleEntry a : list) {
+            System.out.println((a));
+        }
     }
 
 }
