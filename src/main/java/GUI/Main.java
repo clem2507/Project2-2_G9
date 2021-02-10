@@ -343,7 +343,6 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
-
         botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
         botText.setTranslateX(50);
         botText.setTranslateY(userText.getTranslateY()+20);

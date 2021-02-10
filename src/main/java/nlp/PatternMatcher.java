@@ -51,7 +51,8 @@ public class PatternMatcher {
         List<String> tokens = Tokenizer.asTokenList(query); // Break query into tokens
         List<Set<String>> slots = Pattern.parse(pattern); // Parse pattern into slots (sets of strings)
         MatchedSequence output = new MatchedSequence(
-                Collections.unmodifiableList(tokens)
+                pattern,
+                query
         ); // The sequence of (slot, tokens) that we will return
         int lastMatchBegins = 0, lastMatchEnds = 0; // Keep track of where we did the last match
 
