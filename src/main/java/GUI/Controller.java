@@ -30,12 +30,12 @@ public class Controller {
                     break;
                 case ENTER:
                     if (window.textField.getText().length() > 0 && Main.isAgentFree) {
-                        window.assistant.processQuery(window.textField.getText());
+                        Main.isAgentFree = false;
                         window.requestCounter++;
                         window.sendText(window.textField.getText());
-                        window.textField.setText("");
                         Main.robotInteractionText.setText("...");
-                        Main.isAgentFree = false;
+                        window.assistant.processQuery(window.textField.getText());
+                        window.textField.setText("");
                     }
                     break;
             }

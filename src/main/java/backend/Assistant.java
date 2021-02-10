@@ -1,6 +1,7 @@
 package backend;
 
 import domains.Location.FindMe;
+import domains.Photo.Photo;
 import domains.SayThis;
 import domains.Weather.FindWeather;
 import nlp.MatchedSequence;
@@ -25,6 +26,7 @@ public class Assistant {
         addDomain(new SayThis());
         addDomain(new FindMe());
         addDomain(new FindWeather());
+        addDomain(new Photo());
     }
 
     public void processQuery(final String query){
