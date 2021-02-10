@@ -304,12 +304,6 @@ public class Main extends Application {
             System.exit(0);
         });
 
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("Digital Assistant");
-        primaryStage.setScene(scene);
-        primaryStage.centerOnScreen();
-        primaryStage.show();
-
         Thread mainThread = new Thread(() -> {
             while (true) {
                 updateTime();
@@ -317,6 +311,12 @@ public class Main extends Application {
         });
         mainThread.setDaemon(false);
         mainThread.start();
+
+        primaryStage.setResizable(false);
+        primaryStage.setTitle("Digital Assistant");
+        primaryStage.setScene(scene);
+        primaryStage.centerOnScreen();
+        primaryStage.show();
     }
 
     /**
