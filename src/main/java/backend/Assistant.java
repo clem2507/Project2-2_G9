@@ -54,23 +54,7 @@ public class Assistant {
         }
 
         else{
-
-            if(fallback == null)
-                return; //Temporary, while there is no FallbackInterpreter defined
-
-            // In the future, here is where the assistant will invoke the fallback system with user defined responses
-            // NOTE: A third system in place will be added later on. A system of lower hierarchy than the fallback
-            // system will be responsible for interpreting unstructured sentences with vague meaning.
-            String fallbackResponse = fallback.processQuery(query);
-
-            if(fallbackResponse != null){
-                pushMessage(fallbackResponse);
-            }
-
-            else{
-                pushMessage("Query not understood");
-            }
-
+            pushMessage("Query not understood");
         }
 
     }
