@@ -1,5 +1,5 @@
 package backend;
 
 public enum DomainNames {
-    Say, OpenApp, FindWeather, FindMe
+    Say, OpenApp, FindWeather, FindMe, Photo
 }

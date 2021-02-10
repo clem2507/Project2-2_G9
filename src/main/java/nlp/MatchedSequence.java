@@ -3,11 +3,12 @@ package nlp;
 import java.util.*;
 
 public class MatchedSequence extends ArrayList<Map.Entry<Set<String>, List<String>>> {
-    private List<String> sample;
+    private String pattern, query;
 
-    public MatchedSequence(List<String> tokens){
+    public MatchedSequence(String pattern, String query){
         super();
-        sample = tokens;
+        this.pattern = pattern;
+        this.query = query;
     }
 
     public List<String> getMatchedTokensAt(int slotIndex){
@@ -51,7 +52,15 @@ public class MatchedSequence extends ArrayList<Map.Entry<Set<String>, List<Strin
         return stream()
                 .map(s -> (double)s.getValue().size())
                 .reduce(Double::sum)
-                .orElseThrow()/((double)sample.size());
+                .orElseThrow()/((double)(Tokenizer.asTokenList(query)).size());
+    }
+
+    public String getPattern(){
+        return pattern;
+    }
+
+    public String getQuery(){
+        return query;
     }
 
 }

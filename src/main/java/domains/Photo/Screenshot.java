@@ -33,7 +33,9 @@ public class Screenshot extends JFrame {
         JLabel label = new JLabel(new ImageIcon(takeSelfie()));
         panel.add(label);
         this.add(panel);
-        this.setSize(500,500);
+        this.setSize(500,460);
+        this.setUndecorated(true);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
