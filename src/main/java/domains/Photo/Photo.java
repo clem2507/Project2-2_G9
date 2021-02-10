@@ -19,6 +19,7 @@ public class Photo extends Domain {
 
     @Override
     public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
+        System.out.println("SEQUENCE -->\t" + sequence);
         return new Skill(this, outputChannel) {
             @Override
             public void run() {
