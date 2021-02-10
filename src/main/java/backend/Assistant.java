@@ -56,7 +56,7 @@ public class Assistant {
         }
 
         else{
-            pushMessage("Query not understood");
+            pushMessage("Query not understood"); // Push message to the queue
         }
 
     }
@@ -83,8 +83,8 @@ public class Assistant {
         return outputChannel.take();
     }
 
-    public AssistantMessage getOutputOrContinue() throws InterruptedException {
-        return outputChannel.poll(0, TimeUnit.MILLISECONDS);
+    public Optional<AssistantMessage> getOutputOrContinue() throws InterruptedException {
+        return Optional.ofNullable(outputChannel.poll(0, TimeUnit.MILLISECONDS));
     }
 
     public void pushMessage(final String message){

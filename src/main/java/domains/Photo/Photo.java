@@ -12,8 +12,8 @@ public class Photo extends Domain {
     public Photo(){
         super(DomainNames.Photo);
 
-        addPattern("<photo> <...>");
-        addPattern("<selfie> <...>");
+        addPattern("<photo>");
+        addPattern("<selfie>");
 
     }
 
