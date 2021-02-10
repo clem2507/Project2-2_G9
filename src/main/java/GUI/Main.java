@@ -56,10 +56,8 @@ public class Main extends Application {
 
     Text dateText;
     Text timeText;
-    Text botText;
     Text userText;
     Text messageTime;
-    Text robotInteractionText;
     Text weatherCity;
     Text weatherDegree;
 
@@ -91,8 +89,14 @@ public class Main extends Application {
 
     Assistant assistant;
 
+    public static boolean isAgentFree = true;
+
+    public static Text botText;
+    public static Text robotInteractionText;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
+
         assistant = new Assistant();
 
         //Default Background
@@ -333,21 +337,23 @@ public class Main extends Application {
         userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
-
-        try {
-            AssistantMessage hi = assistant.getOutputOrContinue();
-            if(hi != null) {
-                botText = new Text(hi.getMessage());
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        botText = new Text();
         botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
         botText.setTranslateX(50);
         botText.setTranslateY(userText.getTranslateY()+20);
         botText.setFill(Color.WHITE);
 
+//        try {
+//            AssistantMessage hi = assistant.getOutputOrContinue();
+//            while(true) {
+//                if (hi!=null) {
+//                    botText.setText("Bot: " + hi.getMessage());
+//                    break;
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         chatLayout.getChildren().addAll(messageTime, userText, botText);
     }
@@ -357,13 +363,22 @@ public class Main extends Application {
      */
     public void updateTime() {
 
+        wait(1000);
+        currentDate = new Date();
+        timeText.setText(time.format(currentDate));
+    }
+
+    /**
+     * Method the makes the program wait "time" seconds
+     * @param time to wait
+     */
+    public void wait(int time) {
+
         try {
-            Thread.sleep(1000);
+            Thread.sleep(time);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }
-        currentDate = new Date();
-        timeText.setText(time.format(currentDate));
     }
 
     public static void main(String[] args) {
