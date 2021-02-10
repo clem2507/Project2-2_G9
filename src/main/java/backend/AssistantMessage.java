@@ -9,14 +9,6 @@ public class AssistantMessage {
     public AssistantMessage(final Domain sender, final String message){
         this.sender = sender;
         this.message = message;
-        if (message.length() > 0) {
-            Main.botText.setText("Bot: " + message);
-        }
-        else {
-            Main.botText.setText("Bot: query not understood");
-        }
-        Main.robotInteractionText.setText("Anything else?\nI'm free");
-        Main.isAgentFree = true;
     }
 
     /**

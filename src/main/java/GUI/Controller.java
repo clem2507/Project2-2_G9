@@ -29,13 +29,14 @@ public class Controller {
                     System.exit(0);
                     break;
                 case ENTER:
-                    if (window.textField.getText().length() > 0 && Main.isAgentFree) {
-                        Main.isAgentFree = false;
+                    if (window.textField.getText().length() > 0 && window.isAgentFree) {
+                        window.isAgentFree = false;
                         window.requestCounter++;
-                        window.sendText(window.textField.getText());
-                        Main.robotInteractionText.setText("...");
+                        window.sendUserText(window.textField.getText());
+                        window.robotInteractionText.setText("...");
                         window.assistant.processQuery(window.textField.getText());
                         window.textField.setText("");
+                        window.createThread();
                     }
                     break;
             }

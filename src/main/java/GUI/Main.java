@@ -1,6 +1,7 @@
 package GUI;
 
 import backend.Assistant;
+import backend.AssistantMessage;
 import domains.Location.CurrentLocation;
 import domains.Weather.CurrentWeather;
 import javafx.application.Application;
@@ -27,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 public class Main extends Application {
 
@@ -35,6 +37,7 @@ public class Main extends Application {
     int requestCounter = 0;
 
     boolean flag = true;
+    boolean isAgentFree = true;
 
     Group pane = new Group();
     Group imagesLayout;
@@ -58,6 +61,8 @@ public class Main extends Application {
     Text dateText;
     Text timeText;
     Text userText;
+    Text botText;
+    Text robotInteractionText;
     Text messageTime;
     Text weatherCity;
     Text weatherDegree;
@@ -90,10 +95,7 @@ public class Main extends Application {
 
     Assistant assistant;
 
-    public static boolean isAgentFree = true;
-
-    public static Text botText;
-    public static Text robotInteractionText;
+    Thread queryThread;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -324,7 +326,7 @@ public class Main extends Application {
      * Display the request and the answer in the chat
      * @param text query
      */
-    public void sendText(String text) {
+    public void sendUserText(String text) {
 
         currentDate = new Date();
         messageTime = new Text(time.format(currentDate));
@@ -338,25 +340,7 @@ public class Main extends Application {
         userText.setTranslateY(messageTime.getTranslateY()+2);
         userText.setFill(Color.WHITE);
 
-        botText = new Text();
-        botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
-        botText.setTranslateX(50);
-        botText.setTranslateY(userText.getTranslateY()+20);
-        botText.setFill(Color.WHITE);
-
-//        try {
-//            AssistantMessage hi = assistant.getOutputOrContinue();
-//            while(true) {
-//                if (hi!=null) {
-//                    botText.setText("Bot: " + hi.getMessage());
-//                    break;
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-        chatLayout.getChildren().addAll(messageTime, userText, botText);
+        chatLayout.getChildren().addAll(messageTime, userText);
     }
 
     /**
@@ -380,6 +364,35 @@ public class Main extends Application {
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    public void createThread() {
+
+        queryThread = new Thread(() -> {
+            try {
+                botText = new Text();
+                AssistantMessage hi = assistant.getOutputOrWait();
+                if (hi.getMessage().length() > 0) {
+                    botText.setText("Bot: " + hi.getMessage());
+                }
+                else {
+                    botText.setText("Bot: query not understood");
+                }
+                Platform.runLater(() -> {
+                    botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                    botText.setFill(Color.WHITE);
+                    botText.setTranslateX(50);
+                    botText.setTranslateY(userText.getTranslateY()+20);
+                    robotInteractionText.setText("Anything else?\nI'm free");
+                    chatLayout.getChildren().add(botText);
+                });
+                isAgentFree = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        queryThread.setDaemon(false);
+        queryThread.start();
     }
 
     public static void main(String[] args) {
