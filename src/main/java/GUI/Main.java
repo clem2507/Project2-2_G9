@@ -6,6 +6,7 @@ import domains.Location.CurrentLocation;
 import domains.Weather.CurrentWeather;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,6 +14,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -24,8 +26,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -76,6 +81,7 @@ public class Main extends Application {
     Image robot;
     Image robotInteraction;
     Image GPS;
+    ImageView webcam;
 
     ImageView iv;
     ImageView imgView;
@@ -370,22 +376,70 @@ public class Main extends Application {
 
         queryThread = new Thread(() -> {
             try {
+                boolean image = false;
                 botText = new Text();
                 AssistantMessage hi = assistant.getOutputOrWait();
-                if (hi.getMessage().length() > 0) {
+                if(hi.getMessage().split("-")[0].equals("image"))
+                {
+                    image = true;
+                    System.out.println(hi.getMessage().split("-")[1]);
+                    FileInputStream input = new FileInputStream("src/assets/PhotoTaken/" + hi.getMessage().split("-")[1]);
+                    Image imageFile = new Image(input);
+                    webcam = new ImageView(imageFile);
+                    Platform.runLater(() -> {
+                        botText.setText("Bot: \n\n\n\n\n\n\n\n Click on the image to have full resolution!");
+                        botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                        botText.setFill(Color.WHITE);
+                        botText.setTranslateX(50);
+                        botText.setTranslateY(userText.getTranslateY() + 20);
+
+                        chatLayout.getChildren().add(botText);
+
+                        webcam.setScaleX(0.3);
+                        webcam.setScaleY(0.3);
+                        webcam.setScaleZ(0.3);
+                        webcam.setTranslateX(-172);
+                        webcam.setPreserveRatio(true);
+
+                        webcam.setTranslateY(botText.getTranslateY() - 160);
+
+
+                        webcam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+                            @Override
+                            public void handle(MouseEvent event) {
+                                File file = new File("src/assets/PhotoTaken/" + hi.getMessage().split("-")[1]);
+                                Desktop dt = Desktop.getDesktop();
+                                try {
+                                    dt.open(file);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                event.consume();
+                            }
+                        });
+
+
+                        robotInteractionText.setText("Damn\nYou are hot!");
+                        chatLayout.getChildren().add(webcam);
+                    });
+                }
+                else if (hi.getMessage().length() > 0) {
                     botText.setText("Bot: " + hi.getMessage());
                 }
                 else {
                     botText.setText("Bot: query not understood");
                 }
-                Platform.runLater(() -> {
-                    botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
-                    botText.setFill(Color.WHITE);
-                    botText.setTranslateX(50);
-                    botText.setTranslateY(userText.getTranslateY()+20);
-                    robotInteractionText.setText("Anything else?\nI'm free");
-                    chatLayout.getChildren().add(botText);
-                });
+                if(!image) {
+                    Platform.runLater(() -> {
+                        botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                        botText.setFill(Color.WHITE);
+                        botText.setTranslateX(50);
+                        botText.setTranslateY(botText.getTranslateY() + 10);
+                        robotInteractionText.setText("Anything else?\nI'm free");
+                        chatLayout.getChildren().add(botText);
+                    });
+                }
                 isAgentFree = true;
             } catch (Exception e) {
                 e.printStackTrace();

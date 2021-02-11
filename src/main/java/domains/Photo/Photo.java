@@ -6,6 +6,13 @@ import backend.DomainNames;
 import backend.Skill;
 import nlp.MatchedSequence;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.concurrent.BlockingQueue;
 
 public class Photo extends Domain {
@@ -24,34 +31,19 @@ public class Photo extends Domain {
             @Override
             public void run() {
 
-                try {
-
-                String messageA = "3";
-                pushMessage(messageA);
-                System.out.println(messageA);
-
-                Thread.sleep(900);
-
-                String messageB = "2";
-                pushMessage(messageB);
-                System.out.println(messageB);
-
-                Thread.sleep(900);
-
-                String messageC = "1";
-                pushMessage(messageC);
-                System.out.println(messageC);
-
-                Thread.sleep(900);
-
-                String messageD = "Smile!";
-                pushMessage(messageD);
-                System.out.println(messageD);
-
+                FormatStyle dateStyle;
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
+                LocalDateTime now = LocalDateTime.now();
+                String filename = dateTimeFormatter.format(now);
                 Screenshot screenshot = new Screenshot();
-                } catch (InterruptedException e) {
+                BufferedImage image = screenshot.takeSelfie();
+                File outputImage = new File("src/assets/PhotoTaken/" + filename + ".png");
+                try {
+                    ImageIO.write(image, "jpg", outputImage);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
+                pushMessage("image-" + filename + ".png");
             }
         };
     }

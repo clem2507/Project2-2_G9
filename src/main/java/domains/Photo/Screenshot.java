@@ -17,6 +17,7 @@ public class Screenshot extends JFrame {
      */
     public BufferedImage takeSelfie()
     {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture videoCapture = new VideoCapture();
         Mat mat = new Mat();
         videoCapture.open(0);
@@ -31,7 +32,7 @@ public class Screenshot extends JFrame {
     }
 
     public Screenshot() {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        /*System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         JPanel panel = new JPanel();
         JLabel label = new JLabel(new ImageIcon(takeSelfie()));
         panel.add(label);
@@ -56,7 +57,7 @@ public class Screenshot extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         this.setAlwaysOnTop(true);
-        this.setVisible(true);
+        this.setVisible(true);*/
     }
 
 }
