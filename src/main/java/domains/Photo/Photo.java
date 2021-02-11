@@ -1,9 +1,6 @@
 package domains.Photo;
 
-import backend.AssistantMessage;
-import backend.Domain;
-import backend.DomainNames;
-import backend.Skill;
+import backend.*;
 import nlp.MatchedSequence;
 
 import javax.imageio.ImageIO;
@@ -45,13 +42,13 @@ public class Photo extends Domain {
                 } catch (IOException e) {
                     try {
                         Files.createDirectories(Path.of("src/assets/PhotoTaken"));
-                        pushMessage("Directory does not exist try again now.");
+                        pushMessage("Directory does not exist try again now.", MessageType.STRING);
                         return;
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
                 }
-                pushMessage("image-" + filename + ".png");
+                pushMessage("image-" + filename + ".png", MessageType.IMAGE);
             }
         };
     }

@@ -1,9 +1,6 @@
 package domains;
 
-import backend.AssistantMessage;
-import backend.Domain;
-import backend.Skill;
-import backend.DomainNames;
+import backend.*;
 import nlp.MatchedSequence;
 
 import java.util.concurrent.BlockingQueue;
@@ -32,12 +29,12 @@ public class SayThis extends Domain {
             public void run() {
 
                 if(!str.isEmpty()) {
-                    pushMessage(str);
+                    pushMessage(str, MessageType.STRING);
                     System.out.println(str);
                 }
 
                 else{
-                    pushMessage("You gave me nothing to say");
+                    pushMessage("You gave me nothing to say", MessageType.STRING);
                     System.out.println("You gave me nothing to say");
                 }
 

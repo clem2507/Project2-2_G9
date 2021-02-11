@@ -1,9 +1,6 @@
 package domains.Weather;
 
-import backend.AssistantMessage;
-import backend.Domain;
-import backend.DomainNames;
-import backend.Skill;
+import backend.*;
 import nlp.MatchedSequence;
 
 import java.util.List;
@@ -32,15 +29,15 @@ public class FindWeather extends Domain {
                 if(!city.isEmpty()){
                     String weather = CurrentWeather.getWeather(city);
                     if(weather!=""){
-                        pushMessage(str+weather+"'C");
+                        pushMessage(str+weather+"'C", MessageType.STRING);
                         System.out.println(str+weather+"'C");
                     }else{
-                        pushMessage("Can't find the weather in " + city);
+                        pushMessage("Can't find the weather in " + city, MessageType.STRING);
                         System.out.println("Can't find the weather in " + city);
 
                     }
                 }else{
-                    pushMessage("Please enter a city name");
+                    pushMessage("Please enter a city name", MessageType.STRING);
                     System.out.println("Please enter a city name");
                 }
 

@@ -94,7 +94,7 @@ public class Assistant {
     public void pushMessage(final String message){
 
         try {
-            outputChannel.put(new AssistantMessage(null, message));
+            outputChannel.put(new AssistantMessage(Optional.empty(), message, MessageType.STRING));
         }
 
         catch (InterruptedException e) {

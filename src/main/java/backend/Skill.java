@@ -1,6 +1,7 @@
 package backend;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 
 public abstract class Skill implements Runnable{
@@ -12,10 +13,10 @@ public abstract class Skill implements Runnable{
         this.outputChannel = outputChannel;
     }
 
-    protected void pushMessage(final String message){
+    protected void pushMessage(final String message, final MessageType messageType){
 
         try {
-            outputChannel.put(new AssistantMessage(parent, message));
+            outputChannel.put(new AssistantMessage(Optional.of(parent), message, messageType));
         }
 
         catch (InterruptedException e) {

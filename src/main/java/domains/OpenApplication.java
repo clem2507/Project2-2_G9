@@ -1,9 +1,6 @@
 package domains;
 
-import backend.AssistantMessage;
-import backend.Domain;
-import backend.DomainNames;
-import backend.Skill;
+import backend.*;
 import nlp.MatchedSequence;
 
 import java.awt.*;
@@ -35,7 +32,7 @@ public class OpenApplication extends Domain {
                     e.printStackTrace();
                 }
 
-                pushMessage("Application opened");
+                pushMessage("Application opened", MessageType.STRING);
             }
         };
     }

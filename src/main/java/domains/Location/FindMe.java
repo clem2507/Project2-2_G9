@@ -1,9 +1,6 @@
 package domains.Location;
 
-import backend.AssistantMessage;
-import backend.Domain;
-import backend.DomainNames;
-import backend.Skill;
+import backend.*;
 import nlp.MatchedSequence;
 
 import java.io.IOException;
@@ -37,7 +34,7 @@ public class FindMe extends Domain {
                 }
 
                 String message = "You are in " + city;
-                pushMessage(message);
+                pushMessage(message, MessageType.STRING);
                 System.out.println(message);
             }
         };
