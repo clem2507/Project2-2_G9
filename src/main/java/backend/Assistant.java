@@ -1,12 +1,15 @@
 package backend;
 
 import domains.Location.FindMe;
+import domains.OpenApplication;
 import domains.Photo.Photo;
 import domains.SayThis;
 import domains.Weather.FindWeather;
 import nlp.MatchedSequence;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +30,7 @@ public class Assistant {
         addDomain(new FindMe());
         addDomain(new FindWeather());
         addDomain(new Photo());
+        addDomain(new OpenApplication());
     }
 
     public void processQuery(final String query){

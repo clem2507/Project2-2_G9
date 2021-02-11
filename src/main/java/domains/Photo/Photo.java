@@ -8,8 +8,10 @@ import nlp.MatchedSequence;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.time.LocalDate;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -41,7 +43,13 @@ public class Photo extends Domain {
                 try {
                     ImageIO.write(image, "jpg", outputImage);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        Files.createDirectories(Path.of("src/assets/PhotoTaken"));
+                        pushMessage("Directory does not exist try again now.");
+                        return;
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
                 }
                 pushMessage("image-" + filename + ".png");
             }

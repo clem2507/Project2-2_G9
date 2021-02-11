@@ -30,10 +30,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 
 public class Main extends Application {
 
@@ -378,6 +376,7 @@ public class Main extends Application {
             try {
                 boolean image = false;
                 botText = new Text();
+                Text text = new Text();
                 AssistantMessage hi = assistant.getOutputOrWait();
                 if(hi.getMessage().split("-")[0].equals("image"))
                 {
@@ -387,13 +386,14 @@ public class Main extends Application {
                     Image imageFile = new Image(input);
                     webcam = new ImageView(imageFile);
                     Platform.runLater(() -> {
-                        botText.setText("Bot: \n\n\n\n\n\n\n\n Click on the image to have full resolution!");
-                        botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
-                        botText.setFill(Color.WHITE);
-                        botText.setTranslateX(50);
-                        botText.setTranslateY(userText.getTranslateY() + 20);
 
-                        chatLayout.getChildren().add(botText);
+                        text.setText("Bot: Smile!");
+                        text.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                        text.setFill(Color.WHITE);
+                        text.setTranslateX(50);
+                        text.setTranslateY(userText.getTranslateY() + 20);
+
+                        chatLayout.getChildren().add(text);
 
                         webcam.setScaleX(0.3);
                         webcam.setScaleY(0.3);
@@ -401,7 +401,7 @@ public class Main extends Application {
                         webcam.setTranslateX(-172);
                         webcam.setPreserveRatio(true);
 
-                        webcam.setTranslateY(botText.getTranslateY() - 160);
+                        webcam.setTranslateY(text.getTranslateY() - 160);
 
 
                         webcam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -419,9 +419,17 @@ public class Main extends Application {
                             }
                         });
 
-
                         robotInteractionText.setText("Damn\nYou are hot!");
                         chatLayout.getChildren().add(webcam);
+
+                        botText.setText("Click on the image to have full resolution!");
+                        botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                        botText.setFill(Color.WHITE);
+                        botText.setTranslateX(50);
+                        botText.setTranslateY(text.getTranslateY() + 170);
+                        requestCounter += 3;
+                        chatLayout.getChildren().add(botText);
+
                     });
                 }
                 else if (hi.getMessage().length() > 0) {
@@ -435,7 +443,7 @@ public class Main extends Application {
                         botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
                         botText.setFill(Color.WHITE);
                         botText.setTranslateX(50);
-                        botText.setTranslateY(botText.getTranslateY() + 10);
+                        botText.setTranslateY(userText.getTranslateY() + 20);
                         robotInteractionText.setText("Anything else?\nI'm free");
                         chatLayout.getChildren().add(botText);
                     });

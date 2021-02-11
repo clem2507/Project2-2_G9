@@ -1,43 +1,43 @@
 package domains;
 
 import backend.AssistantMessage;
-import backend.Skill;
 import backend.Domain;
 import backend.DomainNames;
+import backend.Skill;
 import nlp.MatchedSequence;
 
-import java.io.IOException;
-import java.util.List;
+import java.awt.*;
+import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
 public class OpenApplication extends Domain {
 
     public OpenApplication() {
         super(DomainNames.OpenApp);
+
+        addPattern("<open>");
+        addPattern("<run>");
     }
 
-    /*public Skill dispatchSkill(List<String> tokens, BlockingQueue<AssistantMessage> resultsQueue) {
-        return new Skill(this, tokens, resultsQueue) {
+    public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
+        return new Skill(this, outputChannel) {
             @Override
             public void run() {
-                String application = "";
-                for (int x = 1; x<tokens.size(); x++){
-                    application = application + tokens.get(x) + " ";
-                }
 
-                // The user must say something like this: Open C:\\Users\\aysen\\AppData\\Roaming\\Spotify\\Spotify.exe
-                // This path is found when you right click the app, Properties -> Copy "Target"
+                //TODO add a way to read the path from the chat
+
+                String path = "C:/Program Files/Google/Chrome/Application/chrome.exe";
                 try {
-                    Process process = Runtime.getRuntime().exec(application);
-                } catch (IOException e) {
+                    File file = new File(path);
+                    Desktop dt = Desktop.getDesktop();
+                    dt.open(file);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                pushMessage("Application opened");
             }
         };
-    }*/
-
-    @Override
-    public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> resultsQueue) {
-        return null;
     }
+
 }
