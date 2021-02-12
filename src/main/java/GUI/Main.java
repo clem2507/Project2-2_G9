@@ -464,6 +464,7 @@ public class Main extends Application {
     }
 
     /**
+     *
      * Update the seconds for the time display
      */
     public void updateTime() {
