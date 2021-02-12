@@ -1,5 +1,7 @@
 package GUI;
 
+import backend.AssistantMessage;
+import backend.MessageType;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -29,14 +31,21 @@ public class Controller {
                     System.exit(0);
                     break;
                 case ENTER:
-                    if (window.textField.getText().length() > 0 && window.isAgentFree) {
-                        window.isAgentFree = false;
-                        window.requestCounter++;
-                        window.sendUserText(window.textField.getText());
+                    if (window.textField.getText().length() > 0) {
+                        //window.isAgentFree = false;
+                        //window.requestCounter++;
+                        //window.sendUserText(window.textField.getText());
                         window.robotInteractionText.setText("...");
+
+                        try {
+                            window.pushMessageOrWait(new ConsoleOutput(window.textField.getText(), true, MessageType.STRING));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                         window.assistant.processQuery(window.textField.getText());
                         window.textField.setText("");
-                        window.createThread();
+                        //window.createThread();
                     }
                     break;
             }

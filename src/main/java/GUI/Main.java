@@ -2,8 +2,10 @@ package GUI;
 
 import backend.Assistant;
 import backend.AssistantMessage;
+import backend.MessageType;
 import domains.Location.CurrentLocation;
 import domains.Weather.CurrentWeather;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -32,6 +34,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class Main extends Application {
 
@@ -97,14 +103,13 @@ public class Main extends Application {
     SimpleDateFormat time;
     SimpleDateFormat date;
 
-    Assistant assistant;
+    Assistant assistant = new Assistant();
+    BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
 
     Thread queryThread;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
-        assistant = new Assistant();
 
         //Default Background
         bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));
@@ -319,6 +324,19 @@ public class Main extends Application {
         mainThread.setDaemon(false);
         mainThread.start();
 
+        AnimationTimer tickTimer = new AnimationTimer(){
+
+            @Override
+            public void handle(long now) {
+                try {
+                    tick();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        tickTimer.start();
+
         primaryStage.setResizable(false);
         primaryStage.setTitle("Digital Assistant");
         primaryStage.setScene(scene);
@@ -368,6 +386,75 @@ public class Main extends Application {
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    /**
+     * Pushes a message into the waiting queue.
+     * If another thread is currently pushing a message, this thread
+     * will wait and then push.
+     * @param newOutput output to be displayed
+     * @throws InterruptedException
+     */
+    public void pushMessageOrWait(final ConsoleOutput newOutput) throws InterruptedException {
+        //System.out.println("Pushing message " + newOutput.getContent());
+        consoleOutput.put(newOutput);
+        //System.out.println("Pushed message " + newOutput.getContent());
+    }
+
+    /**
+     * Reads from the waiting queue and handles the output accordingly.
+     * @throws InterruptedException
+     */
+    public void moveFromQueueToConsole() throws InterruptedException {
+        //System.out.println("Moving message from queue to console");
+        ConsoleOutput output = consoleOutput.poll(0, TimeUnit.MILLISECONDS);
+
+        if(output != null){
+
+            if(output.getMessageType().equals(MessageType.STRING)){
+                String prefix = output.isBot()? "[DKE Assistant]: ":"[User]: ";
+
+                requestCounter++;
+                currentDate = new Date();
+                messageTime = new Text(time.format(currentDate));
+                messageTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
+                messageTime.setTranslateY(20*requestCounter);
+                messageTime.setFill(Color.BLACK);
+
+                userText = new Text(prefix + output.getContent());
+                userText.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+                userText.setTranslateX(50);
+                userText.setTranslateY(messageTime.getTranslateY()+2);
+                userText.setFill(Color.WHITE);
+
+                chatLayout.getChildren().addAll(messageTime, userText);
+            }
+
+            else if(output.getMessageType().equals(MessageType.IMAGE)){
+                // Handle image message
+                // NOTE: Just the image. Forget about other messages.
+                // If you want some stuff like 'SMILE!' and such, just push
+                // another message.
+            }
+
+        }
+
+    }
+
+    public void moveFromAssistantToQueue() throws InterruptedException {
+        //System.out.println("Moving message from assistant to queue");
+        Optional<AssistantMessage> container = assistant.getOutputOrContinue();
+
+        if(container.isPresent()){
+            AssistantMessage msg = container.get();
+            pushMessageOrWait(new ConsoleOutput(msg.getMessage(), false, msg.getMessageType()));
+        }
+
+    }
+
+    public void tick() throws InterruptedException {
+        moveFromAssistantToQueue();
+        moveFromQueueToConsole();
     }
 
     public void createThread() {
