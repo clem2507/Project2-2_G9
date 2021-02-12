@@ -11,7 +11,11 @@ public class FallbackMachine implements FallbackInterpreter {
 
     private String path;
     // Key-Value pair of pattern and response
-    private List<AbstractMap.SimpleEntry<String, String>>  simpleSkills;
+    final private List<AbstractMap.SimpleEntry<String, String>>  simpleSkills;
+
+    public FallbackMachine() {
+        simpleSkills = new ArrayList<>();
+    }
 
     @Override
     public String processQuery(String query) {
@@ -46,11 +50,19 @@ public class FallbackMachine implements FallbackInterpreter {
         try {
             File txtFile = new File(path);
             Scanner myReader = new Scanner(txtFile);
-            String line = "";
+            String line;
             while (myReader.hasNextLine()) {
                 line = myReader.nextLine();
                 String[] parts = line.split(";");
-                simpleSkills.add(new AbstractMap.SimpleEntry<String, String>(parts[0], parts[1]));
+                if (parts.length == 1) {
+                    // problem with the txt file, should always be at least a pattern and a response
+                }
+                else if (parts.length == 2) {
+                    simpleSkills.add(new AbstractMap.SimpleEntry<>(parts[0], parts[1]));
+                }
+                else {
+                    //TODO more complex queries with parameters with custom responses
+                }
             }
         }
         catch (FileNotFoundException e) {
@@ -58,4 +70,10 @@ public class FallbackMachine implements FallbackInterpreter {
             // Probably ask the user to enter a new path?
         }
     }
+
+    // Mainly for testing
+    public List<AbstractMap.SimpleEntry<String, String>> getSimpleSkills() {
+        return simpleSkills;
+    }
+
 }
