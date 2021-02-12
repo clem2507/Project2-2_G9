@@ -471,8 +471,17 @@ public class Main extends Application {
         wait(1000);
         currentDate = new Date();
         timeText.setText(time.format(currentDate));
-        time1 = TimeAt.getTime("Europe", "Paris");
+
+        time1 = TimeAt.getTime("Europe", "Istanbul");
         timeText1.setText(time1);
+        time2 = TimeAt.getTime("Asia", "Tokyo");
+        timeText2.setText(time2);
+        time3 = TimeAt.getTime("Australia", "Sydney");
+        timeText3.setText(time3);
+        time4 = TimeAt.getTime("Africa", "Khartoum");
+        timeText4.setText(time4);
+        time5 = TimeAt.getTime("America", "Jamaica");
+        timeText5.setText(time5);
     }
 
     /**
