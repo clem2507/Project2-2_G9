@@ -324,6 +324,11 @@ public class Main extends Application {
         mainThread.setDaemon(false);
         mainThread.start();
 
+        // Here we start the tick() process - think of it as the main
+        // loop.
+        // NOTE: It is asynchronous but sill runs in the main thread.
+        // If this function blocks or delays, then the entire GuI will be delayed.
+        // IMPORTANT: This code repeats on every frame/tick
         AnimationTimer tickTimer = new AnimationTimer(){
 
             @Override
@@ -407,11 +412,11 @@ public class Main extends Application {
      */
     public void moveFromQueueToConsole() throws InterruptedException {
         //System.out.println("Moving message from queue to console");
-        ConsoleOutput output = consoleOutput.poll(0, TimeUnit.MILLISECONDS);
+        ConsoleOutput output = consoleOutput.poll(0, TimeUnit.MILLISECONDS); // Get the message or null
 
-        if(output != null){
+        if(output != null){ // If there is a message
 
-            if(output.getMessageType().equals(MessageType.STRING)){
+            if(output.getMessageType().equals(MessageType.STRING)){ // If the message is a string
                 String prefix = output.isBot()? "[DKE Assistant]: ":"[User]: ";
 
                 requestCounter++;
@@ -430,7 +435,7 @@ public class Main extends Application {
                 chatLayout.getChildren().addAll(messageTime, userText);
             }
 
-            else if(output.getMessageType().equals(MessageType.IMAGE)){
+            else if(output.getMessageType().equals(MessageType.IMAGE)){ // If the message is an image
                 // Handle image message
                 // NOTE: Just the image. Forget about other messages.
                 // If you want some stuff like 'SMILE!' and such, just push
@@ -441,11 +446,16 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Receives messages piling up in the assistant's output queue and transfers
+     * them to the output queue in the main thread.
+     * @throws InterruptedException
+     */
     public void moveFromAssistantToQueue() throws InterruptedException {
         //System.out.println("Moving message from assistant to queue");
-        Optional<AssistantMessage> container = assistant.getOutputOrContinue();
+        Optional<AssistantMessage> container = assistant.getOutputOrContinue(); // Get message or empty optional
 
-        if(container.isPresent()){
+        if(container.isPresent()){ // If there is a message
             AssistantMessage msg = container.get();
             pushMessageOrWait(new ConsoleOutput(msg.getMessage(), false, msg.getMessageType()));
         }
@@ -453,8 +463,13 @@ public class Main extends Application {
     }
 
     public void tick() throws InterruptedException {
-        moveFromAssistantToQueue();
-        moveFromQueueToConsole();
+        moveFromAssistantToQueue(); // Get assistant messages from the assistant queue to the queue in the main thread
+        moveFromQueueToConsole(); // Move stacking messages from the queue in the main thread to the output console
+        // NOTE: This code will breaks if
+        //      a) A skill spams with messages every cycle
+        //      b) The user spams with messages every frame
+        // Since both cases are expected to be avoided (if we code carefully), I do not see a reason to
+        // work around them. In other words, they are very very unlikely to happen, so let them be.
     }
 
     public void createThread() {
