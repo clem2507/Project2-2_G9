@@ -43,7 +43,6 @@ public class Screenshot extends JFrame {
             public void focusGained( FocusEvent e ) {
                 gained = true;
             }
-
             @Override
             public void focusLost( FocusEvent e ) {
                 if ( gained ){

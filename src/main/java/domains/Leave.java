@@ -13,6 +13,7 @@ public class Leave extends Domain {
         addPattern("<Good Bye>");
         addPattern("<Exit>");
         addPattern("<Leave>");
+        addPattern("<Bye bye>");
     }
 
     @Override
