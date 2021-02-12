@@ -31,6 +31,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -335,7 +336,7 @@ public class Main extends Application {
             public void handle(long now) {
                 try {
                     tick();
-                } catch (InterruptedException e) {
+                } catch (InterruptedException | FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -410,7 +411,7 @@ public class Main extends Application {
      * Reads from the waiting queue and handles the output accordingly.
      * @throws InterruptedException
      */
-    public void moveFromQueueToConsole() throws InterruptedException {
+    public void moveFromQueueToConsole() throws InterruptedException, FileNotFoundException {
         //System.out.println("Moving message from queue to console");
         ConsoleOutput output = consoleOutput.poll(0, TimeUnit.MILLISECONDS); // Get the message or null
 
@@ -436,10 +437,57 @@ public class Main extends Application {
             }
 
             else if(output.getMessageType().equals(MessageType.IMAGE)){ // If the message is an image
-                // Handle image message
-                // NOTE: Just the image. Forget about other messages.
-                // If you want some stuff like 'SMILE!' and such, just push
-                // another message.
+                botText = new Text();
+                Text text = new Text();
+                FileInputStream input = new FileInputStream("src/assets/PhotoTaken/" + output.getContent());
+                Image imageFile = new Image(input);
+                webcam = new ImageView(imageFile);
+                Platform.runLater(() -> {
+
+                    text.setText("Bot: Smile!");
+                    text.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                    text.setFill(Color.WHITE);
+                    text.setTranslateX(50);
+                    text.setTranslateY(userText.getTranslateY() + 20);
+
+                    chatLayout.getChildren().add(text);
+
+                    webcam.setScaleX(0.3);
+                    webcam.setScaleY(0.3);
+                    webcam.setScaleZ(0.3);
+                    webcam.setTranslateX(-172);
+                    webcam.setPreserveRatio(true);
+
+                    webcam.setTranslateY(text.getTranslateY() - 160);
+
+
+                    webcam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+                        @Override
+                        public void handle(MouseEvent event) {
+                            File file = new File("src/assets/PhotoTaken/" + output.getContent());
+                            Desktop dt = Desktop.getDesktop();
+                            try {
+                                dt.open(file);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            event.consume();
+                        }
+                    });
+
+                    robotInteractionText.setText("Damn\nYou are hot!");
+                    chatLayout.getChildren().add(webcam);
+
+                    botText.setText("Click on the image to have full resolution!");
+                    botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                    botText.setFill(Color.WHITE);
+                    botText.setTranslateX(50);
+                    botText.setTranslateY(text.getTranslateY() + 170);
+                    requestCounter += 10;
+                    chatLayout.getChildren().add(botText);
+
+                });
             }
 
         }
@@ -462,7 +510,7 @@ public class Main extends Application {
 
     }
 
-    public void tick() throws InterruptedException {
+    public void tick() throws InterruptedException, FileNotFoundException {
         moveFromAssistantToQueue(); // Get assistant messages from the assistant queue to the queue in the main thread
         moveFromQueueToConsole(); // Move stacking messages from the queue in the main thread to the output console
         // NOTE: This code will breaks if

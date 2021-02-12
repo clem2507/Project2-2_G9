@@ -48,7 +48,7 @@ public class Photo extends Domain {
                         ioException.printStackTrace();
                     }
                 }
-                pushMessage("image-" + filename + ".png", MessageType.IMAGE);
+                pushMessage(filename + ".png", MessageType.IMAGE);
             }
         };
     }
