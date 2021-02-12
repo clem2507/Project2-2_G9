@@ -31,23 +31,23 @@ public class SmallTalk extends Domain {
         return new Skill(this, outputChannel) {
             @Override
             public void run() {
-                if(sequence.getStringAt(0).toLowerCase().equals(("How are you").toLowerCase())){
+                if(sequence.getStringAt(0).toLowerCase().contains(("How are you").toLowerCase())){
                     pushMessage("I am good. How are you?", MessageType.STRING);
-                } else if(sequence.getStringAt(0).toLowerCase().equals(("Good morning").toLowerCase())){
+                } else if(sequence.getStringAt(0).toLowerCase().contains(("Good morning").toLowerCase())){
                     pushMessage("Good morning my friend!", MessageType.STRING);
-                }else if(sequence.getStringAt(0).toLowerCase().equals(("bad").toLowerCase()) ||
-                        sequence.getStringAt(0).toLowerCase().equals(("not good").toLowerCase()) ||
-                        sequence.getStringAt(0).toLowerCase().equals(("sick").toLowerCase())){
+                }else if(sequence.getStringAt(0).toLowerCase().contains(("bad").toLowerCase()) ||
+                        sequence.getStringAt(0).toLowerCase().contains(("not good").toLowerCase()) ||
+                        sequence.getStringAt(0).toLowerCase().contains(("sick").toLowerCase())){
                     pushMessage("I am sorry. I hope you get well soon!", MessageType.STRING);
-                }else if(sequence.getStringAt(0).toLowerCase().equals(("good").toLowerCase()) ||
-                        sequence.getStringAt(0).toLowerCase().equals(("fine").toLowerCase()) ||
-                        sequence.getStringAt(0).toLowerCase().equals(("happy").toLowerCase())){
+                }else if(sequence.getStringAt(0).toLowerCase().contains(("good").toLowerCase()) ||
+                        sequence.getStringAt(0).toLowerCase().contains(("fine").toLowerCase()) ||
+                        sequence.getStringAt(0).toLowerCase().contains(("happy").toLowerCase())){
                     pushMessage("Glad to hear that! How can I help you?", MessageType.STRING);
-                } else if(sequence.getStringAt(0).toLowerCase().equals(("Good morning").toLowerCase())){
+                } else if(sequence.getStringAt(0).toLowerCase().contains(("Good morning").toLowerCase())){
                     pushMessage("Good morning my friend!", MessageType.STRING);
-                } else if(sequence.getStringAt(0).toLowerCase().equals(("Good afternoon").toLowerCase())){
+                } else if(sequence.getStringAt(0).toLowerCase().contains(("Good afternoon").toLowerCase())){
                     pushMessage("Good afternoon my friend!", MessageType.STRING);
-                } else if(sequence.getStringAt(0).toLowerCase().equals(("Good evening").toLowerCase())){
+                } else if(sequence.getStringAt(0).toLowerCase().contains(("Good evening").toLowerCase())){
                     pushMessage("Good evening my friend!", MessageType.STRING);
                 }
                 else{
