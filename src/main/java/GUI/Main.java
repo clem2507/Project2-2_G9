@@ -4,6 +4,7 @@ import backend.Assistant;
 import backend.AssistantMessage;
 import backend.MessageType;
 import domains.Location.CurrentLocation;
+import domains.Time.TimeAt;
 import domains.Weather.CurrentWeather;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -13,6 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -42,8 +44,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Main extends Application {
 
-    final int WINDOW_WIDTH = 1200;
-    final int WINDOW_HEIGHT = 700;
+    final int WINDOW_WIDTH = 1500;
+    final int WINDOW_HEIGHT = 750;
     int requestCounter = 0;
 
     boolean flag = true;
@@ -58,6 +60,11 @@ public class Main extends Application {
     TextField textField;
 
     String city;
+    String time1;
+    String time2;
+    String time3;
+    String time4;
+    String time5;
 
     Rectangle chatWindow;
     Rectangle chatInputWindow;
@@ -70,6 +77,11 @@ public class Main extends Application {
 
     Text dateText;
     Text timeText;
+    Text timeText1;
+    Text timeText2;
+    Text timeText3;
+    Text timeText4;
+    Text timeText5;
     Text userText;
     Text botText;
     Text robotInteractionText;
@@ -166,7 +178,7 @@ public class Main extends Application {
 
         imagesScrollPane = new ScrollPane();
         imagesScrollPane.setContent(imagesLayout);
-        imagesScrollPane.setPrefSize(228, 290);
+        imagesScrollPane.setPrefSize(228, 310);
         imagesScrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
         imagesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         imagesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -174,7 +186,7 @@ public class Main extends Application {
         imagesScrollPane.setFitToWidth(true);
 
         editBgButton = new Button("Edit Background");
-        editBgButton.setTranslateX(970);
+        editBgButton.setTranslateX(1320);
         editBgButton.setTranslateY(40);
         editBgButton.setStyle(" -fx-background-radius: 30; -fx-background-insets: 0,1,1; -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ) ");
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
@@ -193,7 +205,6 @@ public class Main extends Application {
         weatherWidget.setFill(lg);
         pane.getChildren().add(weatherWidget);
 
-        // TODO: Update the city based on the location of the user
         city = CurrentLocation.getLocation();
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
@@ -224,16 +235,16 @@ public class Main extends Application {
         pane.getChildren().add(GPSView);
 
         chatWindow = new Rectangle(500, 500);
-        chatWindow.setTranslateX(350);
-        chatWindow.setTranslateY(50);
+        chatWindow.setTranslateX(490);
+        chatWindow.setTranslateY(80);
         chatWindow.setFill(Color.rgb(160, 160, 160, 0.75));
         chatWindow.setStroke(Color.WHITE);
         chatWindow.setStrokeWidth(1);
         pane.getChildren().add(chatWindow);
 
         chatInputWindow = new Rectangle(500, 100);
-        chatInputWindow.setTranslateX(350);
-        chatInputWindow.setTranslateY(550);
+        chatInputWindow.setTranslateX(490);
+        chatInputWindow.setTranslateY(580);
         chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.8));
         chatInputWindow.setStroke(Color.WHITE);
         chatInputWindow.setStrokeWidth(1);
@@ -242,8 +253,8 @@ public class Main extends Application {
         textField = new TextField();
         textField.setPromptText("Input...");
         textField.setFocusTraversable(false);
-        textField.setTranslateX(400);
-        textField.setTranslateY(580);
+        textField.setTranslateX(540);
+        textField.setTranslateY(610);
         textField.setPrefSize(400, 40);
         textField.setFont(Font.font("Calibri", FontPosture.REGULAR, 16));
         pane.getChildren().add(textField);
@@ -267,16 +278,16 @@ public class Main extends Application {
 
         robot = new Image(new FileInputStream("src/assets/robot.png"));
         robotViewer = new ImageView(robot);
-        robotViewer.setTranslateX(980);
-        robotViewer.setTranslateY(440);
+        robotViewer.setTranslateX(1100);
+        robotViewer.setTranslateY(470);
         robotViewer.setFitWidth(200);
         robotViewer.setFitHeight(220);
         pane.getChildren().add(robotViewer);
 
         robotInteraction = new Image(new FileInputStream("src/assets/speechBubbleBot.png"));
         robotInteractionViewer = new ImageView(robotInteraction);
-        robotInteractionViewer.setTranslateX(880);
-        robotInteractionViewer.setTranslateY(390);
+        robotInteractionViewer.setTranslateX(1000);
+        robotInteractionViewer.setTranslateY(420);
         robotInteractionViewer.setFitWidth(150);
         robotInteractionViewer.setFitHeight(100);
         pane.getChildren().add(robotInteractionViewer);
@@ -297,6 +308,88 @@ public class Main extends Application {
         timeText.setTranslateY(50);
         timeText.setFill(Color.WHITE);
         pane.getChildren().add(timeText);
+
+        Rectangle timezones = new Rectangle(420, 65);
+        timezones.setTranslateX(30);
+        timezones.setTranslateY(240);
+        timezones.setArcWidth(20);
+        timezones.setArcHeight(20);
+        timezones.setStroke(Color.WHITESMOKE);
+        timezones.setStrokeWidth(0.6);
+        Stop[] stops1 = new Stop[] { new Stop(0, Color.TRANSPARENT), new Stop(1, Color.BLACK)};
+        LinearGradient lg1 = new LinearGradient(0, 0, 0, 1.9, true, CycleMethod.NO_CYCLE, stops1);
+        timezones.setFill(lg1);
+        pane.getChildren().add(timezones);
+
+        time1 = TimeAt.getTime("Europe", "Istanbul");
+        timeText1 = new Text(time1);
+        timeText1.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
+        timeText1.setTranslateX(timezones.getTranslateX() + 15);
+        timeText1.setTranslateY(timezones.getTranslateY() + 30);
+        timeText1.setFill(Color.WHITE);
+        Text time1city = new Text("Istanbul");
+        time1city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+        time1city.setTranslateX(timezones.getTranslateX() + 18);
+        time1city.setTranslateY(timezones.getTranslateY() + 50);
+        time1city.setFill(Color.WHITE);
+        pane.getChildren().add(time1city);
+        pane.getChildren().add(timeText1);
+
+        time2 = TimeAt.getTime("Asia", "Tokyo");
+        timeText2 = new Text(time2);
+        timeText2.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
+        timeText2.setTranslateX(timezones.getTranslateX() + 95);
+        timeText2.setTranslateY(timezones.getTranslateY() + 30);
+        timeText2.setFill(Color.WHITE);
+        Text time2city = new Text("Tokyo");
+        time2city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+        time2city.setTranslateX(timezones.getTranslateX() + 100);
+        time2city.setTranslateY(timezones.getTranslateY() + 50);
+        time2city.setFill(Color.WHITE);
+        pane.getChildren().add(time2city);
+        pane.getChildren().add(timeText2);
+
+        time3 = TimeAt.getTime("Australia", "Sydney");
+        timeText3 = new Text(time3);
+        timeText3.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
+        timeText3.setTranslateX(timezones.getTranslateX() + 175);
+        timeText3.setTranslateY(timezones.getTranslateY() + 30);
+        timeText3.setFill(Color.WHITE);
+        Text time3city = new Text("Sydney");
+        time3city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+        time3city.setTranslateX(timezones.getTranslateX() + 180);
+        time3city.setTranslateY(timezones.getTranslateY() + 50);
+        time3city.setFill(Color.WHITE);
+        pane.getChildren().add(time3city);
+        pane.getChildren().add(timeText3);
+
+        time4 = TimeAt.getTime("Africa", "Khartoum");
+        timeText4 = new Text(time4);
+        timeText4.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
+        timeText4.setTranslateX(timezones.getTranslateX() + 260);
+        timeText4.setTranslateY(timezones.getTranslateY() + 30);
+        timeText4.setFill(Color.WHITE);
+        Text time4city = new Text("Khartoum");
+        time4city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+        time4city.setTranslateX(timezones.getTranslateX() + 260);
+        time4city.setTranslateY(timezones.getTranslateY() + 50);
+        time4city.setFill(Color.WHITE);
+        pane.getChildren().add(time4city);
+        pane.getChildren().add(timeText4);
+
+        time5 = TimeAt.getTime("America", "Jamaica");
+        timeText5 = new Text(time5);
+        timeText5.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
+        timeText5.setTranslateX(timezones.getTranslateX() + 345);
+        timeText5.setTranslateY(timezones.getTranslateY() + 30);
+        timeText5.setFill(Color.WHITE);
+        Text time5city = new Text("Jamaica");
+        time5city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+        time5city.setTranslateX(timezones.getTranslateX() + 349);
+        time5city.setTranslateY(timezones.getTranslateY() + 50);
+        time5city.setFill(Color.WHITE);
+        pane.getChildren().add(time5city);
+        pane.getChildren().add(timeText5);
 
         date = new SimpleDateFormat("dd/MM/yyyy");
         dateText = new Text(date.format(currentDate));
@@ -372,6 +465,7 @@ public class Main extends Application {
     }
 
     /**
+     *
      * Update the seconds for the time display
      */
     public void updateTime() {
@@ -379,6 +473,17 @@ public class Main extends Application {
         wait(1000);
         currentDate = new Date();
         timeText.setText(time.format(currentDate));
+
+        time1 = TimeAt.getTime("Europe", "Istanbul");
+        timeText1.setText(time1);
+        time2 = TimeAt.getTime("Asia", "Tokyo");
+        timeText2.setText(time2);
+        time3 = TimeAt.getTime("Australia", "Sydney");
+        timeText3.setText(time3);
+        time4 = TimeAt.getTime("Africa", "Khartoum");
+        timeText4.setText(time4);
+        time5 = TimeAt.getTime("America", "Jamaica");
+        timeText5.setText(time5);
     }
 
     /**
