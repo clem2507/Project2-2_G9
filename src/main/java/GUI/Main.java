@@ -439,7 +439,7 @@ public class Main extends Application {
             else if(output.getMessageType().equals(MessageType.IMAGE)){ // If the message is an image
                 botText = new Text();
                 Text text = new Text();
-                FileInputStream input = new FileInputStream("src/assets/PhotoTaken/" + output.getContent());
+                FileInputStream input = new FileInputStream("src/assets/ProjectData/PhotoTaken/" + output.getContent());
                 Image imageFile = new Image(input);
                 webcam = new ImageView(imageFile);
                 Platform.runLater(() -> {
@@ -465,7 +465,7 @@ public class Main extends Application {
 
                         @Override
                         public void handle(MouseEvent event) {
-                            File file = new File("src/assets/PhotoTaken/" + output.getContent());
+                            File file = new File("src/assets/ProjectData/PhotoTaken/" + output.getContent());
                             Desktop dt = Desktop.getDesktop();
                             try {
                                 dt.open(file);

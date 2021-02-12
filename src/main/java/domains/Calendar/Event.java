@@ -81,8 +81,8 @@ public class Event {
      * Return Summary
      * @return
      */
-    public String getSummary() {
-        return summary;
+    public String[] getSummary() {
+        return summary.split("-");
     }
 
     /**

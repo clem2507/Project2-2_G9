@@ -36,12 +36,12 @@ public class Photo extends Domain {
                 String filename = dateTimeFormatter.format(now);
                 Screenshot screenshot = new Screenshot();
                 BufferedImage image = screenshot.takeSelfie();
-                File outputImage = new File("src/assets/PhotoTaken/" + filename + ".png");
+                File outputImage = new File("src/assets/ProjectData/PhotoTaken/" + filename + ".png");
                 try {
                     ImageIO.write(image, "jpg", outputImage);
                 } catch (IOException e) {
                     try {
-                        Files.createDirectories(Path.of("src/assets/PhotoTaken"));
+                        Files.createDirectories(Path.of("src/assets/ProjectData/PhotoTaken"));
                         pushMessage("Directory does not exist try again now.", MessageType.STRING);
                         return;
                     } catch (IOException ioException) {
