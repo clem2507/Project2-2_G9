@@ -24,6 +24,8 @@ public class SmallTalk extends Domain {
         addPattern("<bad>");
         addPattern("<not good>");
         addPattern("<sick>");
+        addPattern("<Thank you>");
+        addPattern("<Thanks>");
     }
 
     @Override
@@ -49,6 +51,9 @@ public class SmallTalk extends Domain {
                     pushMessage("Good afternoon my friend!", MessageType.STRING);
                 } else if(sequence.getStringAt(0).toLowerCase().contains(("Good evening").toLowerCase())){
                     pushMessage("Good evening my friend!", MessageType.STRING);
+                } else if(sequence.getStringAt(0).toLowerCase().contains(("Thank you").toLowerCase()) ||
+                        sequence.getStringAt(0).toLowerCase().contains(("Thanks").toLowerCase())){
+                    pushMessage("You're welcome!", MessageType.STRING);
                 }
                 else{
                     pushMessage("Hello", MessageType.STRING);
