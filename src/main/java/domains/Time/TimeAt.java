@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class Time {
+public class TimeAt {
     public static String getTime(String continent, String city) {
         String urlString = "http://worldtimeapi.org/api/timezone/"+continent+"/"+city;
 
