@@ -1,9 +1,11 @@
 package backend;
 
+import domains.Leave;
 import domains.Location.FindMe;
 import domains.OpenApplication;
 import domains.Photo.Photo;
 import domains.SayThis;
+import domains.SmallTalk;
 import domains.Weather.FindWeather;
 import nlp.MatchedSequence;
 
@@ -31,6 +33,8 @@ public class Assistant {
         addDomain(new FindWeather());
         addDomain(new Photo());
         addDomain(new OpenApplication());
+        addDomain(new Leave());
+        addDomain(new SmallTalk());
     }
 
     public void processQuery(final String query){
