@@ -12,8 +12,8 @@ public class OpenApplication extends Domain {
     public OpenApplication() {
         super(DomainNames.OpenApp);
 
-        addPattern("<open>");
-        addPattern("<run>");
+        addPattern("<open><...>");
+        addPattern("<run><...>");
     }
 
     public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
@@ -21,9 +21,7 @@ public class OpenApplication extends Domain {
             @Override
             public void run() {
 
-                //TODO add a way to read the path from the chat
-
-                String path = "C:/Program Files/Google/Chrome/Application/chrome.exe";
+                String path = sequence.getStringAt(1);
                 try {
                     File file = new File(path);
                     Desktop dt = Desktop.getDesktop();
