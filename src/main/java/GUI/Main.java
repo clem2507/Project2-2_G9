@@ -45,8 +45,8 @@ import java.util.concurrent.TimeUnit;
 public class Main extends Application {
 
     Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    final double WINDOW_WIDTH = screenSize.getWidth() -5;
-    final double WINDOW_HEIGHT = screenSize.getHeight() -70;
+    final double WINDOW_WIDTH = screenSize.getWidth() - 5;
+    final double WINDOW_HEIGHT = screenSize.getHeight() - 70;
     int requestCounter = 0;
 
     boolean flag = true;
@@ -235,7 +235,7 @@ public class Main extends Application {
         GPSView.setFitHeight(20);
         pane.getChildren().add(GPSView);
 
-        chatWindow = new Rectangle(500, 500);
+        chatWindow = new Rectangle(700, 500);
         chatWindow.setTranslateX(490);
         chatWindow.setTranslateY(80);
         chatWindow.setFill(Color.rgb(160, 160, 160, 0.75));
@@ -243,7 +243,7 @@ public class Main extends Application {
         chatWindow.setStrokeWidth(1);
         pane.getChildren().add(chatWindow);
 
-        chatInputWindow = new Rectangle(500, 100);
+        chatInputWindow = new Rectangle(700, 100);
         chatInputWindow.setTranslateX(490);
         chatInputWindow.setTranslateY(580);
         chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.8));
@@ -256,7 +256,7 @@ public class Main extends Application {
         textField.setFocusTraversable(false);
         textField.setTranslateX(540);
         textField.setTranslateY(610);
-        textField.setPrefSize(400, 40);
+        textField.setPrefSize(600, 40);
         textField.setFont(Font.font("Calibri", FontPosture.REGULAR, 16));
         pane.getChildren().add(textField);
 
@@ -279,7 +279,7 @@ public class Main extends Application {
 
         robot = new Image(new FileInputStream("src/assets/robot.png"));
         robotViewer = new ImageView(robot);
-        robotViewer.setTranslateX(1100);
+        robotViewer.setTranslateX(1300);
         robotViewer.setTranslateY(470);
         robotViewer.setFitWidth(200);
         robotViewer.setFitHeight(220);
@@ -287,7 +287,7 @@ public class Main extends Application {
 
         robotInteraction = new Image(new FileInputStream("src/assets/speechBubbleBot.png"));
         robotInteractionViewer = new ImageView(robotInteraction);
-        robotInteractionViewer.setTranslateX(1000);
+        robotInteractionViewer.setTranslateX(1200);
         robotInteractionViewer.setTranslateY(420);
         robotInteractionViewer.setFitWidth(150);
         robotInteractionViewer.setFitHeight(100);
