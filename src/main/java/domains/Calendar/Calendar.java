@@ -67,11 +67,12 @@ public class Calendar extends Domain {
                     pushMessage("To get your timetable link", MessageType.STRING);
                     pushMessage("1) Go to the UM student portal", MessageType.STRING);
                     pushMessage("2) Go to the My timetable tab", MessageType.STRING);
-                    pushMessage("3) Scroll down", MessageType.STRING);
-                    pushMessage("4) Click general timetable link", MessageType.STRING);
-                    pushMessage("5) ", MessageType.STRING);
-                    pushMessage("6)", MessageType.STRING);
-                    pushMessage("7)", MessageType.STRING);
+                    pushMessage("3) Select calendar and scroll down", MessageType.STRING);
+                    pushMessage("4) Click Agenda connect link", MessageType.STRING);
+                    pushMessage("5) Open general timetables", MessageType.STRING);
+                    pushMessage("6) Click connect calendar (top right)", MessageType.STRING);
+                    pushMessage("7) Select \"Other\"", MessageType.STRING);
+                    pushMessage("8) Click next and copy the link", MessageType.STRING);
                     pushMessage("To use the calendar", MessageType.STRING);
                     pushMessage("To get your schedule of", MessageType.STRING);
                     pushMessage("today: \"schedule today\"", MessageType.STRING);
@@ -154,7 +155,7 @@ public class Calendar extends Domain {
                             reader.close();
                             System.out.println(link);
                             CalendarReader calendarReader = new CalendarReader(new URL(link));
-                            Date currentDate = new Date(Integer.valueOf(sequence.getStringAt(1).split(" - ")[0]),Integer.valueOf(sequence.getStringAt(1).split(" - ")[1]),Integer.valueOf(sequence.getStringAt(1).split(" - ")[2]));
+                            Date currentDate = new Date(Integer.parseInt(sequence.getStringAt(1).split(" - ")[0]),Integer.parseInt(sequence.getStringAt(1).split(" - ")[1]),Integer.parseInt(sequence.getStringAt(1).split(" - ")[2]));
                             boolean free = true;
                             for(Event e : calendarReader.getEvents())
                             {
@@ -185,7 +186,7 @@ public class Calendar extends Domain {
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDateTime now = LocalDateTime.now();
                 LocalDateTime tomo = now.plusDays(days);
-                Date date = new Date(Integer.valueOf(dtf.format(tomo).split("-")[0]),Integer.valueOf(dtf.format(tomo).split("-")[1]),Integer.valueOf(dtf.format(tomo).split("-")[2]));
+                Date date = new Date(Integer.parseInt(dtf.format(tomo).split("-")[0]),Integer.parseInt(dtf.format(tomo).split("-")[1]),Integer.parseInt(dtf.format(tomo).split("-")[2]));
                 System.out.println("AIM DATE = " + date.toString());
                 return date;
             }
@@ -194,7 +195,7 @@ public class Calendar extends Domain {
             {
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDateTime now = LocalDateTime.now();
-                return new Date(Integer.valueOf(dtf.format(now).split("-")[0]),Integer.valueOf(dtf.format(now).split("-")[1]),Integer.valueOf(dtf.format(now).split("-")[2]));
+                return new Date(Integer.parseInt(dtf.format(now).split("-")[0]),Integer.parseInt(dtf.format(now).split("-")[1]),Integer.parseInt(dtf.format(now).split("-")[2]));
             }
 
             public String clearLink(String input)
