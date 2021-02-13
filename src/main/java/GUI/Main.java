@@ -45,8 +45,8 @@ import java.util.concurrent.TimeUnit;
 public class Main extends Application {
 
     Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    final double WINDOW_WIDTH = screenSize.getWidth();
-    final double WINDOW_HEIGHT = screenSize.getHeight();
+    final double WINDOW_WIDTH = screenSize.getWidth() -5;
+    final double WINDOW_HEIGHT = screenSize.getHeight() -70;
     int requestCounter = 0;
 
     boolean flag = true;
