@@ -1,5 +1,6 @@
 package backend;
 
+import domains.Calendar.Calendar;
 import domains.Leave;
 import domains.Location.FindMe;
 import domains.OpenApplication;
@@ -35,6 +36,7 @@ public class Assistant {
         addDomain(new OpenApplication());
         addDomain(new Leave());
         addDomain(new SmallTalk());
+        addDomain(new Calendar());
     }
 
     public void processQuery(final String query){
