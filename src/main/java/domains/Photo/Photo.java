@@ -3,6 +3,7 @@ package domains.Photo;
 import backend.*;
 import backend.camera.Camera;
 import nlp.MatchedSequence;
+import nlp.NLPError;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -79,6 +80,7 @@ public class Photo extends Domain {
             e.printStackTrace();
         }
 
+        final int finalInSlot = inSlot;
         return new Skill(this, outputChannel) {
             @Override
             public void run() {
@@ -89,6 +91,37 @@ public class Photo extends Domain {
 
                 // We generate the absolute file location
                 String imagePath = DIR + "/" + filename + ".png";
+
+                // Now we get the wait time from the matched pattern
+                try {
+                    int waitTime = finalInSlot >= 0? sequence.getIntAt(finalInSlot)*1000:0; // Time to wait in milliseconds
+                    long startTime = System.currentTimeMillis();
+                    long currentTime;
+                    int counterState = 0;
+
+                    // We use a while loop and not just Thread.wait or Thread.sleep
+                    // in case the skill is interrupted while waiting.
+                    do {
+                        currentTime = System.currentTimeMillis();
+
+                        // If the thread is interrupted  (i.e. the thread running this skill)
+                        // then we early stop - don't even bother about taking the picture
+                        if(Thread.interrupted()){
+                            return;
+                        }
+
+                        int newCounterState = (int) ((currentTime - startTime)/1000);
+
+                        if(newCounterState - counterState >= 1){
+                            counterState = newCounterState;
+                            pushMessage("Photo in " + counterState + "!", MessageType.STRING);
+                        }
+
+                    } while (currentTime - startTime < waitTime);
+
+                } catch (NLPError nlpError) {
+                    nlpError.printStackTrace();
+                }
 
                 // Here we take the picture
                 try {
