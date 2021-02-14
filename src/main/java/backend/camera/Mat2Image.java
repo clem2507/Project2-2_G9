@@ -1,4 +1,4 @@
-package domains.Photo;
+package backend.camera;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -41,7 +41,7 @@ public class Mat2Image {
             img = new BufferedImage(w, h, type);
     }
 
-    BufferedImage getImage(Mat mat){
+    public BufferedImage getImage(Mat mat){
         getSpace(mat);
         WritableRaster raster = img.getRaster();
         DataBufferByte dataBuffer = (DataBufferByte) raster.getDataBuffer();

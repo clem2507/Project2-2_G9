@@ -545,12 +545,11 @@ public class Main extends Application {
             else if(output.getMessageType().equals(MessageType.IMAGE)){ // If the message is an image
                 botText = new Text();
                 Text text = new Text();
-                FileInputStream input = new FileInputStream("src/assets/ProjectData/PhotoTaken/" + output.getContent());
+                FileInputStream input = new FileInputStream(output.getContent());
                 Image imageFile = new Image(input);
                 webcam = new ImageView(imageFile);
                 Platform.runLater(() -> {
 
-                    text.setText("Bot: Smile!");
                     text.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
                     text.setFill(Color.WHITE);
                     text.setTranslateX(50);
@@ -571,7 +570,7 @@ public class Main extends Application {
 
                         @Override
                         public void handle(MouseEvent event) {
-                            File file = new File("src/assets/ProjectData/PhotoTaken/" + output.getContent());
+                            File file = new File(output.getContent());
                             Desktop dt = Desktop.getDesktop();
                             try {
                                 dt.open(file);
@@ -582,7 +581,6 @@ public class Main extends Application {
                         }
                     });
 
-                    robotInteractionText.setText("Damn\nYou are hot!");
                     chatLayout.getChildren().add(webcam);
 
                     botText.setText("Click on the image to have full resolution!");

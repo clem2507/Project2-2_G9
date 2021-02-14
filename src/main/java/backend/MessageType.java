@@ -1,5 +1,5 @@
 package backend;
 
 public enum MessageType {
-    STRING, IMAGE
+    STRING, IMAGE, EXIT
 }

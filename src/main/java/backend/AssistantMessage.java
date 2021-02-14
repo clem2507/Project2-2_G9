@@ -51,6 +51,6 @@ public class AssistantMessage {
 
     @Override
     public String toString() {
-        return "[" + sender.toString() + "]: " + message;
+        return sender.toString() + ": " + message + " | TYPE " + messageType;
     }
 }
