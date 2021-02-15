@@ -53,6 +53,9 @@ public class Popup {
             System.out.println("N/A");
         }
 
+        System.out.println(binaryQuestion("Are you satisfied with the service?"));
+
+        message("Goodbye");
     }
 
 }

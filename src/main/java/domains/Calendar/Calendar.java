@@ -16,10 +16,10 @@ public class Calendar extends Domain {
     {
         super(DomainNames.Calendar);
 
-        addPattern("<schedule> <...>");
-        addPattern("<do> <...>");
+        addPattern("<schedule>");
+        addPattern("<do>");
         addPattern("<set calendar> <...>");
-        addPattern("<reset calendar> <...>");
+        addPattern("<reset calendar>");
         addPattern("<help calendar>");
 
 
