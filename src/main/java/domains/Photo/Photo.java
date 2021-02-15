@@ -40,10 +40,10 @@ public class Photo extends Domain {
         paramIndex.put(-1, Arrays.asList("<photo, selfie, picture>")); // Direct command
 
         // For cases such as 'take a picture in 5 seconds'
-        paramIndex.put(3, Arrays.asList("<photo, selfie, picture> <#:3> <in, after> <param:int>"));
+        paramIndex.put(3, Arrays.asList("<photo, selfie, picture> <#:4> <in, after, wait> <param:int>"));
 
         // For those weirdos that would say 'wait 5 seconds, and then take a picture'
-        paramIndex.put(0, Arrays.asList("<param:int> <#:4> <photo, selfie, picture>"));
+        paramIndex.put(1, Arrays.asList("<in, after, wait> <param:int> <#:6> <photo, selfie, picture>"));
 
         // NOTE: We use lists instead of a single string just in case we want to add more patterns that
         // use the same parameter slot index.
