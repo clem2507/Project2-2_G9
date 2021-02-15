@@ -21,13 +21,14 @@ import java.util.stream.Collectors;
 public class Assistant {
     private final Set<Domain> domains;
     private final BlockingQueue<AssistantMessage> outputChannel;
-    private Set<Thread> runningSkills;
+    private Set<Thread> runningSkills, backgroundSkills;
     private final FallbackInterpreter customFallback;
 
     public Assistant(){
         domains = new HashSet<>();
         outputChannel = new LinkedBlockingQueue<>();
         runningSkills = new HashSet<>();
+        backgroundSkills = new HashSet<>();
         customFallback = new DummyFallback();
 
         addDomain(new SayThis());
@@ -106,9 +107,16 @@ public class Assistant {
      * Note: If this function is not called, there will be memory leaks after closing the app.
      */
     public void interruptAndWait(){
-        runningSkills
-                .forEach(Thread::interrupt);
+        runningSkills.forEach(Thread::interrupt);
         runningSkills.forEach(t -> {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        backgroundSkills.forEach(Thread::interrupt);
+        backgroundSkills.forEach(t -> {
             try {
                 t.join();
             } catch (InterruptedException e) {
@@ -162,6 +170,15 @@ public class Assistant {
     private void addDomain(final Domain domain){
         assert !domains.contains(domain);
         assert domain.getUniqueName() != null;
+
+        Optional<Skill> backgroundSkill = domain.backgroundSkill();
+
+        if(backgroundSkill.isPresent()){
+            Thread thread = new Thread(backgroundSkill.get());
+            thread.start();
+            backgroundSkills.add(thread);
+        }
+
         domains.add(domain);
     }
 
