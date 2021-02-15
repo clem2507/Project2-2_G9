@@ -119,6 +119,7 @@ public class Main extends Application {
 
     Assistant assistant = new Assistant();
     BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
+    private int outputMessageHeight = 0;
 
     Thread queryThread;
 
@@ -508,9 +509,7 @@ public class Main extends Application {
      * @throws InterruptedException
      */
     public void pushMessageOrWait(final ConsoleOutput newOutput) throws InterruptedException {
-        //System.out.println("Pushing message " + newOutput.getContent());
         consoleOutput.put(newOutput);
-        //System.out.println("Pushed message " + newOutput.getContent());
     }
 
     /**
@@ -518,7 +517,6 @@ public class Main extends Application {
      * @throws InterruptedException
      */
     public void moveFromQueueToConsole() throws InterruptedException, FileNotFoundException {
-        //System.out.println("Moving message from queue to console");
         ConsoleOutput output = consoleOutput.poll(0, TimeUnit.MILLISECONDS); // Get the message or null
 
         if(output != null){ // If there is a message
@@ -526,74 +524,50 @@ public class Main extends Application {
             if(output.getMessageType().equals(MessageType.STRING)){ // If the message is a string
                 String prefix = output.isBot()? "[DKE Assistant]: ":"[User]: ";
 
-                requestCounter++;
-                currentDate = new Date();
-                messageTime = new Text(time.format(currentDate));
-                messageTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
-                messageTime.setTranslateY(20*requestCounter);
-                messageTime.setFill(Color.BLACK);
+                outputMessageHeight += 20;
+                Date currentDate = new Date();
+                Text msgTime = new Text(time.format(currentDate));
+                msgTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
+                msgTime.setTranslateY(outputMessageHeight);
+                msgTime.setFill(Color.BLACK);
 
-                userText = new Text(prefix + output.getContent());
-                userText.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 16));
-                userText.setTranslateX(50);
-                userText.setTranslateY(messageTime.getTranslateY()+2);
-                userText.setFill(Color.WHITE);
+                Text msgText = new Text(prefix + output.getContent());
+                msgText.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+                msgText.setTranslateX(50);
+                msgText.setTranslateY(msgTime.getTranslateY());
+                msgText.setFill(Color.WHITE);
 
-                chatLayout.getChildren().addAll(messageTime, userText);
+                chatLayout.getChildren().addAll(msgTime, msgText);
             }
 
             else if(output.getMessageType().equals(MessageType.IMAGE)){ // If the message is an image
-                botText = new Text();
-                Text text = new Text();
-                FileInputStream input = new FileInputStream("src/assets/ProjectData/PhotoTaken/" + output.getContent());
-                Image imageFile = new Image(input);
-                webcam = new ImageView(imageFile);
-                Platform.runLater(() -> {
-
-                    text.setText("Bot: Smile!");
-                    text.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
-                    text.setFill(Color.WHITE);
-                    text.setTranslateX(50);
-                    text.setTranslateY(userText.getTranslateY() + 20);
-
-                    chatLayout.getChildren().add(text);
-
-                    webcam.setScaleX(0.3);
-                    webcam.setScaleY(0.3);
-                    webcam.setScaleZ(0.3);
-                    webcam.setTranslateX(-172);
-                    webcam.setPreserveRatio(true);
-
-                    webcam.setTranslateY(text.getTranslateY() - 160);
-
-
-                    webcam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
-                        @Override
-                        public void handle(MouseEvent event) {
-                            File file = new File("src/assets/ProjectData/PhotoTaken/" + output.getContent());
-                            Desktop dt = Desktop.getDesktop();
-                            try {
-                                dt.open(file);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            event.consume();
-                        }
-                    });
-
-                    robotInteractionText.setText("Damn\nYou are hot!");
-                    chatLayout.getChildren().add(webcam);
-
-                    botText.setText("Click on the image to have full resolution!");
-                    botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
-                    botText.setFill(Color.WHITE);
-                    botText.setTranslateX(50);
-                    botText.setTranslateY(text.getTranslateY() + 170);
-                    requestCounter += 10;
-                    chatLayout.getChildren().add(botText);
-
+                Image imageFile = new Image(new FileInputStream(output.getContent()));
+                ImageView outputImage = new ImageView(imageFile);
+                outputImage.setScaleX(0.3);
+                outputImage.setScaleY(0.3);
+                outputImage.setScaleZ(0.3);
+                outputImage.setTranslateX(-172);
+                outputImage.setPreserveRatio(true);
+                outputImage.setTranslateY(outputMessageHeight - 160);
+                outputImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    File file = new File(output.getContent());
+                    Desktop dt = Desktop.getDesktop();
+                    try {
+                        dt.open(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    event.consume();
                 });
+
+                Date currentDate = new Date();
+                Text msgTime = new Text(time.format(currentDate));
+                msgTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
+                msgTime.setTranslateY(outputMessageHeight + 20);
+                msgTime.setFill(Color.BLACK);
+
+                chatLayout.getChildren().addAll(msgTime, outputImage);
+                outputMessageHeight += outputImage.getImage().getHeight()*outputImage.getScaleY() + 5;
             }
 
         }
