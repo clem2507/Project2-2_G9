@@ -114,4 +114,11 @@ public class Camera {
         return getFrame(0);
     }
 
+    /**
+     * Synonym of closeCamera(0) - defaults to channel=0
+     */
+    public static void closeCamera(){
+        closeCamera(0);
+    }
+
 }
