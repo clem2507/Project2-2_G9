@@ -14,6 +14,9 @@ import java.util.Map;
  * Handles the camera feed
  * Note: It is thread safe. Anyone can open a camera feed from anywhere and/or
  * tak a picture from any thread and the code will not break.
+ *
+ * Also, this class uses a similar technique to reference counting to keep track
+ * of used camera - So, if you forget to close a camera, it will remain open until the program closes
  */
 public class Camera {
     private static final Map<Integer, VideoCapture> videoCaptures = new HashMap<>(); // List of open cameras
@@ -59,7 +62,7 @@ public class Camera {
                 VideoCapture videoCapture = videoCaptures.get(channel);
                 useCounter.put(channel, useCounter.get(channel) - 1);
 
-                if(useCounter.get(channel).equals(0)){
+                if(useCounter.get(channel) <= 0){
                     useCounter.remove(channel);
                     videoCaptures.remove(channel);
                     videoCapture.release();

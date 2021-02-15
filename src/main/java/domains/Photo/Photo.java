@@ -27,9 +27,11 @@ public class Photo extends Domain {
         super(DomainNames.Photo);
 
         // Since there are many ways to ask the assistant to take a photo, we
-        // have to define many patterns, since we also want the assistant
-        // to take a photo either immediately or wait an arbitrary amount of time
-        // before taking the photo, our code should make our life easier.
+        // have to define many patterns.
+        //
+        // We also want the assistant to take a photo either immediately or wait an arbitrary amount of time
+        // before taking the photo.
+        // Our code should make our life easier, not harder. That's why we use the following code.
 
         paramIndex = new HashMap<>();
         // Define a map containing a parameter index (i.e. the index of the
@@ -38,10 +40,13 @@ public class Photo extends Domain {
         paramIndex.put(-1, Arrays.asList("<photo, selfie, picture>")); // Direct command
 
         // For cases such as 'take a picture in 5 seconds'
-        paramIndex.put(2, Arrays.asList("<photo, selfie, picture> <in, after> <param:int>"));
+        paramIndex.put(3, Arrays.asList("<photo, selfie, picture> <#:3> <in, after> <param:int>"));
 
         // For those weirdos that would say 'wait 5 seconds, and then take a picture'
         paramIndex.put(0, Arrays.asList("<param:int> <#:4> <photo, selfie, picture>"));
+
+        // NOTE: We use lists instead of a single string just in case we want to add more patterns that
+        // use the same parameter slot index.
 
         // Then we have to add those patterns
         for (Integer index : paramIndex.keySet()){

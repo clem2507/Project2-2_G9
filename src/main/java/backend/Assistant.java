@@ -39,6 +39,14 @@ public class Assistant {
         addDomain(new Calendar());
     }
 
+    /**
+     * Process a query.
+     * NOTE: This is supposed to be executed on a single thread. In other words, there is no limit
+     * to how many times this is called or where this is called, but it has to be called only on the
+     * same thread each time. Normally, this thread would be the main thread - but it doesn't need
+     * to be the main thread
+     * @param query a string
+     */
     public void processQuery(final String query){
         Domain selectedDomain = null; // Best domain matched so far
         MatchedSequence obtainedSequence = null; // Best matched sequence so far
@@ -56,7 +64,7 @@ public class Assistant {
 
         }
 
-        if(selectedDomain != null){ // If a domained matched
+        if(selectedDomain != null){ // If a domain matched
             Skill skill = selectedDomain.dispatchSkill(obtainedSequence, outputChannel); // Declare skill
 
             // Send skill to run in the background
@@ -66,17 +74,27 @@ public class Assistant {
         }
 
         else{
-            pushMessage("Query not understood"); // Push message to the queue
+            pushMessage("Query not understood"); // Push failure message to the queue
         }
 
     }
 
+    /**
+     * Removes the skills that are no longer running. This has to be called periodically in the same thread
+     * processQuery is called.
+     */
     public void cleanSkillPool(){
         runningSkills = runningSkills.stream()
                 .filter(Thread::isAlive)
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Tells all the running skills to stop and waits for them to stop. This has to be called only
+     * before quitting the application. It can be called on a different thread from processQuery, but
+     * only if you can ensure processQuery is not being called at the same time as this function.
+     * Note: If this function is not called, there will be memory leaks after closing the app.
+     */
     public void interruptAndWait(){
         runningSkills
                 .forEach(Thread::interrupt);
@@ -89,14 +107,32 @@ public class Assistant {
         });
     }
 
+    /**
+     * Returns and removes the oldest output message in the queue. If there is
+     * no message, it waits. This can be called anywhere and
+     * from any thread.
+     * @return an AssistantMessage object.
+     * @throws InterruptedException if the thread calling this function is interrupted
+     */
     public AssistantMessage getOutputOrWait() throws InterruptedException {
         return outputChannel.take();
     }
 
+    /**
+     * Returns and removes the oldest output message in the queue, if and only if, there is a message
+     * waiting. If there is none, it returns an empty Optional and continues execution - i.e. does not wait
+     * @return Optional object
+     * @throws InterruptedException if the thread calling this function is interrupted
+     */
     public Optional<AssistantMessage> getOutputOrContinue() throws InterruptedException {
         return Optional.ofNullable(outputChannel.poll(0, TimeUnit.MILLISECONDS));
     }
 
+    /**
+     * Pushes a message into the output queue. This is thread safe and can be called from any
+     * thread at any point
+     * @param message String to push
+     */
     public void pushMessage(final String message){
 
         try {
@@ -109,21 +145,41 @@ public class Assistant {
 
     }
 
-    public void addDomain(final Domain domain){
+    /**
+     * Adds a new domain to the set. This should only be called in the constructor.
+     * @param domain
+     */
+    private void addDomain(final Domain domain){
         assert !domains.contains(domain);
         assert domain.getUniqueName() != null;
         domains.add(domain);
     }
 
+    /**
+     * Removes a domain from the set. This should only be called in the same thread as
+     * processQuery
+     * @param domain
+     */
     public void removeDomain(final Domain domain){
         assert domains.contains(domain);
         domains.remove(domain);
     }
 
+    /**
+     * Checks if a domain is already in the set. This should only be called
+     * in the same thread as processQuery
+     * @param domain
+     * @return boolean - true if the domain is present, false otherwise
+     */
     public boolean hasDomain(final Domain domain){
         return domains.contains(domain);
     }
 
+    /**
+     * Tells the fallback system that the user has defined a new set of responses in a file
+     * identified by the path. This can be called from any thead at any point - i.e. thread safe
+     * @param path String representing the new path
+     */
     public void notifyOfNewPath(String path){
         fallback.notifyNewPath(path);
     }
