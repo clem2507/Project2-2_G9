@@ -19,15 +19,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Assistant {
-    private Set<Domain> domains;
-    private BlockingQueue<AssistantMessage> outputChannel;
+    private final Set<Domain> domains;
+    private final BlockingQueue<AssistantMessage> outputChannel;
     private Set<Thread> runningSkills;
-    private FallbackInterpreter fallback;
+    private final FallbackInterpreter customFallback;
 
     public Assistant(){
         domains = new HashSet<>();
         outputChannel = new LinkedBlockingQueue<>();
         runningSkills = new HashSet<>();
+        customFallback = new DummyFallback();
 
         addDomain(new SayThis());
         addDomain(new FindMe());
@@ -74,7 +75,16 @@ public class Assistant {
         }
 
         else{
-            pushMessage("Query not understood"); // Push failure message to the queue
+            String customResponse = customFallback.processQuery(query);
+
+            if(customResponse != null){
+                pushMessage(customResponse);
+            }
+
+            else{
+                pushMessage("Query not understood"); // Push failure message to the queue
+            }
+
         }
 
     }
@@ -181,7 +191,7 @@ public class Assistant {
      * @param path String representing the new path
      */
     public void notifyOfNewPath(String path){
-        fallback.notifyNewPath(path);
+        customFallback.notifyNewPath(path);
     }
 
 }
