@@ -119,7 +119,6 @@ public class Main extends Application {
 
     Assistant assistant = new Assistant();
     BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
-    private int outputMessageHeight = 0;
 
     Thread queryThread;
 
@@ -188,14 +187,14 @@ public class Main extends Application {
         imagesScrollPane.setFitToWidth(true);
 
         editBgButton = new Button("Edit Background");
-        editBgButton.setTranslateX(WINDOW_WIDTH-310);
+        editBgButton.setTranslateX(WINDOW_WIDTH-170);
         editBgButton.setTranslateY(40);
         editBgButton.setStyle(" -fx-background-radius: 30; -fx-background-insets: 0,1,1; -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ) ");
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
         pane.getChildren().add(editBgButton);
 
-        weatherWidget = new Rectangle(185, 80);
+        weatherWidget = new Rectangle(140, 80);
         weatherWidget.setTranslateX(28);
         weatherWidget.setTranslateY(130);
         weatherWidget.setStroke(Color.WHITESMOKE);
@@ -207,8 +206,7 @@ public class Main extends Application {
         weatherWidget.setFill(lg);
         pane.getChildren().add(weatherWidget);
 
-        //city = CurrentLocation.getLocation();
-        city = "Puerto de la Cruz";
+        city = CurrentLocation.getLocation();
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
         weatherCity.setTranslateX(weatherWidget.getTranslateX()+12);
@@ -231,23 +229,23 @@ public class Main extends Application {
 
         GPS = new Image(new FileInputStream("src/assets/GPSpointer.png"));
         GPSView = new ImageView(GPS);
-        GPSView.setTranslateX(weatherCity.getTranslateX()+140);
+        GPSView.setTranslateX(weatherCity.getTranslateX()+95);
         GPSView.setTranslateY(weatherCity.getTranslateY()-18);
         GPSView.setFitWidth(30);
         GPSView.setFitHeight(20);
         pane.getChildren().add(GPSView);
 
-        chatWindow = new Rectangle(700, 600);
-        chatWindow.setTranslateX((WINDOW_WIDTH/2)-(chatWindow.getWidth()/2));
-        chatWindow.setTranslateY(100);
+        chatWindow = new Rectangle(700, 500);
+        chatWindow.setTranslateX(490);
+        chatWindow.setTranslateY(80);
         chatWindow.setFill(Color.rgb(160, 160, 160, 0.75));
         chatWindow.setStroke(Color.WHITE);
         chatWindow.setStrokeWidth(1);
         pane.getChildren().add(chatWindow);
 
         chatInputWindow = new Rectangle(700, 100);
-        chatInputWindow.setTranslateX((WINDOW_WIDTH/2)-(chatInputWindow.getWidth()/2));
-        chatInputWindow.setTranslateY(chatWindow.getHeight()+100);
+        chatInputWindow.setTranslateX(490);
+        chatInputWindow.setTranslateY(580);
         chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.8));
         chatInputWindow.setStroke(Color.WHITE);
         chatInputWindow.setStrokeWidth(1);
@@ -255,10 +253,10 @@ public class Main extends Application {
 
         textField = new TextField();
         textField.setPromptText("Input...");
-        textField.setPrefSize(600, 40);
         textField.setFocusTraversable(false);
-        textField.setTranslateX((WINDOW_WIDTH/2)-(chatInputWindow.getWidth()/2)+45);
-        textField.setTranslateY(710);
+        textField.setTranslateX(540);
+        textField.setTranslateY(610);
+        textField.setPrefSize(600, 40);
         textField.setFont(Font.font("Calibri", FontPosture.REGULAR, 16));
         pane.getChildren().add(textField);
 
@@ -281,16 +279,16 @@ public class Main extends Application {
 
         robot = new Image(new FileInputStream("src/assets/robot.png"));
         robotViewer = new ImageView(robot);
-        robotViewer.setTranslateX(chatWindow.getTranslateX()+850);
-        robotViewer.setTranslateY(chatWindow.getTranslateY()+495);
+        robotViewer.setTranslateX(1300);
+        robotViewer.setTranslateY(470);
         robotViewer.setFitWidth(200);
         robotViewer.setFitHeight(220);
         pane.getChildren().add(robotViewer);
 
         robotInteraction = new Image(new FileInputStream("src/assets/speechBubbleBot.png"));
         robotInteractionViewer = new ImageView(robotInteraction);
-        robotInteractionViewer.setTranslateX(1295);
-        robotInteractionViewer.setTranslateY(540);
+        robotInteractionViewer.setTranslateX(1200);
+        robotInteractionViewer.setTranslateY(420);
         robotInteractionViewer.setFitWidth(150);
         robotInteractionViewer.setFitHeight(100);
         pane.getChildren().add(robotInteractionViewer);
@@ -314,7 +312,7 @@ public class Main extends Application {
 
         Rectangle timezones = new Rectangle(420, 65);
         timezones.setTranslateX(30);
-        timezones.setTranslateY(245);
+        timezones.setTranslateY(240);
         timezones.setArcWidth(20);
         timezones.setArcHeight(20);
         timezones.setStroke(Color.WHITESMOKE);
@@ -510,7 +508,9 @@ public class Main extends Application {
      * @throws InterruptedException
      */
     public void pushMessageOrWait(final ConsoleOutput newOutput) throws InterruptedException {
+        //System.out.println("Pushing message " + newOutput.getContent());
         consoleOutput.put(newOutput);
+        //System.out.println("Pushed message " + newOutput.getContent());
     }
 
     /**
@@ -518,6 +518,7 @@ public class Main extends Application {
      * @throws InterruptedException
      */
     public void moveFromQueueToConsole() throws InterruptedException, FileNotFoundException {
+        //System.out.println("Moving message from queue to console");
         ConsoleOutput output = consoleOutput.poll(0, TimeUnit.MILLISECONDS); // Get the message or null
 
         if(output != null){ // If there is a message
@@ -525,50 +526,74 @@ public class Main extends Application {
             if(output.getMessageType().equals(MessageType.STRING)){ // If the message is a string
                 String prefix = output.isBot()? "[DKE Assistant]: ":"[User]: ";
 
-                outputMessageHeight += 20;
-                Date currentDate = new Date();
-                Text msgTime = new Text(time.format(currentDate));
-                msgTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
-                msgTime.setTranslateY(outputMessageHeight);
-                msgTime.setFill(Color.BLACK);
+                requestCounter++;
+                currentDate = new Date();
+                messageTime = new Text(time.format(currentDate));
+                messageTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
+                messageTime.setTranslateY(20*requestCounter);
+                messageTime.setFill(Color.BLACK);
 
-                Text msgText = new Text(prefix + output.getContent());
-                msgText.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 16));
-                msgText.setTranslateX(50);
-                msgText.setTranslateY(msgTime.getTranslateY());
-                msgText.setFill(Color.WHITE);
+                userText = new Text(prefix + output.getContent());
+                userText.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+                userText.setTranslateX(50);
+                userText.setTranslateY(messageTime.getTranslateY()+2);
+                userText.setFill(Color.WHITE);
 
-                chatLayout.getChildren().addAll(msgTime, msgText);
+                chatLayout.getChildren().addAll(messageTime, userText);
             }
 
             else if(output.getMessageType().equals(MessageType.IMAGE)){ // If the message is an image
-                Image imageFile = new Image(new FileInputStream(output.getContent()));
-                ImageView outputImage = new ImageView(imageFile);
-                outputImage.setScaleX(0.3);
-                outputImage.setScaleY(0.3);
-                outputImage.setScaleZ(0.3);
-                outputImage.setTranslateX(-172);
-                outputImage.setPreserveRatio(true);
-                outputImage.setTranslateY(outputMessageHeight - 160);
-                outputImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                    File file = new File(output.getContent());
-                    Desktop dt = Desktop.getDesktop();
-                    try {
-                        dt.open(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    event.consume();
+                botText = new Text();
+                Text text = new Text();
+                FileInputStream input = new FileInputStream("src/assets/ProjectData/PhotoTaken/" + output.getContent());
+                Image imageFile = new Image(input);
+                webcam = new ImageView(imageFile);
+                Platform.runLater(() -> {
+
+                    text.setText("Bot: Smile!");
+                    text.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                    text.setFill(Color.WHITE);
+                    text.setTranslateX(50);
+                    text.setTranslateY(userText.getTranslateY() + 20);
+
+                    chatLayout.getChildren().add(text);
+
+                    webcam.setScaleX(0.3);
+                    webcam.setScaleY(0.3);
+                    webcam.setScaleZ(0.3);
+                    webcam.setTranslateX(-172);
+                    webcam.setPreserveRatio(true);
+
+                    webcam.setTranslateY(text.getTranslateY() - 160);
+
+
+                    webcam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+                        @Override
+                        public void handle(MouseEvent event) {
+                            File file = new File("src/assets/ProjectData/PhotoTaken/" + output.getContent());
+                            Desktop dt = Desktop.getDesktop();
+                            try {
+                                dt.open(file);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            event.consume();
+                        }
+                    });
+
+                    robotInteractionText.setText("Damn\nYou are hot!");
+                    chatLayout.getChildren().add(webcam);
+
+                    botText.setText("Click on the image to have full resolution!");
+                    botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
+                    botText.setFill(Color.WHITE);
+                    botText.setTranslateX(50);
+                    botText.setTranslateY(text.getTranslateY() + 170);
+                    requestCounter += 10;
+                    chatLayout.getChildren().add(botText);
+
                 });
-
-                Date currentDate = new Date();
-                Text msgTime = new Text(time.format(currentDate));
-                msgTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
-                msgTime.setTranslateY(outputMessageHeight + 20);
-                msgTime.setFill(Color.BLACK);
-
-                chatLayout.getChildren().addAll(msgTime, outputImage);
-                outputMessageHeight += outputImage.getImage().getHeight()*outputImage.getScaleY() + 5;
             }
 
         }
