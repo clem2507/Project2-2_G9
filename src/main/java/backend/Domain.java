@@ -4,10 +4,7 @@ import nlp.MatchedSequence;
 import nlp.Pattern;
 import nlp.PatternMatcher;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 
@@ -37,6 +34,10 @@ public abstract class Domain {
     }
 
     public abstract Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel);
+
+    public Optional<Skill> backgroundSkill(){
+        return Optional.empty();
+    }
 
     public DomainNames getUniqueName(){
         return uniqueName;
