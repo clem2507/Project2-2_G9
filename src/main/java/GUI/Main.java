@@ -188,14 +188,14 @@ public class Main extends Application {
         imagesScrollPane.setFitToWidth(true);
 
         editBgButton = new Button("Edit Background");
-        editBgButton.setTranslateX(WINDOW_WIDTH-170);
+        editBgButton.setTranslateX(WINDOW_WIDTH-310);
         editBgButton.setTranslateY(40);
         editBgButton.setStyle(" -fx-background-radius: 30; -fx-background-insets: 0,1,1; -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ) ");
         imagesScrollPane.setTranslateX(editBgButton.getTranslateX()-55);
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
         pane.getChildren().add(editBgButton);
 
-        weatherWidget = new Rectangle(140, 80);
+        weatherWidget = new Rectangle(185, 80);
         weatherWidget.setTranslateX(28);
         weatherWidget.setTranslateY(130);
         weatherWidget.setStroke(Color.WHITESMOKE);
@@ -207,7 +207,8 @@ public class Main extends Application {
         weatherWidget.setFill(lg);
         pane.getChildren().add(weatherWidget);
 
-        city = CurrentLocation.getLocation();
+        //city = CurrentLocation.getLocation();
+        city = "Puerto de la Cruz";
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
         weatherCity.setTranslateX(weatherWidget.getTranslateX()+12);
@@ -230,23 +231,23 @@ public class Main extends Application {
 
         GPS = new Image(new FileInputStream("src/assets/GPSpointer.png"));
         GPSView = new ImageView(GPS);
-        GPSView.setTranslateX(weatherCity.getTranslateX()+95);
+        GPSView.setTranslateX(weatherCity.getTranslateX()+140);
         GPSView.setTranslateY(weatherCity.getTranslateY()-18);
         GPSView.setFitWidth(30);
         GPSView.setFitHeight(20);
         pane.getChildren().add(GPSView);
 
-        chatWindow = new Rectangle(700, 500);
-        chatWindow.setTranslateX(490);
-        chatWindow.setTranslateY(80);
+        chatWindow = new Rectangle(700, 600);
+        chatWindow.setTranslateX((WINDOW_WIDTH/2)-(chatWindow.getWidth()/2));
+        chatWindow.setTranslateY(100);
         chatWindow.setFill(Color.rgb(160, 160, 160, 0.75));
         chatWindow.setStroke(Color.WHITE);
         chatWindow.setStrokeWidth(1);
         pane.getChildren().add(chatWindow);
 
         chatInputWindow = new Rectangle(700, 100);
-        chatInputWindow.setTranslateX(490);
-        chatInputWindow.setTranslateY(580);
+        chatInputWindow.setTranslateX((WINDOW_WIDTH/2)-(chatInputWindow.getWidth()/2));
+        chatInputWindow.setTranslateY(chatWindow.getHeight()+100);
         chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.8));
         chatInputWindow.setStroke(Color.WHITE);
         chatInputWindow.setStrokeWidth(1);
@@ -254,10 +255,10 @@ public class Main extends Application {
 
         textField = new TextField();
         textField.setPromptText("Input...");
-        textField.setFocusTraversable(false);
-        textField.setTranslateX(540);
-        textField.setTranslateY(610);
         textField.setPrefSize(600, 40);
+        textField.setFocusTraversable(false);
+        textField.setTranslateX((WINDOW_WIDTH/2)-(chatInputWindow.getWidth()/2)+45);
+        textField.setTranslateY(710);
         textField.setFont(Font.font("Calibri", FontPosture.REGULAR, 16));
         pane.getChildren().add(textField);
 
@@ -280,16 +281,16 @@ public class Main extends Application {
 
         robot = new Image(new FileInputStream("src/assets/robot.png"));
         robotViewer = new ImageView(robot);
-        robotViewer.setTranslateX(1300);
-        robotViewer.setTranslateY(470);
+        robotViewer.setTranslateX(chatWindow.getTranslateX()+850);
+        robotViewer.setTranslateY(chatWindow.getTranslateY()+495);
         robotViewer.setFitWidth(200);
         robotViewer.setFitHeight(220);
         pane.getChildren().add(robotViewer);
 
         robotInteraction = new Image(new FileInputStream("src/assets/speechBubbleBot.png"));
         robotInteractionViewer = new ImageView(robotInteraction);
-        robotInteractionViewer.setTranslateX(1200);
-        robotInteractionViewer.setTranslateY(420);
+        robotInteractionViewer.setTranslateX(1295);
+        robotInteractionViewer.setTranslateY(540);
         robotInteractionViewer.setFitWidth(150);
         robotInteractionViewer.setFitHeight(100);
         pane.getChildren().add(robotInteractionViewer);
@@ -313,7 +314,7 @@ public class Main extends Application {
 
         Rectangle timezones = new Rectangle(420, 65);
         timezones.setTranslateX(30);
-        timezones.setTranslateY(240);
+        timezones.setTranslateY(245);
         timezones.setArcWidth(20);
         timezones.setArcHeight(20);
         timezones.setStroke(Color.WHITESMOKE);
