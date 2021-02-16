@@ -36,7 +36,7 @@ public class Popup {
      * Shows a popup with a custom message and waits for the user's input. Blocks the thread
      * until the user responds or the window is closed.
      * @param text message to show
-     * @return String representing the user's input
+     * @return Optional<String> representing the user's input
      */
     public static Optional<String> userInput(final String text){
         String input = JOptionPane.showInputDialog(null, text, DEFAULT_TITLE, JOptionPane.QUESTION_MESSAGE);

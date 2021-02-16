@@ -207,7 +207,12 @@ public class Main extends Application {
         weatherWidget.setFill(lg);
         pane.getChildren().add(weatherWidget);
 
-        city = CurrentLocation.getLocation();
+        try {
+            city = CurrentLocation.getLocation();
+        } catch (IOException e){
+            e.printStackTrace();
+            city = "UNKNOWN";
+        }
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
         weatherCity.setTranslateX(weatherWidget.getTranslateX()+12);
@@ -215,7 +220,14 @@ public class Main extends Application {
         weatherCity.setFill(Color.WHITE);
         pane.getChildren().add(weatherCity);
 
-        String temp = CurrentWeather.getWeather(city);
+        String temp = "1000";
+
+        try{
+            temp =CurrentWeather.getWeather(city);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
         double d = Double.parseDouble(temp);
         double rounded = Math.round(d);
         int i = (int) rounded;

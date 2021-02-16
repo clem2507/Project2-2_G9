@@ -3,6 +3,8 @@ package domains.Location;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class CurrentLocation {
@@ -14,19 +16,14 @@ public class CurrentLocation {
 
         String loc = "";
 
-        try (java.util.Scanner s =
-                     new java.util.Scanner(new java.net.URL(url).openStream())) {
-
-            String result = s.useDelimiter("\\A").next();
-            int ss = result.indexOf("city") + 7;
-            for (int k = ss; k < result.length(); k++) {
-                loc = loc + result.charAt(k);
-                if (k == (result.indexOf("lat") - 4)) {
-                    break;
-                }
+        java.util.Scanner s = new java.util.Scanner(new java.net.URL(url).openStream());
+        String result = s.useDelimiter("\\A").next();
+        int ss = result.indexOf("city") + 7;
+        for (int k = ss; k < result.length(); k++) {
+            loc = loc + result.charAt(k);
+            if (k == (result.indexOf("lat") - 4)) {
+                break;
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
 
 

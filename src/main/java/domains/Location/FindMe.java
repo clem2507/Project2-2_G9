@@ -4,6 +4,7 @@ import backend.*;
 import nlp.MatchedSequence;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
@@ -24,18 +25,16 @@ public class FindMe extends Domain {
         return new Skill(this, outputChannel) {
             @Override
             public void run() {
-                String city = "UNKNOWN";
 
                 try {
-                    city = CurrentLocation.getLocation();
+                    String city = CurrentLocation.getLocation();
+                    pushMessage("You are in " + city, MessageType.STRING);
+                    return;
                 } catch (IOException e) {
-
                     e.printStackTrace();
                 }
 
-                String message = "You are in " + city;
-                pushMessage(message, MessageType.STRING);
-                System.out.println(message);
+                pushMessage("Your location is unknown", MessageType.STRING);
             }
         };
     }

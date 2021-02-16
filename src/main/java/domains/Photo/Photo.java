@@ -53,13 +53,13 @@ public class Photo extends Domain {
         // Define a map containing a parameter index (i.e. the index of the
         // slot that says how long to wait before taking a photo)
 
-        indexes2Pattern.put(Arrays.asList(-1, -1, -1), "<photo, selfie, picture>"); // Direct command
+        indexes2Pattern.put(Arrays.asList(-1, -1), "<photo, selfie, picture>"); // Direct command
 
         // For cases such as 'take a picture in 5 seconds'
-        indexes2Pattern.put(Arrays.asList(3, 4, 2), "<photo, selfie, picture> <#:4> <in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs>");
+        indexes2Pattern.put(Arrays.asList(3, 4), "<photo, selfie, picture> <#:4> <in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs>");
 
         // For those weirdos that would say 'wait 5 seconds, and then take a picture'
-        indexes2Pattern.put(Arrays.asList(1, 2, 0), "<in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs> <#:5> <photo, selfie, picture>");
+        indexes2Pattern.put(Arrays.asList(1, 2), "<in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs> <#:5> <photo, selfie, picture>");
 
         // Then we have to add those patterns
         for (List<Integer> indexes : indexes2Pattern.keySet()){
@@ -124,7 +124,7 @@ public class Photo extends Domain {
                 }
 
                 catch (InterruptedException e) {
-                    System.err.println(e);
+                    e.printStackTrace();
                     return;
                 }
 

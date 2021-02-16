@@ -3,6 +3,7 @@ package domains.Weather;
 import backend.*;
 import nlp.MatchedSequence;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
@@ -27,7 +28,12 @@ public class FindWeather extends Domain {
             public void run() {
 
                 if(!city.isEmpty()){
-                    String weather = CurrentWeather.getWeather(city);
+                    String weather = null;
+                    try {
+                        weather = CurrentWeather.getWeather(city);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     if(weather!=""){
                         pushMessage(str+weather+"'C", MessageType.STRING);
                         System.out.println(str+weather+"'C");
