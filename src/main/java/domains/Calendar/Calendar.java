@@ -16,8 +16,8 @@ public class Calendar extends Domain {
     {
         super(DomainNames.Calendar);
 
-        addPattern("<schedule>");
-        addPattern("<do>");
+        addPattern("<schedule> <...>");
+        //addPattern("<do> <...>"); I believe this pattern is not being used at all. - Dennis
         addPattern("<set calendar> <...>");
         addPattern("<reset calendar>");
         addPattern("<help calendar>");
