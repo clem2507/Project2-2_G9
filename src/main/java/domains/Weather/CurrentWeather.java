@@ -9,8 +9,8 @@ import java.net.URLConnection;
 public class CurrentWeather {
 
     public static String getWeather(String city) throws IOException {
-        String APIKEY = "54cd4b7942fb66b79b3377b338e3a9b1";
-        String urlString = "http://api.openweathermap.org/data/2.5/weather?q="+ city +"&appid="+APIKEY+"&units=metric";
+        final String APIKEY = "54cd4b7942fb66b79b3377b338e3a9b1";
+        final String urlString = "http://api.openweathermap.org/data/2.5/weather?q="+ city +"&appid="+APIKEY+"&units=metric";
 
         String temp = "";
 

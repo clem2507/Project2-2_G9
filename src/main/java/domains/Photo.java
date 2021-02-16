@@ -1,4 +1,4 @@
-package domains.Photo;
+package domains;
 
 import backend.*;
 import backend.camera.Camera;
@@ -46,19 +46,19 @@ public class Photo extends Domain {
         //
         // We also want the assistant to take a photo either immediately or wait an arbitrary amount of time
         // before taking the photo.
-        // Our code should make our life easier, not harder. That's why we use the following code.
+        // Our code should make our life easier, not harder. That's why we use the following technique.
 
-        indexes2Pattern = new HashMap<>();
-        pattern2Indexes = new HashMap<>();
-        // Define a map containing a parameter index (i.e. the index of the
-        // slot that says how long to wait before taking a photo)
+        indexes2Pattern = new HashMap<>(); // Slot indexes to pattern
+        pattern2Indexes = new HashMap<>(); // Pattern to slot indexes
+        // In each list of indexes, we store an integer telling where to find the slot that holds
+        // the data we want to look for. In this case, 0 --> time to wait and 1 --> time scale (i.e. secs, hrs, mins)
 
-        indexes2Pattern.put(Arrays.asList(-1, -1), "<photo, selfie, picture>"); // Direct command
+        indexes2Pattern.put(Arrays.asList(-1, -1), "<photo, selfie, picture>"); // Direct command - No waiting time
 
         // For cases such as 'take a picture in 5 seconds'
         indexes2Pattern.put(Arrays.asList(3, 4), "<photo, selfie, picture> <#:4> <in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs>");
 
-        // For those weirdos that would say 'wait 5 seconds, and then take a picture'
+        // For those weirdos that would say 'wait 5 seconds, and then take a picture' XD
         indexes2Pattern.put(Arrays.asList(1, 2), "<in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs> <#:5> <photo, selfie, picture>");
 
         // Then we have to add those patterns
@@ -79,9 +79,10 @@ public class Photo extends Domain {
         int scale = 1; // Default to 1-1 scale
 
         try {
+            // Now we extract the waiting time and scale specified by the user, if any
             List<Integer> indexes = pattern2Indexes.get(matchedPattern);
-            waitTime = sequence.getIntAt(indexes.get(0));
-            scale = (int) fromScale(sequence.getStringAt(indexes.get(1)));
+            waitTime = indexes.get(0) != -1? sequence.getIntAt(indexes.get(0)):waitTime;
+            scale = indexes.get(1) != -1? ((int) fromScale(sequence.getStringAt(indexes.get(1)))):scale;
         } catch (NLPError nlpError) {
             nlpError.printStackTrace();
         }
@@ -95,6 +96,8 @@ public class Photo extends Domain {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // Besides, this ensures this segment of the code runs only once per query. If more than 1 skill were trying
+        // to create the same directory, at least one of them will crash or suffer an IOException.
 
         // We need to store some variables in finals - this is very technical to Java
         final int finalWaitTime = waitTime;
@@ -104,9 +107,12 @@ public class Photo extends Domain {
             @Override
             public void run() {
                 // The following code is to generate the name of the picture automatically, based on time
+                // There is a possible scenario that will make two skills crash though, if they both happen
+                // to run exactly at the same time, they will name the photo exactly the same. To fix this
+                // we add the thread ID to the name, ensuring they are unique.
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
                 LocalDateTime now = LocalDateTime.now();
-                String filename = dateTimeFormatter.format(now);
+                String filename = dateTimeFormatter.format(now) + "_" + Thread.currentThread().getId(); // + thread ID
 
                 // We generate the relative file location
                 String imagePath = DIR + "/" + filename + ".png";
@@ -124,8 +130,10 @@ public class Photo extends Domain {
                 }
 
                 catch (InterruptedException e) {
+                    // If the thread is interrupted while waiting, we simply early stop
+                    // don't even bother to take the picture
                     e.printStackTrace();
-                    return;
+                    return; // Early stop
                 }
 
                 // Here we take the picture
