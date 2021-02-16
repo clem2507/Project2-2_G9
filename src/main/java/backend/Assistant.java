@@ -76,7 +76,11 @@ public class Assistant {
         }
 
         else{
-            String customResponse = customFallback.processQuery(query);
+            String customResponse;
+
+            synchronized (customFallback) {
+                customResponse = customFallback.processQuery(query);
+            }
 
             if(customResponse != null){
                 pushMessage(customResponse);
@@ -208,7 +212,11 @@ public class Assistant {
      * @param path String representing the new path
      */
     public void notifyOfNewPath(String path){
-        customFallback.notifyNewPath(path);
+
+        synchronized (customFallback) {
+            customFallback.notifyNewPath(path);
+        }
+
     }
 
 }
