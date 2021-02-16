@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.util.Optional;
 
 public class Popup {
+    private static final String DEFAULT_TITLE = "DKE Assistant";
 
     /**
      * Shows a popup with a custom message. Blocks the thread until the user
@@ -11,7 +12,7 @@ public class Popup {
      * @param text String to display
      */
     public static void message(final String text){
-        JOptionPane.showMessageDialog(null, text, "", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(null, text, DEFAULT_TITLE, JOptionPane.PLAIN_MESSAGE);
     }
 
     /**
@@ -24,7 +25,7 @@ public class Popup {
         int answer = JOptionPane.showConfirmDialog(
                 null,
                 text,
-                "",
+                DEFAULT_TITLE,
                 JOptionPane.YES_NO_OPTION
         );
 
@@ -38,7 +39,7 @@ public class Popup {
      * @return String representing the user's input
      */
     public static Optional<String> userInput(final String text){
-        String input = JOptionPane.showInputDialog(null, text, "", JOptionPane.QUESTION_MESSAGE);
+        String input = JOptionPane.showInputDialog(null, text, DEFAULT_TITLE, JOptionPane.QUESTION_MESSAGE);
         return Optional.ofNullable((input != null && input.length() > 0)? input:null);
     }
 

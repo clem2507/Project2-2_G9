@@ -13,15 +13,30 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
 public class Photo extends Domain {
-    private final Map<Integer, List<String>> paramIndex;
+    private final Map<List<Integer>, String> indexes2Pattern;
+    private final Map<String, List<Integer>> pattern2Indexes;
     private static final String DIR = "src/assets/ProjectData/PhotoTaken"; // Default directory
+
+    private static double fromScale(String spec) throws NLPError {
+
+        if(Arrays.asList("seconds", "secs", "second").contains(spec)){
+            return 1;
+        }
+
+        if(Arrays.asList("minutes", "mins", "mns", "minute").contains(spec)){
+            return 60;
+        }
+
+        if(Arrays.asList("hours", "hrs", "hour").contains(spec)){
+            return 120;
+        }
+
+        throw new NLPError("Illegal time scale " + spec);
+    }
 
     public Photo(){
         super(DomainNames.Photo);
@@ -33,28 +48,24 @@ public class Photo extends Domain {
         // before taking the photo.
         // Our code should make our life easier, not harder. That's why we use the following code.
 
-        paramIndex = new HashMap<>();
+        indexes2Pattern = new HashMap<>();
+        pattern2Indexes = new HashMap<>();
         // Define a map containing a parameter index (i.e. the index of the
         // slot that says how long to wait before taking a photo)
 
-        paramIndex.put(-1, Arrays.asList("<photo, selfie, picture>")); // Direct command
+        indexes2Pattern.put(Arrays.asList(-1, -1, -1), "<photo, selfie, picture>"); // Direct command
 
         // For cases such as 'take a picture in 5 seconds'
-        paramIndex.put(3, Arrays.asList("<photo, selfie, picture> <#:4> <in, after, wait> <param:int>"));
+        indexes2Pattern.put(Arrays.asList(3, 4, 2), "<photo, selfie, picture> <#:4> <in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs>");
 
         // For those weirdos that would say 'wait 5 seconds, and then take a picture'
-        paramIndex.put(1, Arrays.asList("<in, after, wait> <param:int> <#:6> <photo, selfie, picture>"));
-
-        // NOTE: We use lists instead of a single string just in case we want to add more patterns that
-        // use the same parameter slot index.
+        indexes2Pattern.put(Arrays.asList(1, 2, 0), "<in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs> <#:5> <photo, selfie, picture>");
 
         // Then we have to add those patterns
-        for (Integer index : paramIndex.keySet()){
-
-            for(String pattern : paramIndex.get(index)){
-                addPattern(pattern);
-            }
-
+        for (List<Integer> indexes : indexes2Pattern.keySet()){
+            String pattern = indexes2Pattern.get(indexes);
+            pattern2Indexes.put(pattern, indexes);
+            addPattern(pattern);
         }
         // This way we kill two birds in one hit. We can add patterns with arbitrary locations for
         // the parameter, and wouldn't have to add anything else.
@@ -64,15 +75,15 @@ public class Photo extends Domain {
     @Override
     public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
         String matchedPattern = sequence.getPattern(); // This is a copy of the pattern matched in the sequence
-        int inSlot = -1; // Default -1 (i.e. no parameter)
+        int waitTime = 0; // Default to no wait time
+        int scale = 1; // Default to 1-1 scale
 
-        for(Integer index : paramIndex.keySet()){ // Iterate over the indexes
-
-            if(paramIndex.get(index).contains(matchedPattern)){ // If the pattern is related to the index
-                inSlot = index; // Get index
-                break; // Stop searching
-            }
-
+        try {
+            List<Integer> indexes = pattern2Indexes.get(matchedPattern);
+            waitTime = sequence.getIntAt(indexes.get(0));
+            scale = (int) fromScale(sequence.getStringAt(indexes.get(1)));
+        } catch (NLPError nlpError) {
+            nlpError.printStackTrace();
         }
 
         // Now, we have to make sure the default photos folder exists for the photo skills to actually
@@ -85,7 +96,10 @@ public class Photo extends Domain {
             e.printStackTrace();
         }
 
-        final int finalInSlot = inSlot;
+        // We need to store some variables in finals - this is very technical to Java
+        final int finalWaitTime = waitTime;
+        final int finalScale = scale;
+
         return new Skill(this, outputChannel) {
             @Override
             public void run() {
@@ -94,38 +108,24 @@ public class Photo extends Domain {
                 LocalDateTime now = LocalDateTime.now();
                 String filename = dateTimeFormatter.format(now);
 
-                // We generate the absolute file location
+                // We generate the relative file location
                 String imagePath = DIR + "/" + filename + ".png";
 
-                // Now we get the wait time from the matched pattern
+                // Then we wait the specified time
                 try {
-                    int waitTime = finalInSlot >= 0? sequence.getIntAt(finalInSlot)*1000:0; // Time to wait in milliseconds
-                    long startTime = System.currentTimeMillis();
-                    long currentTime;
-                    int counterState = 0;
+                    int counter = 0;
 
-                    // We use a while loop and not just Thread.wait or Thread.sleep
-                    // in case the skill is interrupted while waiting.
-                    do {
-                        currentTime = System.currentTimeMillis();
+                    while (counter < finalWaitTime*finalScale){
+                        Thread.sleep(1000);
+                        counter++;
+                        pushMessage("Photo in " + counter + "!", MessageType.STRING);
+                    }
 
-                        // If the thread is interrupted  (i.e. the thread running this skill)
-                        // then we early stop - don't even bother about taking the picture
-                        if(Thread.interrupted()){
-                            return;
-                        }
+                }
 
-                        int newCounterState = (int) ((currentTime - startTime)/1000);
-
-                        if(newCounterState - counterState >= 1){
-                            counterState = newCounterState;
-                            pushMessage("Photo in " + counterState + "!", MessageType.STRING);
-                        }
-
-                    } while (currentTime - startTime < waitTime);
-
-                } catch (NLPError nlpError) {
-                    nlpError.printStackTrace();
+                catch (InterruptedException e) {
+                    System.err.println(e);
+                    return;
                 }
 
                 // Here we take the picture
