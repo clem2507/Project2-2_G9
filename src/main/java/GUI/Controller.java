@@ -25,9 +25,9 @@ public class Controller {
      */
     public void setChatController() {
 
-        window.scene.setOnKeyPressed(t -> {
+        window.textField.setOnKeyPressed(t -> {
             KeyCode key = t.getCode();
-            //System.out.println(key);
+            System.out.println(key);
             switch (key) {
                 case ESCAPE:
                     System.exit(0);
@@ -51,17 +51,22 @@ public class Controller {
                         //window.createThread();
                     }
                     break;
-                case UP:
-                    if (historyCount < window.messageHistory.size()) {
+                case DOWN:
+                    if (historyCount < window.messageHistory.size()-1) {
                         window.textField.setText(window.messageHistory.get(historyCount+1));
                         historyCount++;
                     }
+                    else {
+                        window.textField.setText("");
+                    }
+                    window.textField.positionCaret(window.textField.getText().length());
                     break;
-                case DOWN:
+                case UP:
                     if (historyCount > 0) {
                         window.textField.setText(window.messageHistory.get(historyCount-1));
                         historyCount--;
                     }
+                    window.textField.positionCaret(window.textField.getText().length());
                     break;
             }
         });
