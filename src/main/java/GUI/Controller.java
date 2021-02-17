@@ -27,7 +27,6 @@ public class Controller {
 
         window.textField.setOnKeyPressed(t -> {
             KeyCode key = t.getCode();
-            System.out.println(key);
             switch (key) {
                 case ESCAPE:
                     System.exit(0);
