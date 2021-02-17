@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 public class Controller {
 
     private Main window;
+    private int historyCount = 0;
 
     /**
      * Constructor of the main possible control with the graphic interface
@@ -26,6 +27,7 @@ public class Controller {
 
         window.scene.setOnKeyPressed(t -> {
             KeyCode key = t.getCode();
+            //System.out.println(key);
             switch (key) {
                 case ESCAPE:
                     System.exit(0);
@@ -45,7 +47,20 @@ public class Controller {
 
                         window.assistant.processQuery(window.textField.getText());
                         window.textField.setText("");
+                        historyCount = window.messageHistory.size()+1;
                         //window.createThread();
+                    }
+                    break;
+                case UP:
+                    if (historyCount < window.messageHistory.size()) {
+                        window.textField.setText(window.messageHistory.get(historyCount+1));
+                        historyCount++;
+                    }
+                    break;
+                case DOWN:
+                    if (historyCount > 0) {
+                        window.textField.setText(window.messageHistory.get(historyCount-1));
+                        historyCount--;
                     }
                     break;
             }

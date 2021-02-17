@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
@@ -65,6 +66,8 @@ public class Main extends Application {
     String time3;
     String time4;
     String time5;
+
+    ArrayList<String> messageHistory;
 
     Rectangle chatWindow;
     Rectangle chatInputWindow;
@@ -414,6 +417,8 @@ public class Main extends Application {
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+        this.messageHistory = new ArrayList<>();
+
         Controller controller = new Controller(this);
         controller.setChatController();
         controller.setBackgroundController();
@@ -547,6 +552,9 @@ public class Main extends Application {
                 msgText.setTranslateX(50);
                 msgText.setTranslateY(msgTime.getTranslateY());
                 msgText.setFill(Color.WHITE);
+                if (prefix.equals("[User]: ")) {
+                    messageHistory.add(output.getContent());
+                }
 
                 chatLayout.getChildren().addAll(msgTime, msgText);
             }
