@@ -1,10 +1,10 @@
-package domains.Weather;
+package domains;
 
 import backend.*;
+import backend.common.CurrentWeather;
 import nlp.MatchedSequence;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class FindWeather extends Domain {

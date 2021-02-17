@@ -1,11 +1,10 @@
-package domains.Location;
+package domains;
 
 import backend.*;
+import backend.common.CurrentLocation;
 import nlp.MatchedSequence;
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class FindMe extends Domain {

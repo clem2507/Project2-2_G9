@@ -1,4 +1,4 @@
-package domains.Time;
+package backend.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class FindTime {
+public class CurrentTime {
     public static String getTime(String continent, String city) {
         String urlString = "http://worldtimeapi.org/api/timezone/"+continent+"/"+city;
 

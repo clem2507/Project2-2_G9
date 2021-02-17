@@ -2,12 +2,12 @@ package backend;
 
 import domains.Calendar.Calendar;
 import domains.Leave;
-import domains.Location.FindMe;
+import domains.FindMe;
 import domains.OpenApplication;
 import domains.Photo;
 import domains.SayThis;
 import domains.SmallTalk;
-import domains.Weather.FindWeather;
+import domains.FindWeather;
 import nlp.MatchedSequence;
 
 import java.util.HashSet;

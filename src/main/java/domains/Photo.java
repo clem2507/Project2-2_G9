@@ -1,7 +1,7 @@
 package domains;
 
 import backend.*;
-import backend.camera.Camera;
+import backend.common.camera.Camera;
 import nlp.MatchedSequence;
 import nlp.NLPError;
 

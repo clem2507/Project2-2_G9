@@ -1,6 +1,5 @@
-package backend.camera;
+package backend.common.camera;
 
-import backend.camera.Mat2Image;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;

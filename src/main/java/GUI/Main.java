@@ -3,9 +3,9 @@ package GUI;
 import backend.Assistant;
 import backend.AssistantMessage;
 import backend.MessageType;
-import domains.Location.CurrentLocation;
-import domains.Time.FindTime;
-import domains.Weather.CurrentWeather;
+import backend.common.CurrentLocation;
+import backend.common.CurrentTime;
+import backend.common.CurrentWeather;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,7 +14,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -335,7 +334,7 @@ public class Main extends Application {
         timezones.setFill(lg1);
         pane.getChildren().add(timezones);
 
-        time1 = FindTime.getTime("Europe", "Istanbul");
+        time1 = CurrentTime.getTime("Europe", "Istanbul");
         timeText1 = new Text(time1);
         timeText1.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
         timeText1.setTranslateX(timezones.getTranslateX() + 15);
@@ -349,7 +348,7 @@ public class Main extends Application {
         pane.getChildren().add(time1city);
         pane.getChildren().add(timeText1);
 
-        time2 = FindTime.getTime("Asia", "Tokyo");
+        time2 = CurrentTime.getTime("Asia", "Tokyo");
         timeText2 = new Text(time2);
         timeText2.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
         timeText2.setTranslateX(timezones.getTranslateX() + 95);
@@ -363,7 +362,7 @@ public class Main extends Application {
         pane.getChildren().add(time2city);
         pane.getChildren().add(timeText2);
 
-        time3 = FindTime.getTime("Australia", "Sydney");
+        time3 = CurrentTime.getTime("Australia", "Sydney");
         timeText3 = new Text(time3);
         timeText3.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
         timeText3.setTranslateX(timezones.getTranslateX() + 175);
@@ -377,7 +376,7 @@ public class Main extends Application {
         pane.getChildren().add(time3city);
         pane.getChildren().add(timeText3);
 
-        time4 = FindTime.getTime("Africa", "Khartoum");
+        time4 = CurrentTime.getTime("Africa", "Khartoum");
         timeText4 = new Text(time4);
         timeText4.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
         timeText4.setTranslateX(timezones.getTranslateX() + 260);
@@ -391,7 +390,7 @@ public class Main extends Application {
         pane.getChildren().add(time4city);
         pane.getChildren().add(timeText4);
 
-        time5 = FindTime.getTime("America", "Jamaica");
+        time5 = CurrentTime.getTime("America", "Jamaica");
         timeText5 = new Text(time5);
         timeText5.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
         timeText5.setTranslateX(timezones.getTranslateX() + 345);
@@ -488,15 +487,15 @@ public class Main extends Application {
         currentDate = new Date();
         timeText.setText(time.format(currentDate));
 
-        time1 = FindTime.getTime("Europe", "Istanbul");
+        time1 = CurrentTime.getTime("Europe", "Istanbul");
         timeText1.setText(time1);
-        time2 = FindTime.getTime("Asia", "Tokyo");
+        time2 = CurrentTime.getTime("Asia", "Tokyo");
         timeText2.setText(time2);
-        time3 = FindTime.getTime("Australia", "Sydney");
+        time3 = CurrentTime.getTime("Australia", "Sydney");
         timeText3.setText(time3);
-        time4 = FindTime.getTime("Africa", "Khartoum");
+        time4 = CurrentTime.getTime("Africa", "Khartoum");
         timeText4.setText(time4);
-        time5 = FindTime.getTime("America", "Jamaica");
+        time5 = CurrentTime.getTime("America", "Jamaica");
         timeText5.setText(time5);
     }
 

@@ -1,4 +1,4 @@
-package domains.Weather;
+package backend.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;

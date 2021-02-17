@@ -1,4 +1,4 @@
-package backend.camera;
+package backend.common.camera;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
