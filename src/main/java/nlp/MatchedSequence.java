@@ -98,6 +98,7 @@ public class MatchedSequence extends ArrayList<Map.Entry<Slot, List<String>>> {
      */
     public double useRatio(){
         return stream()
+                .filter(s -> !Pattern.getSlotType(s.getKey()).equals(Pattern.SlotType.BLANK))
                 .map(s -> (double)s.getValue().size())
                 .reduce(Double::sum)
                 .orElseThrow()/((double)(Tokenizer.asTokenList(query)).size());
