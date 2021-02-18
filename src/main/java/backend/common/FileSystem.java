@@ -4,6 +4,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,6 +46,10 @@ public class FileSystem {
 
         public String getArgs(){
             return cmdArgs != null? cmdArgs:"";
+        }
+
+        public boolean isBroken(){
+            return !(new File(getTarget())).exists();
         }
 
         @Override
@@ -123,6 +128,10 @@ public class FileSystem {
 
             for(File link : links){
 
+                if(Thread.interrupted()){
+                    throw new InterruptedIOException("Interrupted while listing files in " + directory.getAbsolutePath());
+                }
+
                 try {
                     WindowsShortcut shortcut = new WindowsShortcut(link);
 
@@ -186,7 +195,7 @@ public class FileSystem {
         return Math.max(tes1, tes2);
     }
 
-    public static void runProgramFromLink(LinkData link) {
+    public static int runProgramFromLink(LinkData link) {
 
         try {
             if(getOperatingSystem().equals(OSName.WINDOWS)){
@@ -197,40 +206,13 @@ public class FileSystem {
                 params.addAll(args);
 
                 new ProcessBuilder(params).start();
+                return 0; // Return 0 - meaning everything is OK
             }
         } catch (UnsupportedOSException | IOException e) {
             e.printStackTrace();
         }
 
-        // Other OS are not supported yet
-
-    }
-
-    public static void main(String[] args){
-        Scanner inputScanner = new Scanner(System.in);
-
-        try {
-            System.out.println("Searching links...");
-            Set<LinkData> links = listAllLinks();
-            System.out.println("Search complete - " + links.size() + " links detected");
-
-            while (true){
-                String in = inputScanner.nextLine();
-                Optional<LinkData> bestMatch = findClosestMatch(links, in, DEFAULT_MIN_THRESHOLD);
-
-                if(bestMatch.isPresent()){
-                    System.out.println(bestMatch);
-                    runProgramFromLink(bestMatch.get());
-                }
-
-            }
-
-        }
-
-        catch (UnsupportedOSException e) {
-            e.printStackTrace();
-        }
-
+        return -1; // Return anything other than zero - meaning something went wrong
     }
 
 }
