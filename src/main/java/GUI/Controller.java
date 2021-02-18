@@ -159,9 +159,11 @@ public class Controller {
             public void handle(DragEvent event) {
 
                 Dragboard db = event.getDragboard();
+
                 File filepath = null;
                 if(getExtension(db.getFiles().get(0).toString()).equals("txt")){
                     filepath = db.getFiles().get(0);
+                    window.assistant.notifyOfNewPath(filepath.toString());
                     System.out.println(filepath);
                 }else{
                     System.out.println("This is not a text file");
