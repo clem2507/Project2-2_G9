@@ -17,7 +17,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -28,7 +28,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -118,6 +117,9 @@ public class Main extends Application {
 
     SimpleDateFormat time;
     SimpleDateFormat date;
+
+    Text source;
+    Text target;
 
     Assistant assistant = new Assistant();
     BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
@@ -376,8 +378,8 @@ public class Main extends Application {
         time3city.setTranslateX(timezones.getTranslateX() + 180);
         time3city.setTranslateY(timezones.getTranslateY() + 50);
         time3city.setFill(Color.WHITE);
-        pane.getChildren().add(time3city);
         pane.getChildren().add(timeText3);
+        pane.getChildren().add(time3city);
 
         time4 = CurrentTime.getTime("Africa", "Khartoum");
         timeText4 = new Text(time4);
@@ -414,6 +416,23 @@ public class Main extends Application {
         dateText.setTranslateY(90);
         dateText.setFill(Color.WHITE);
         pane.getChildren().add(dateText);
+
+        Rectangle dropFile = new Rectangle(132, 35);
+        dropFile.setTranslateX(30);
+        dropFile.setTranslateY(340);
+        dropFile.setArcWidth(20);
+        dropFile.setArcHeight(20);
+        dropFile.setStroke(Color.WHITESMOKE);
+        dropFile.setStrokeWidth(0.6);
+        Stop[] stops2 = new Stop[] { new Stop(0, Color.TRANSPARENT), new Stop(1, Color.BLACK)};
+        LinearGradient lg2 = new LinearGradient(0, 0, 0, 1.9, true, CycleMethod.NO_CYCLE, stops2);
+        dropFile.setFill(lg2);
+        pane.getChildren().add(dropFile);
+
+        target = new Text(dropFile.getTranslateX() + 10 , dropFile.getTranslateY() + 22, "DROP FILE HERE");
+        target.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
+        target.setFill(Color.WHITE);
+        pane.getChildren().add(target);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
 

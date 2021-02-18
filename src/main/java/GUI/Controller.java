@@ -1,10 +1,14 @@
 package GUI;
 
-import backend.AssistantMessage;
 import backend.MessageType;
 import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
+import javafx.scene.input.*;
+import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
+
+import java.io.File;
 
 public class Controller {
 
@@ -148,5 +152,33 @@ public class Controller {
                 window.flag = true;
             }
         });
+
+        Text target = window.target;
+
+        target.setOnDragExited(new EventHandler <DragEvent>() {
+            public void handle(DragEvent event) {
+
+                Dragboard db = event.getDragboard();
+                File filepath = null;
+                if(getExtension(db.getFiles().get(0).toString()).equals("txt")){
+                    filepath = db.getFiles().get(0);
+                    System.out.println(filepath);
+                }else{
+                    System.out.println("This is not a text file");
+                }
+                target.setFill(Color.BLACK);
+                event.consume();
+            }
+        });
     }
+    private String getExtension(String fileName){
+        String extension = "";
+
+        int i = fileName.lastIndexOf('.');
+        if (i > 0 && i < fileName.length() - 1) //if the name is not empty
+            return fileName.substring(i + 1).toLowerCase();
+
+        return extension;
+    }
+
 }
