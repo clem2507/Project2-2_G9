@@ -39,7 +39,7 @@ public class PatternMatcher {
         return startsAt != -1 && endsAt > startsAt? (new AbstractMap.SimpleEntry<>(startsAt, endsAt)):null; // Null if there is no match
     }
 
-    public static Optional<Map.Entry<Integer, Integer>> matchSlotWithTokens(final Set<String> slot, final List<String> tokens){
+    public static Optional<Map.Entry<Integer, Integer>> matchSlotWithTokens(final Slot slot, final List<String> tokens){
         return slot.stream()
                 .map(c -> matchContentWithTokens(c, tokens))
                 .filter(Objects::nonNull)
@@ -49,7 +49,7 @@ public class PatternMatcher {
     public static MatchedSequence matchPatternWithString(final String pattern, final String query) throws NLPError {
         //TODO: This function is too long. There must be a way to split this algorithm into smaller parts
         List<String> tokens = Tokenizer.asTokenList(query); // Break query into tokens
-        List<Set<String>> slots = Pattern.parse(pattern); // Parse pattern into slots (sets of strings)
+        List<Slot> slots = Pattern.parse(pattern); // Parse pattern into slots (sets of strings)
         MatchedSequence output = new MatchedSequence(
                 pattern,
                 query
@@ -58,7 +58,7 @@ public class PatternMatcher {
 
         for(int slot_i = 0; slot_i < slots.size(); slot_i++){ // Iterate over the slots
             final int matchFrom = lastMatchEnds;
-            Set<String> slot = slots.get(slot_i); // Current slot
+            Slot slot = slots.get(slot_i); // Current slot
 
             if(Pattern.getSlotType(slot).equals(Pattern.SlotType.SOLID)) { // If slot is SOLID
                 Optional<Map.Entry<Integer, Integer>> range = matchSlotWithTokens(slot, tokens.subList(matchFrom, tokens.size()));
@@ -75,7 +75,7 @@ public class PatternMatcher {
                     //  b) This match starts right where the previous one ends, and thus is consecutive
                     if (slot_i == 0 || (lastMatchEnds == startsAt)){
                         lastMatchBegins = startsAt; lastMatchEnds = endsAt; // Register where the last match occurred
-                        Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
+                        Map.Entry<Slot, List<String>> element = new AbstractMap.SimpleEntry<>(
                                 slot,
                                 tokens.subList(startsAt, endsAt)
                         ); // Pack this match into a pair
@@ -93,11 +93,11 @@ public class PatternMatcher {
                 // NOTE: The limit is bounded to be [1, Integer.MAX_VALUE/2]. If <...> or <#:n> where n < 1, then
                 // limit = Integer.MAX_VALUE/2 (this is akin to saying limit = +infinity - We devide by 2 to prevent
                 // integer overflow when doing calculations with -limit-)
-                Set<String> nextSlot = slot_i < slots.size() - 1? slots.get(slot_i + 1):null; // Get the next slot
+                Slot nextSlot = slot_i < slots.size() - 1? slots.get(slot_i + 1):null; // Get the next slot
                 // NOTE: IF there is not next slot, then we assign null
 
                 if(nextSlot == null){ // If there is no next slot
-                    Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
+                    Map.Entry<Slot, List<String>> element = new AbstractMap.SimpleEntry<>(
                             slot,
                             tokens.subList(
                                     matchFrom,
@@ -135,7 +135,7 @@ public class PatternMatcher {
 
                             // Now we add the chunk of tokens between the previous slot and the next slot as
                             // matches of the blank slot
-                            Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
+                            Map.Entry<Slot, List<String>> element = new AbstractMap.SimpleEntry<>(
                                     slot,
                                     tokens.subList(
                                             matchFrom,
@@ -149,7 +149,7 @@ public class PatternMatcher {
                         }
 
                         else{ // We add the empty blank slot into the sequence
-                            Map.Entry<Set<String>, List<String>> element = new AbstractMap.SimpleEntry<>(
+                            Map.Entry<Slot, List<String>> element = new AbstractMap.SimpleEntry<>(
                                     slot,
                                     Collections.emptyList()
                             );

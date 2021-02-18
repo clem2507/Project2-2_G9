@@ -17,8 +17,6 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
 public class Photo extends Domain {
-    private final Map<List<Integer>, String> indexes2Pattern;
-    private final Map<String, List<Integer>> pattern2Indexes;
     private static final String DIR = "src/assets/ProjectData/PhotoTaken"; // Default directory
 
     private static double fromScale(String spec) throws NLPError {
@@ -46,45 +44,39 @@ public class Photo extends Domain {
         //
         // We also want the assistant to take a photo either immediately or wait an arbitrary amount of time
         // before taking the photo.
-        // Our code should make our life easier, not harder. That's why we use the following technique.
 
-        indexes2Pattern = new HashMap<>(); // Slot indexes to pattern
-        pattern2Indexes = new HashMap<>(); // Pattern to slot indexes
-        // In each list of indexes, we store an integer telling where to find the slot that holds
-        // the data we want to look for. In this case, 0 --> time to wait and 1 --> time scale (i.e. secs, hrs, mins)
+        // Pay attention to the new slot tagging system
 
-        indexes2Pattern.put(Arrays.asList(-1, -1), "<photo, selfie, picture>"); // Direct command - No waiting time
+        addPattern("<photo, selfie, picture>");
+        addPattern("<photo, selfie, picture> <#:4> <in, after, wait> <@wait_time, param:int> <@time_scale, second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs>");
+        addPattern("<in, after, wait> <@wait_time, param:int> <@time_scale, second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs> <#:5> <photo, selfie, picture>");
 
-        // For cases such as 'take a picture in 5 seconds'
-        indexes2Pattern.put(Arrays.asList(3, 4), "<photo, selfie, picture> <#:4> <in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs>");
-
-        // For those weirdos that would say 'wait 5 seconds, and then take a picture' XD
-        indexes2Pattern.put(Arrays.asList(1, 2), "<in, after, wait> <param:int> <second, seconds, secs, minute, minutes, mins, mns, hour, hours, hrs> <#:5> <photo, selfie, picture>");
-
-        // Then we have to add those patterns
-        for (List<Integer> indexes : indexes2Pattern.keySet()){
-            String pattern = indexes2Pattern.get(indexes);
-            pattern2Indexes.put(pattern, indexes);
-            addPattern(pattern);
-        }
-        // This way we kill two birds in one hit. We can add patterns with arbitrary locations for
-        // the parameter, and wouldn't have to add anything else.
+        // For the last two patterns, which support waiting and different time scales (i.e. secs, mins, hrs), we add
+        // the tags @wait_time and @time_scale to the corresponding slots
 
     }
 
     @Override
     public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
         String matchedPattern = sequence.getPattern(); // This is a copy of the pattern matched in the sequence
-        int waitTime = 0; // Default to no wait time
-        int scale = 1; // Default to 1-1 scale
+
+        Optional<Integer> waitTimeSlotIndex = sequence.getSlotIndex("@wait_time"); // Here we try getting the
+        // slot tagged as @wait_time - however, if it is not present, we get an empty Optional
+        Optional<Integer> timeScaleSlotIndex = sequence.getSlotIndex("@time_scale"); // Same case as the one above
+
+        int waitTime = 0, scale = 1; // Scale defaults to 1 - It shouldn't matter anyways
 
         try {
-            // Now we extract the waiting time and scale specified by the user, if any
-            List<Integer> indexes = pattern2Indexes.get(matchedPattern);
-            waitTime = indexes.get(0) != -1? sequence.getIntAt(indexes.get(0)):waitTime;
-            scale = indexes.get(1) != -1? ((int) fromScale(sequence.getStringAt(indexes.get(1)))):scale;
-        } catch (NLPError nlpError) {
-            nlpError.printStackTrace();
+            waitTime = waitTimeSlotIndex.isPresent()? sequence.getIntAt(waitTimeSlotIndex.get()):0; // Default to no wait time
+
+            if(timeScaleSlotIndex.isPresent()){
+                scale = (int) fromScale(sequence.getStringAt(timeScaleSlotIndex.get()));
+            }
+
+        }
+
+        catch (NLPError e){
+            e.printStackTrace();
         }
 
         // Now, we have to make sure the default photos folder exists for the photo skills to actually

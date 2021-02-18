@@ -7,7 +7,7 @@ import java.util.*;
  * Contains pairs of slots and lists of tokens, such that the first term is a slot
  * and the second term is a list of tokens (i.e. [slot, tokens]).
  */
-public class MatchedSequence extends ArrayList<Map.Entry<Set<String>, List<String>>> {
+public class MatchedSequence extends ArrayList<Map.Entry<Slot, List<String>>> {
     private String pattern, query;
 
     public MatchedSequence(String pattern, String query){
@@ -31,7 +31,7 @@ public class MatchedSequence extends ArrayList<Map.Entry<Set<String>, List<Strin
      * @param slotIndex index of the slot
      * @return set of strings representing the contents of the slot
      */
-    public Set<String> getSlot(int slotIndex){
+    public Slot getSlot(int slotIndex){
         return get(slotIndex).getKey();
     }
 
@@ -117,6 +117,16 @@ public class MatchedSequence extends ArrayList<Map.Entry<Set<String>, List<Strin
      */
     public String getQuery(){
         return query;
+    }
+
+    /**
+     * Returns the index of the slot with the specified tag
+     * @param tag to match
+     * @return Optional<Integer> representing the index of the slot
+     */
+    public Optional<Integer> getSlotIndex(String tag){
+        Optional<Map.Entry<Slot, List<String>>> pair = stream().filter(p -> p.getKey().containsTag(tag)).findAny();
+        return pair.map(this::indexOf);
     }
 
 }

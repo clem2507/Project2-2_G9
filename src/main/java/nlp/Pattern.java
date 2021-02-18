@@ -12,7 +12,7 @@ public class Pattern {
     }
 
     public enum ContentType{
-        STRING, PARAMETER_INT, PARAMETER_DAY, WHITESPACE
+        STRING, PARAMETER_INT, PARAMETER_DAY, WHITESPACE, SLOT_TAG
     }
 
     private static List<String> breakPattern(String pattern){
@@ -101,6 +101,36 @@ public class Pattern {
         return slots; // Return list of slots
     }
 
+    private static List<Slot> parseTags(List<Set<String>> pattern) throws NLPError {
+        Set<String> usedTags = new HashSet<>(); // Empty set of tags, we will use this to keep track of used tags
+        List<Slot> output = new ArrayList<>(pattern.size()); // The mapped pattern sequence
+
+        for(Set<String> slot : pattern){ // For each slot in the pattern
+            // Get the contents
+            Set<String> contents = slot.stream().filter(c -> !c.startsWith("@")).collect(Collectors.toSet());
+
+            // Get the tags
+            Set<String> tags = slot.stream().filter(c -> c.startsWith("@")).collect(Collectors.toSet());
+
+            for(String tag : tags){ // For each tag
+
+                if(usedTags.contains(tag)){ // If it was already used
+                    throw new NLPError("Duplicated tag " + tag); // Throw NLPError
+                }
+
+            }
+
+            if(contents.isEmpty()){
+                throw new NLPError("Illegal slot declaration, empty slot");
+            }
+
+            output.add(new Slot(contents, tags)); // Add mapped slot to output
+            usedTags.addAll(tags); // Register tag for future reference
+        }
+
+        return output; // Return mapped pattern
+    }
+
     public static boolean isValidInt(String str){
         return str.matches("^[+-]?\\d+$");
     }
@@ -117,8 +147,8 @@ public class Pattern {
         }).contains(str.toLowerCase());
     }
 
-    public static List<Set<String>> parse(String pattern) throws NLPError {
-        return groupInSlots(groupByContent(breakPattern(pattern)));
+    public static List<Slot> parse(String pattern) throws NLPError {
+        return parseTags(groupInSlots(groupByContent(breakPattern(pattern))));
     }
 
     public static ContentType getContentType(String content){
@@ -133,14 +163,18 @@ public class Pattern {
             return ContentType.WHITESPACE;
         }
 
+        if(content.startsWith("@")){
+            return ContentType.SLOT_TAG;
+        }
+
         return ContentType.STRING;
     }
 
-    public static SlotType getSlotType(Set<String> slot){
+    public static SlotType getSlotType(Slot slot){
 
         if(!slot.isEmpty()) {
 
-            if (slot.size() == 1 && slot.stream().allMatch(c -> getContentType(c).equals(ContentType.WHITESPACE))) {
+            if (slot.size() <= 2 && slot.stream().allMatch(c -> getContentType(c).equals(ContentType.WHITESPACE))) {
                 return SlotType.BLANK;
             }
 
@@ -153,7 +187,7 @@ public class Pattern {
         return SlotType.NONE;
     }
 
-    public static int getBlankSlotParameter(Set<String> slot) throws NLPError {
+    public static int getBlankSlotParameter(Slot slot) throws NLPError {
 
         if(!getSlotType(slot).equals(SlotType.BLANK)){
             throw new NLPError("Illegal operation on solid slot, solid slots contain no parameters");
