@@ -135,11 +135,14 @@ public class OpenApplication extends Domain {
 
                     try{
                         listedApps.clear(); // Clear old list
+
+                        long startTime = System.currentTimeMillis();
                         listedApps.addAll(CurrentOS.getAllPrograms()); // Save new list
+                        long endTime = System.currentTimeMillis();
                         saveListOfApps();
 
                         // Notify the user that the search is complete
-                        pushMessage("Full system search finished", MessageType.STRING);
+                        pushMessage("Full system search finished in " + ((double) (endTime - startTime))/1000.0 + " seconds", MessageType.STRING);
                         pushMessage("You can try running " + programName.get() + " again", MessageType.STRING);
                     } catch (UnsupportedOSException e) {
                         // In case of the operating system not being supported
@@ -196,11 +199,13 @@ public class OpenApplication extends Domain {
                         Runtime runtime = Runtime.getRuntime();
                         String application = programName.get();
                         try{
-                            runtime.exec( new String[] { "open" , "-a", application }) ;
+                            runtime.exec( new String[] { "open" , "-a", application });
+                            pushMessage("Running " + application, MessageType.STRING);
                         }
                         catch (IOException e) {
                             e.printStackTrace();
                         }
+
                     }
 
                 } else {
