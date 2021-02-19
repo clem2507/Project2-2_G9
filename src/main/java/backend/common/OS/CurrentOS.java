@@ -77,12 +77,14 @@ public class CurrentOS {
             String[] allPaths = cmdOutput.split("\\R+"); // Split the output in lines
             Set<ProgramReference> references = new HashSet<>();
 
-            for(String path : allPaths){ // For each path to a .lnk file
+            for(String path : allPaths){ // For each path to a .app file
+                System.out.println("Looking at " + path);
                 File file = new File(path);
 
                 if(file.exists() && file.isFile()) { // If the file actually exists - due to string formatting
                     // sometimes the cmd tool will print file names that are not compatible with the standard
                     // conventions.
+                    System.out.println("\t- This path exists and is a file");
                     references.add(new MacAppReference(file)); // Store a ref. to the program
                 }
 
