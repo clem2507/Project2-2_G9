@@ -16,14 +16,16 @@ public class CurrentOS {
         if(root.exists() && root.isDirectory()){
             File[] children = root.listFiles();
 
-            for(File child : Objects.requireNonNull(children)){
+            if(children != null) {
 
-                if(recursive && child.isDirectory()){
-                    output.addAll(find(child, filter, true));
-                }
+                for (File child : children) {
 
-                else if(child.isFile() && filter.accept(root, child.getName())){
-                    output.add(child);
+                    if (recursive && child.isDirectory()) {
+                        output.addAll(find(child, filter, true));
+                    } else if (child.isFile() && filter.accept(root, child.getName())) {
+                        output.add(child);
+                    }
+
                 }
 
             }
