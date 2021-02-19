@@ -192,7 +192,15 @@ public class OpenApplication extends Domain {
                         }
 
                     } else {
-                        // TODO: Procedure to run app in a MAC OS computer
+
+                        Runtime runtime = Runtime.getRuntime();
+                        String application = programName.get();
+                        try{
+                            runtime.exec( new String[] { "open" , "-a", application }) ;
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 } else {
