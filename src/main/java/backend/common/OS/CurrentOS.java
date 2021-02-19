@@ -99,20 +99,7 @@ public class CurrentOS {
             return references;
         }
 
-        if(getOperatingSystem().equals(OSName.MAC)){ // If running on MAC
-            // First we get the list of file that end with .app
-            Set<File> appFiles = find(
-                    (new File("/Applications")),
-                    (dir, name) -> name.endsWith(".app"),
-                    false);
-
-            // Then we map them to ProgramReference
-            return appFiles.stream()
-                    .map(MacAppReference::new)
-                    .collect(Collectors.toSet());
-        }
-
-        // TODO: Add support for Linux
+        // TODO: Add support for Linux and MAC
 
         return Collections.emptySet();
     }

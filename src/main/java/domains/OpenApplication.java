@@ -17,12 +17,28 @@ import java.util.stream.Collectors;
 public class OpenApplication extends Domain {
     private final Set<ProgramReference> listedApps;
     private final String DEFAULT_LIST_PATH = "src/assets/ProjectData/linked_apps.txt";
+    private boolean isOnMAC;
 
     public OpenApplication() {
         super(DomainNames.OpenApp);
         addPattern("<open, run, execute, exec, start> <@program_name, ...>");
         listedApps = new HashSet<>();
-        loadListOfApps();
+        isOnMAC = false; // False by default
+
+        try {
+            // Check if we are running on MACOS
+            isOnMAC = CurrentOS.getOperatingSystem().equals(OSName.MAC);
+        }
+
+        catch (UnsupportedOSException e) {
+            e.printStackTrace();
+        }
+
+        if(!isOnMAC){ // If this is not a MAC computer
+            // Then we use our custom program reference system
+            loadListOfApps();
+        }
+
     }
 
     private void saveListOfApps(){
@@ -168,15 +184,21 @@ public class OpenApplication extends Domain {
 
                 if (programName.isPresent()) {
 
-                    synchronized (listedApps){ // Since the skill is able to modify listedApps, we must lock it
-                        // to prevent many threads from accessing at the same time.
-                        searchApp(); // Run the first step of the dialog graph
+                    if(!isOnMAC) {
+
+                        synchronized (listedApps) { // Since the skill is able to modify listedApps, we must lock it
+                            // to prevent many threads from accessing at the same time.
+                            searchApp(); // Run the first step of the dialog graph
+                        }
+
+                    } else {
+                        // TODO: Procedure to run app in a MAC OS computer
                     }
 
-                    return; // When we are done, early skip - essentially the same as if-else
+                } else {
+                    pushMessage("No app name specified", MessageType.STRING);
                 }
 
-                pushMessage("No app name specified", MessageType.STRING);
             }
 
         };
