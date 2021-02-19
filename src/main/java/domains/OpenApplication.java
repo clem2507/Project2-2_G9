@@ -56,7 +56,11 @@ public class OpenApplication extends Domain {
                         listedApps.add(new WindowsExeReference(line));
                     }
 
-                    // TODO: Add support for Linux and MAC
+                    if(CurrentOS.getOperatingSystem().equals(OSName.MAC)){
+                        listedApps.add(new MacAppReference(line));
+                    }
+
+                    // TODO: Add support for Linux
 
                 }
 

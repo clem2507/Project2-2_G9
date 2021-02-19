@@ -11,6 +11,10 @@ public class MacAppReference extends ProgramReference {
         args = null;
     }
 
+    public MacAppReference(final String text) throws IOException {
+        super(text);
+    }
+
     @Override
     public int start() {
 
