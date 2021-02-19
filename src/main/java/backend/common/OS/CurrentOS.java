@@ -6,24 +6,25 @@ import java.io.*;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CurrentOS {
     public static final double DEFAULT_MIN_THRESHOLD = 0.7;
 
     public static Set<File> find(final File root, final FilenameFilter filter, boolean recursive){
-        Set<File> output = new HashSet<>();
+        Set<File> output = new HashSet<>(); // Create empty set of files found
 
-        if(root.exists() && root.isDirectory()){
-            File[] children = root.listFiles();
+        if(root.exists() && root.isDirectory()){ // If the root exists and is a directory
+            File[] children = root.listFiles(); // Get files contained inside
 
-            if(children != null) {
+            if(children != null) { // If the list of files inside of root is not null
 
-                for (File child : children) {
+                for (File child : children) { // For each file inside of root
 
-                    if (recursive && child.isDirectory()) {
-                        output.addAll(find(child, filter, true));
-                    } else if (child.isFile() && filter.accept(root, child.getName())) {
-                        output.add(child);
+                    if (recursive && child.isDirectory()) { // If search is recursive and file is a directory
+                        output.addAll(find(child, filter, true)); // Search inside
+                    } else if (child.isFile() && filter.accept(root, child.getName())) { // Else if is file and filter accepts
+                        output.add(child); // Save file in files found
                     }
 
                 }
@@ -32,7 +33,7 @@ public class CurrentOS {
 
         }
 
-        return output;
+        return output; // Return set of files found
     }
 
     public static OSName getOperatingSystem() throws UnsupportedOSException {
@@ -100,16 +101,13 @@ public class CurrentOS {
 
         if(getOperatingSystem().equals(OSName.MAC)){ // If running on MAC
             // First we get the list of file that end with .app
-            Set<File> appFiles = Arrays.stream(File.listRoots())
-                    .flatMap(r -> find(r, (dir, name) -> name.endsWith(".app"), true).stream())
-                    .collect(Collectors.toSet());
+            Set<File> appFiles = find(
+                    (new File("/Applications")),
+                    (dir, name) -> name.endsWith(".app"),
+                    false);
 
             // Then we map them to ProgramReference
-            // Note we still check if the files exist and are files. Why? Because find(...) suffers the same
-            // problem, file names won't always respect the standard string encoding formar and thus will be
-            // impossible for us to read it properly.
             return appFiles.stream()
-                    .filter(f -> f.exists() && f.isFile())
                     .map(MacAppReference::new)
                     .collect(Collectors.toSet());
         }
