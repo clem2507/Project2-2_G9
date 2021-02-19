@@ -5,9 +5,33 @@ import nlp.Tokenizer;
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CurrentOS {
     public static final double DEFAULT_MIN_THRESHOLD = 0.7;
+
+    public static Set<File> find(final File root, final FilenameFilter filter, boolean recursive){
+        Set<File> output = new HashSet<>();
+
+        if(root.exists() && root.isDirectory()){
+            File[] children = root.listFiles();
+
+            for(File child : Objects.requireNonNull(children)){
+
+                if(recursive && child.isDirectory()){
+                    output.addAll(find(child, filter, true));
+                }
+
+                else if(child.isFile() && filter.accept(root, child.getName())){
+                    output.add(child);
+                }
+
+            }
+
+        }
+
+        return output;
+    }
 
     public static OSName getOperatingSystem() throws UnsupportedOSException {
         String os = System.getProperty("os.name").toLowerCase();
@@ -73,24 +97,19 @@ public class CurrentOS {
         }
 
         if(getOperatingSystem().equals(OSName.MAC)){ // If running on MAC
-            String cmdOutput = getCommandLineOutput("sudo find / -iname *.app"); // Get list of all .lnk files
-            String[] allPaths = cmdOutput.split("\\R+"); // Split the output in lines
-            Set<ProgramReference> references = new HashSet<>();
+            // First we get the list of file that end with .app
+            Set<File> appFiles = Arrays.stream(File.listRoots())
+                    .flatMap(r -> find(r, (dir, name) -> name.endsWith(".app"), true).stream())
+                    .collect(Collectors.toSet());
 
-            for(String path : allPaths){ // For each path to a .app file
-                System.out.println("Looking at " + path);
-                File file = new File(path);
-
-                if(file.exists() && file.isFile()) { // If the file actually exists - due to string formatting
-                    // sometimes the cmd tool will print file names that are not compatible with the standard
-                    // conventions.
-                    System.out.println("\t- This path exists and is a file");
-                    references.add(new MacAppReference(file)); // Store a ref. to the program
-                }
-
-            }
-
-            return references;
+            // Then we map them to ProgramReference
+            // Note we still check if the files exist and are files. Why? Because find(...) suffers the same
+            // problem, file names won't always respect the standard string encoding formar and thus will be
+            // impossible for us to read it properly.
+            return appFiles.stream()
+                    .filter(f -> f.exists() && f.isFile())
+                    .map(MacAppReference::new)
+                    .collect(Collectors.toSet());
         }
 
         // TODO: Add support for Linux
