@@ -1,4 +1,4 @@
-package backend.common;
+package backend.common.OS;
 
 public enum OSName {
     WINDOWS, MAC, LINUX

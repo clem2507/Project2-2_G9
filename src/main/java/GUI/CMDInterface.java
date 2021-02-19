@@ -26,6 +26,7 @@ public class CMDInterface {
                     try {
                         Optional<AssistantMessage> output = assistant.getOutputOrContinue();
                         output.ifPresent(assistantMessage -> System.out.println(assistantMessage.toString()));
+                        assistant.cleanSkillPool();
                     }
 
                     catch (InterruptedException e) {
@@ -52,6 +53,7 @@ public class CMDInterface {
         }
 
         outputReader.join();
+        assistant.interruptAndWait();
     }
 
 }

@@ -1,7 +1,7 @@
 package domains;
 
 import backend.*;
-import backend.common.FileSystem;
+import backend.common.OS.*;
 import nlp.MatchedSequence;
 import nlp.Tokenizer;
 
@@ -15,9 +15,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 
 public class OpenApplication extends Domain {
-    private final Set<FileSystem.LinkData> listedApps;
+    private final Set<ProgramReference> listedApps;
     private final String DEFAULT_LIST_PATH = "src/assets/ProjectData/linked_apps.txt";
-    private final String SEPARATOR = ";", BLANK_SECTION = "<null>";
 
     public OpenApplication() {
         super(DomainNames.OpenApp);
@@ -28,10 +27,7 @@ public class OpenApplication extends Domain {
 
     private void saveListOfApps(){
         List<String> lines = listedApps.stream()
-                .map(l -> l.getLinkName() + SEPARATOR +
-                        (l.getLinkDescription().isEmpty()? BLANK_SECTION:l.getLinkDescription()) + SEPARATOR +
-                        l.getTarget() + SEPARATOR +
-                        (l.getArgs().isEmpty()? BLANK_SECTION:l.getArgs()))
+                .map(ProgramReference::toString)
                 .collect(Collectors.toList());
         Path pathToFile = Paths.get(DEFAULT_LIST_PATH);
 
@@ -55,23 +51,22 @@ public class OpenApplication extends Domain {
                 String line;
 
                 while ((line = reader.readLine()) != null){
-                    List<String> data = Tokenizer.splitOn(line, ";")
-                            .filter(t -> !t.equals(SEPARATOR)).collect(Collectors.toList());
 
-                    listedApps.add(new FileSystem.LinkData(
-                            data.get(0),
-                            data.get(1).equals(BLANK_SECTION)? "":data.get(1),
-                            data.get(2),
-                            data.get(3).equals(BLANK_SECTION)? "":data.get(3)
-                    ));
+                    if(CurrentOS.getOperatingSystem().equals(OSName.WINDOWS)){
+                        listedApps.add(new WindowsExeReference(line));
+                    }
+
+                    // TODO: Add support for Linux and MAC
+
                 }
 
             }
 
-            catch (IOException e) {
+            catch (IOException | UnsupportedOSException e) {
                 // This block of code should be impossible to reach. If we ever reach this line
                 // that means we are doing something wrong somewhere else, maybe running this function twice.
                 e.printStackTrace();
+                file.delete(); // Get rid of the file - just in case it is corrupted
             }
 
         }
@@ -90,11 +85,7 @@ public class OpenApplication extends Domain {
 
                 // We use Jaro-Winkler's score algorithm to measure the similarity between the name
                 // specified by the user and the names we stored in our list of links.
-                Optional<FileSystem.LinkData> bestMatch = FileSystem.findClosestMatch(
-                        listedApps,
-                        programName.get(),
-                        FileSystem.DEFAULT_MIN_THRESHOLD
-                );
+                Optional<ProgramReference> bestMatch = CurrentOS.findProgramReference(listedApps, programName.get());
 
                 if(bestMatch.isPresent()){ // If we find a match
                     checkIfBroken(bestMatch.get()); // Step into the next node of our dialog graph
@@ -113,7 +104,7 @@ public class OpenApplication extends Domain {
                 // task.
                 if(Popup.binaryQuestion(
                         "\"" + programName.get() + "\"" + " is not in my library of linked apps." +
-                                "\nDo you want me to run a full system search and link " + programName.get() + "?" +
+                                "\nDo you want me to run a full system search and link \"" + programName.get() + "\"?" +
                                 "\nIt may take a while."
                 )){
                     // First, let the user know that the search is taking place
@@ -124,13 +115,13 @@ public class OpenApplication extends Domain {
 
                     try{
                         listedApps.clear(); // Clear old list
-                        listedApps.addAll(FileSystem.listAllLinks()); // Save new list
+                        listedApps.addAll(CurrentOS.getAllPrograms()); // Save new list
                         saveListOfApps();
 
                         // Notify the user that the search is complete
                         pushMessage("Full system search finished", MessageType.STRING);
                         pushMessage("You can try running " + programName.get() + " again", MessageType.STRING);
-                    } catch (FileSystem.UnsupportedOSException e) {
+                    } catch (UnsupportedOSException e) {
                         // In case of the operating system not being supported
                         e.printStackTrace();
                         pushMessage("Full system search interrupted", MessageType.STRING);
@@ -144,7 +135,7 @@ public class OpenApplication extends Domain {
                 // the user we understand their choice of not running a full system search
             }
 
-            private void checkIfBroken(FileSystem.LinkData link){ // Here we make sure the link is not broken
+            private void checkIfBroken(ProgramReference link){ // Here we make sure the link is not broken
                 // It may be the case that the link exists in our list, but the app is no longer in the same
                 // path
 
@@ -157,8 +148,8 @@ public class OpenApplication extends Domain {
                 runProgram(link);
             }
 
-            private void runProgram(FileSystem.LinkData link){ // Here we run the program
-                int runTest = FileSystem.runProgramFromLink(link);
+            private void runProgram(ProgramReference link){ // Here we run the program
+                int runTest = link.start();
 
                 if(runTest == 0){
                     pushMessage("Running " + programName.get(), MessageType.STRING);
