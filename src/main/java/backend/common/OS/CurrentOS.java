@@ -43,9 +43,9 @@ public class CurrentOS {
             return OSName.WINDOWS;
         }
 
-        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
+        /*else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
             return OSName.LINUX;
-        }
+        }*/
 
         else if (os.contains("mac")) {
             return OSName.MAC;
@@ -74,8 +74,10 @@ public class CurrentOS {
     public static Set<ProgramReference> getAllPrograms() throws UnsupportedOSException {
 
         if(getOperatingSystem().equals(OSName.WINDOWS)){ // If running on Windows
-            String cmdOutput = getCommandLineOutput("where /r c:\\ *.lnk"); // Get list of all .lnk files
-            String[] allPaths = cmdOutput.split("\\R+"); // Split the output in lines
+            // First, for each root in the computer, we get a list of all .lnk files
+            Set<String> allPaths = Stream.of(File.listRoots())
+                    .flatMap(root -> Stream.of(getCommandLineOutput("where /r " + root.getPath() + " *.lnk").split("\\R+")))
+                    .collect(Collectors.toSet());
             Set<ProgramReference> references = new HashSet<>();
 
             for(String path : allPaths){ // For each path to a .lnk file
@@ -87,7 +89,11 @@ public class CurrentOS {
 
                     try {
                         WindowsShortcut shortcut = new WindowsShortcut(file); // Try parsing the .lnk file
-                        references.add(new WindowsExeReference(file, shortcut)); // If all good, store a ref. to the program
+
+                        if(shortcut.getRealFilename().endsWith(".exe")) { // If the target file is an .exe
+                            references.add(new WindowsExeReference(file, shortcut)); // If all good, store a ref. to the program
+                        }
+
                     } catch (IOException | ParseException e) {
                         e.printStackTrace();
                     }

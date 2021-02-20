@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public abstract class ProgramReference {
     protected String name, target, args;
-    private final String DEFAULT_SEPARATOR = "<--->";
+    private final String DEFAULT_SEPARATOR = "--->";
 
     public ProgramReference(){
         target = "";

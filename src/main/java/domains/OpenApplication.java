@@ -204,6 +204,7 @@ public class OpenApplication extends Domain {
                         }
                         catch (IOException e) {
                             e.printStackTrace();
+                            pushMessage("Something went wrong while trying to run " + application, MessageType.STRING);
                         }
 
                     }
