@@ -1,6 +1,8 @@
 package backend;
 
 import nlp.MatchedSequence;
+import nlp.NLPError;
+import nlp.Pattern;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -8,8 +10,8 @@ import java.util.List;
 
 public class CustomSkill {
 
-    private String pattern;
-    private String response;
+    private final String pattern;
+    private final String response;
     private List<AbstractMap.SimpleEntry<String, String>> parameters;
 
     public CustomSkill(String pattern, String response){
@@ -34,19 +36,30 @@ public class CustomSkill {
         strippedParameter = strippedParameter.substring(0, strippedParameter.length() - 2);
 
         // Split into pair separated by comma
-        String[] tuples = parameter.split("[)],[(]");
+        String[] tuples = strippedParameter.split("[)],[(]");
         String[] tempPair;
-        for (int i = 0; i < tuples.length; i++) {
-            tempPair = tuples[i].split(",");
-            pairs.add(new AbstractMap.SimpleEntry<String, String>(tempPair[0], tempPair[1]));
+        for (String tuple : tuples) {
+            tempPair = tuple.split(",");
+            pairs.add(new AbstractMap.SimpleEntry<>(tempPair[0], tempPair[1]));
         }
         return pairs;
     }
 
-    // Fills out the blank spaces corresponding to parameters in the query
+    /** Fills out the blank spaces corresponding to parameters in the query
+     *
+     * @param match Mathced sequence of pattern
+     * @return response
+     */
     public String getParametricResponse(MatchedSequence match) {
         String newResponse = response;
-        //TODO
+        // TODO finish method
+        // Find parameter value in the matched sequence by its index
+        int index = 2;
+        // Find the response substring that corresponds to the given parameter value
+        String substring = "";
+        // Put the response substring into the general response by replacing the placeholder
+        String placeholder = "<" + index + ">";
+        newResponse = newResponse.replace(placeholder, substring);
         return newResponse;
     }
 
