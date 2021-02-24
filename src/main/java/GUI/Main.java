@@ -121,7 +121,7 @@ public class Main extends Application {
     Text source;
     Text target;
 
-    static Assistant assistant = new Assistant();
+    Assistant assistant = new Assistant();
     BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
     private int outputMessageHeight = 0;
 
@@ -607,6 +607,9 @@ public class Main extends Application {
                 outputMessageHeight += outputImage.getImage().getHeight()*outputImage.getScaleY() + 5;
             }
 
+            else if (output.getMessageType().equals(MessageType.EXIT)) {
+                exitProgram();
+            }
         }
 
     }
@@ -724,7 +727,7 @@ public class Main extends Application {
         queryThread.start();
     }
 
-    public static void exitProgram() {
+    public void exitProgram() {
 
         assistant.interruptAndWait();
         System.exit(0);

@@ -28,7 +28,7 @@ public class Leave extends Domain {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Main.exitProgram();
+                pushMessage("", MessageType.EXIT);
             }
         };
     }

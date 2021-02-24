@@ -34,7 +34,7 @@ public class Controller {
             KeyCode key = t.getCode();
             switch (key) {
                 case ESCAPE:
-                    Main.exitProgram();
+                    window.exitProgram();
                     break;
                 case ENTER:
                     if (window.textField.getText().length() > 0) {
@@ -49,7 +49,7 @@ public class Controller {
                             e.printStackTrace();
                         }
 
-                        Main.assistant.processQuery(window.textField.getText());
+                        window.assistant.processQuery(window.textField.getText());
                         window.textField.setText("");
                         historyCount = window.messageHistory.size()+1;
                         //window.createThread();
