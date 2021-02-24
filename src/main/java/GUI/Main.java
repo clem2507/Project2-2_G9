@@ -121,7 +121,7 @@ public class Main extends Application {
     Text source;
     Text target;
 
-    Assistant assistant = new Assistant();
+    static Assistant assistant = new Assistant();
     BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
     private int outputMessageHeight = 0;
 
@@ -443,8 +443,7 @@ public class Main extends Application {
         controller.setBackgroundController();
 
         primaryStage.setOnCloseRequest(t -> {
-            Platform.exit();
-            System.exit(0);
+            exitProgram();
         });
 
         Thread mainThread = new Thread(() -> {
@@ -723,6 +722,12 @@ public class Main extends Application {
         });
         queryThread.setDaemon(false);
         queryThread.start();
+    }
+
+    public static void exitProgram() {
+
+        assistant.interruptAndWait();
+        System.exit(0);
     }
 
     public static void main(String[] args) {

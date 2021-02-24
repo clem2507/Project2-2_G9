@@ -1,5 +1,6 @@
 package domains;
 
+import GUI.Main;
 import backend.*;
 import nlp.MatchedSequence;
 
@@ -27,7 +28,7 @@ public class Leave extends Domain {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.exit(0);
+                Main.exitProgram();
             }
         };
     }

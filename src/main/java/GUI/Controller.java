@@ -1,5 +1,6 @@
 package GUI;
 
+import backend.Assistant;
 import backend.MessageType;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -12,7 +13,7 @@ import java.io.File;
 
 public class Controller {
 
-    private Main window;
+    private final Main window;
     private int historyCount = 0;
 
     /**
@@ -29,11 +30,11 @@ public class Controller {
      */
     public void setChatController() {
 
-        window.textField.setOnKeyPressed(t -> {
+        window.scene.setOnKeyPressed(t -> {
             KeyCode key = t.getCode();
             switch (key) {
                 case ESCAPE:
-                    System.exit(0);
+                    Main.exitProgram();
                     break;
                 case ENTER:
                     if (window.textField.getText().length() > 0) {
@@ -48,19 +49,29 @@ public class Controller {
                             e.printStackTrace();
                         }
 
-                        window.assistant.processQuery(window.textField.getText());
+                        Main.assistant.processQuery(window.textField.getText());
                         window.textField.setText("");
                         historyCount = window.messageHistory.size()+1;
                         //window.createThread();
                     }
                     break;
+            }
+        });
+
+        window.textField.setOnKeyPressed(t -> {
+            KeyCode key = t.getCode();
+            switch (key) {
                 case DOWN:
+                    System.out.println(window.messageHistory.size()-1);
                     if (historyCount < window.messageHistory.size()-1) {
                         window.textField.setText(window.messageHistory.get(historyCount+1));
                         historyCount++;
                     }
                     else {
                         window.textField.setText("");
+                        if (historyCount == window.messageHistory.size()-1) {
+                            historyCount++;
+                        }
                     }
                     window.textField.positionCaret(window.textField.getText().length());
                     break;
