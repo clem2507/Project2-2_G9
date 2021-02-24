@@ -11,12 +11,10 @@ public class FallbackMachine implements FallbackInterpreter {
 
     private String path;
     // Could just be combined, not sure
-    final private List<CustomSkill> simpleSkills;
-    final private List<CustomSkill> advancedSkills;
+    final private List<CustomSkill> listOfSkills;
 
     public FallbackMachine() {
-        simpleSkills = new ArrayList<>();
-        advancedSkills = new ArrayList<>();
+        listOfSkills = new ArrayList<>();
     }
 
     @Override
@@ -24,23 +22,22 @@ public class FallbackMachine implements FallbackInterpreter {
     // Returns either the response corresponding to the matched pattern or a default response if there is not matched pattern
     public String processQuery(String query) {
         // Rewrite for custom skills
-        if(simpleSkills.size() == 0) {
+        if(listOfSkills.size() == 0) {
             return null;
         }
-        MatchedSequence match = simpleSkills.stream()
+        MatchedSequence match = listOfSkills.stream()
                 .map(singleSkill -> PatternMatcher.compile(singleSkill.getPattern(), query))
                 .filter(Objects::nonNull)
                 .max(Comparator.comparingDouble(MatchedSequence::useRatio))
                 .orElse(null);
         // TODO: I feel like there should be an easier way to do this, getting the singleSkill from the previous method
         if (match != null) {
-            for (CustomSkill skill : simpleSkills) {
+            for (CustomSkill skill : listOfSkills) {
                 if (match.getPattern().equals(skill.getPattern())) {
                     return skill.getResponse(match);
                 }
             }
         }
-        // TODO: Similar thing for parametric responses -> should be done within the previous loops
         return null;
 
     }
@@ -64,14 +61,15 @@ public class FallbackMachine implements FallbackInterpreter {
                 String[] parts = line.split(";");
                 if (parts.length == 1) {
                     // problem with the txt file, should always be at least a pattern and a response
+                    // Send message to bot
                 }
                 else if (parts.length == 2) {
                     newSkill = new CustomSkill(parts[0], parts[1]);
-                    simpleSkills.add(newSkill);
+                    listOfSkills.add(newSkill);
                 }
                 else {
                     newSkill = new CustomSkill(parts[0], parts[1], parts[2]);
-                    advancedSkills.add(newSkill);
+                    listOfSkills.add(newSkill);
                 }
             }
         }
@@ -82,14 +80,9 @@ public class FallbackMachine implements FallbackInterpreter {
     }
 
     // Mainly for testing
-    public List<CustomSkill> getSimpleSkills() {
-        return simpleSkills;
+    public List<CustomSkill> getSkills() {
+        return listOfSkills;
     }
 
-    public static void main(String[] args) {
-        FallbackMachine test = new FallbackMachine();
-        test.notifyNewPath("C:\\Users\\gebruiker\\Documents\\Project 2-2\\bottest.txt");
-        System.out.println(test.processQuery("bot what name"));
-    }
 
 }

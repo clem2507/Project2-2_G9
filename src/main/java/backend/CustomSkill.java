@@ -40,7 +40,7 @@ public class CustomSkill {
         String[] tempPair;
         for (String tuple : tuples) {
             tempPair = tuple.split(",");
-            pairs.add(new AbstractMap.SimpleEntry<>(tempPair[0], tempPair[1]));
+            pairs.add(new AbstractMap.SimpleEntry<>(tempPair[0].toLowerCase(), tempPair[1]));
         }
         return pairs;
     }
@@ -48,19 +48,34 @@ public class CustomSkill {
     /** Fills out the blank spaces corresponding to parameters in the query
      *
      * @param match Mathced sequence of pattern
-     * @return response
+     * @return response with parameter value
      */
     public String getParametricResponse(MatchedSequence match) {
         String newResponse = response;
-        // TODO finish method
         // Find parameter value in the matched sequence by its index
-        int index = 2;
-        // Find the response substring that corresponds to the given parameter value
-        String substring = "";
-        // Put the response substring into the general response by replacing the placeholder
-        String placeholder = "<" + index + ">";
-        newResponse = newResponse.replace(placeholder, substring);
-        return newResponse;
+        if (match.getSlotIndex("@1").isPresent()) {
+            int index = match.getSlotIndex("@1").get();
+            List<String> tokens = match.getMatchedTokensAt(index);
+            StringBuilder builder = new StringBuilder();
+            for (String s : tokens) {
+                builder.append(s);
+            }
+            String parameterValue = builder.toString().toLowerCase();
+            String parameterString = "";
+            for (AbstractMap.SimpleEntry<String, String> e : parameters) {
+                if (e.getKey().equals(parameterValue)) {
+                    parameterString = e.getValue();
+                    break;
+                }
+            }
+            String placeholder = "@1";
+            newResponse = newResponse.replace(placeholder, parameterString);
+            return newResponse;
+        }
+        else {
+            // In this case, there was no matching value for the parameter
+            return null;
+        }
     }
 
     public String getPattern() {
