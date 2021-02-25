@@ -4,6 +4,7 @@ import backend.*;
 import backend.common.camera.Camera;
 import nlp.MatchedSequence;
 import nlp.NLPError;
+import org.opencv.core.Core;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -99,6 +100,7 @@ public class Photo extends Domain {
         return new Skill(this, outputChannel) {
             @Override
             public void run() {
+                System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
                 // The following code is to generate the name of the picture automatically, based on time
                 // There is a possible scenario that will make two skills crash though, if they both happen
                 // to run exactly at the same time, they will name the photo exactly the same. To fix this
