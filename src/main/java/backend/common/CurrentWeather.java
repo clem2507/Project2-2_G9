@@ -8,11 +8,10 @@ import java.net.URLConnection;
 
 public class CurrentWeather {
 
-    public static String getWeather(String city) throws IOException {
+    public static StringBuilder getWeather(String city) throws IOException {
         final String APIKEY = "54cd4b7942fb66b79b3377b338e3a9b1";
         final String urlString = "http://api.openweathermap.org/data/2.5/weather?q="+ city +"&appid="+APIKEY+"&units=metric";
 
-        String temp = "";
 
         StringBuilder result = new StringBuilder();
         URL url = new URL(urlString);
@@ -24,27 +23,6 @@ public class CurrentWeather {
         }
         rd.close();
 
-        int ss = result.indexOf("temp")+6;
-        for (int k = ss ; k <result.length(); k++){
-            if(isNumeric(String.valueOf(result.charAt(k)))|| result.charAt(k)=='.' || result.charAt(k)=='-'){
-                temp= temp+ result.charAt(k);
-            }else{
-                break;
-            }
-        }
-        return temp;
+        return result;
     }
-
-    public static boolean isNumeric(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            double d = Double.parseDouble(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
-
 }

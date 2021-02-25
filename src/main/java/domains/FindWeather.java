@@ -2,6 +2,7 @@ package domains;
 
 import backend.*;
 import backend.common.CurrentWeather;
+import backend.common.WeatherObject;
 import nlp.MatchedSequence;
 
 import java.io.IOException;
@@ -28,15 +29,18 @@ public class FindWeather extends Domain {
             public void run() {
 
                 if(!city.isEmpty()){
-                    String weather = null;
+                    String temp = null;
                     try {
-                        weather = CurrentWeather.getWeather(city);
+                        WeatherObject currentWeather = new WeatherObject(city);
+                        temp = currentWeather.getTemp();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if(weather!=""){
-                        pushMessage(str+weather+"'C", MessageType.STRING);
-                        System.out.println(str+weather+"'C");
+
+
+                    if(!temp.equals("")){
+                        pushMessage(str+temp+"'C", MessageType.STRING);
+                        System.out.println(str+temp+"'C");
                     }else{
                         pushMessage("Can't find the weather in " + city, MessageType.STRING);
                         System.out.println("Can't find the weather in " + city);

@@ -6,6 +6,7 @@ import backend.MessageType;
 import backend.common.CurrentLocation;
 import backend.common.CurrentTime;
 import backend.common.CurrentWeather;
+import backend.common.WeatherObject;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -227,7 +228,8 @@ public class Main extends Application {
         String temp = "1000";
 
         try{
-            temp =CurrentWeather.getWeather(city);
+            WeatherObject currentweather = new WeatherObject(city);
+            temp = currentweather.getTemp();
         } catch (IOException e){
             e.printStackTrace();
         }
