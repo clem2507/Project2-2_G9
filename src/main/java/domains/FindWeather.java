@@ -50,28 +50,30 @@ public class FindWeather extends Domain {
 
                     if(currentWeather!=null){
                         if(matched.contains("weather")){
-                            pushMessage("Current Temperature = "+currentWeather.getTemp()+"'C\n" +
-                                    "Feels Like = "+currentWeather.getFeelsLike()+"'C\n" +
-                                    "Maximum Temperature = "+currentWeather.getMaxTemp()+"'C\n" +
-                                    "Minimum Temperature = "+currentWeather.getFeelsLike()+"'C\n" +
-                                    "Humidity = "+currentWeather.getHumidity() +"\n"+
-                                    "Visibility = "+currentWeather.getFeelsLike()+"\n"+
-                                    "Wind Speed = "+currentWeather.getFeelsLike()+"\n"
-                                    , MessageType.STRING);
+
+                            pushMessage("Current Temperature = "+currentWeather.getTemp() + "'C", MessageType.STRING);
+                            pushMessage("Feels Like = "+currentWeather.getFeelsLike()+ "'C", MessageType.STRING);
+                            pushMessage("Maximum Temperature = "+currentWeather.getMaxTemp()+ "'C", MessageType.STRING);
+                            pushMessage("Minimum Temperature = "+currentWeather.getMinTemp()+ "'C", MessageType.STRING);
+                            pushMessage("Humidity = "+currentWeather.getHumidity(), MessageType.STRING);
+                            pushMessage("Wind Speed = "+currentWeather.getWindSpeed(), MessageType.STRING);
+                            pushMessage("Visibility = "+currentWeather.getVisibility(), MessageType.STRING);
+
+
                         }else if (matched.contains("humidity")){
                             pushMessage("Humidity = "+currentWeather.getHumidity(), MessageType.STRING);
                         }else if (matched.contains("feel")){
-                            pushMessage("Feels Like = "+currentWeather.getFeelsLike(), MessageType.STRING);
+                            pushMessage("Feels Like = "+currentWeather.getFeelsLike()+ "'C", MessageType.STRING);
                         }else if (matched.contains("max")){
-                            pushMessage("Maximum Temperature = "+currentWeather.getMaxTemp(), MessageType.STRING);
+                            pushMessage("Maximum Temperature = "+currentWeather.getMaxTemp()+ "'C", MessageType.STRING);
                         }else if(matched.contains("min")){
-                            pushMessage("Minimum Temperature = "+currentWeather.getMinTemp(), MessageType.STRING);
+                            pushMessage("Minimum Temperature = "+currentWeather.getMinTemp()+ "'C", MessageType.STRING);
                         }else if (matched.contains("wind")){
                             pushMessage("Wind Speed = "+currentWeather.getWindSpeed(), MessageType.STRING);
                         }else if(matched.contains("visibility")){
                             pushMessage("Visibility = "+currentWeather.getVisibility(), MessageType.STRING);
                         }else {
-                            pushMessage("Current Temperature = "+currentWeather.getTemp(), MessageType.STRING);
+                            pushMessage("Current Temperature = "+currentWeather.getTemp()+ "'C", MessageType.STRING);
                         }
                     }else{
                         pushMessage("Can't find the weather in " + city, MessageType.STRING);
