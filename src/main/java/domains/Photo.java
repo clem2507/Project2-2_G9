@@ -13,7 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 
 public class Photo extends Domain {
@@ -131,13 +132,14 @@ public class Photo extends Domain {
                 // Here we take the picture
                 try {
                     Camera.openCamera(0); // Open the camera feed
+                    Thread.sleep(1000);
                     BufferedImage image = Camera.getFrame(0); // Get frame
                     Camera.closeCamera(0); // Close feed
 
                     // Save the image
                     File outputImage = new File(imagePath);
                     ImageIO.write(image, "png", outputImage);
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
 
