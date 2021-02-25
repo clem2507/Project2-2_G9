@@ -32,17 +32,17 @@ public class WeatherObject {
 
     public String retrieveMaxTemp(){
         int maxtempWord = result.indexOf("temp_max")+10;
-        return retreiveInfo(maxtempWord)+"'C";
+        return retreiveInfo(maxtempWord);
     }
 
     public String retrieveMinTemp(){
         int mintempWord = result.indexOf("temp_min")+10;
-        return retreiveInfo(mintempWord)+"'C";
+        return retreiveInfo(mintempWord);
     }
 
     public String retrieveFeelsLike(){
         int feelsLikeWord = result.indexOf("feels_like")+12;
-        return retreiveInfo(feelsLikeWord)+"'C";
+        return retreiveInfo(feelsLikeWord);
     }
 
     public String retrieveWindSpeed(){
