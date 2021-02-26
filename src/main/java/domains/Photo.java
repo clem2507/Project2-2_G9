@@ -4,7 +4,7 @@ import backend.*;
 import backend.common.camera.Camera;
 import nlp.MatchedSequence;
 import nlp.NLPError;
-import org.opencv.core.Core;
+import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,6 +20,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class Photo extends Domain {
     private static final String DIR = "src/assets/ProjectData/PhotoTaken"; // Default directory
+    private static String absPath = "C:\\Users\\aless\\IdeaProjects\\Project2-2_G9\\lib\\";
 
     private static double fromScale(String spec) throws NLPError {
 
@@ -100,7 +101,7 @@ public class Photo extends Domain {
         return new Skill(this, outputChannel) {
             @Override
             public void run() {
-                System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
                 // The following code is to generate the name of the picture automatically, based on time
                 // There is a possible scenario that will make two skills crash though, if they both happen
                 // to run exactly at the same time, they will name the photo exactly the same. To fix this
@@ -134,15 +135,37 @@ public class Photo extends Domain {
                 // Here we take the picture
                 try {
                     Camera.openCamera(0); // Open the camera feed
-                    Thread.sleep(1000);
                     BufferedImage image = Camera.getFrame(0); // Get frame
                     Camera.closeCamera(0); // Close feed
 
                     // Save the image
                     File outputImage = new File(imagePath);
                     ImageIO.write(image, "png", outputImage);
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println(System.getenv("JAVA_HOME"));
+                } catch (UnsatisfiedLinkError | Exception e) {
+
+                    if(System.getProperty("os.name").startsWith("Windows"))
+                    {
+
+                        String javaPath = "C:\\Users\\aless\\.jdks\\openjdk-14.0.2\\bin";
+                        System.out.println("Updating Lib + -" + javaPath);
+                        File nativeLib = new File("lib/opencv/opencv_java430.dll");
+                        File nativeLibToHome = new File(javaPath + "/opencv_java430.dll");
+                        try {
+                            FileUtils.copyFile(nativeLib.getAbsoluteFile(),nativeLibToHome);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                            System.out.println("Failed Lib");
+                        }
+                    }
+                    else
+                    {
+                        pushMessage("Please open the build framework file inside the libraries folder", MessageType.STRING);
+                    }
+
+
+                    pushMessage("Libraries error please try again.", MessageType.STRING);
+                    return;
                 }
 
                 // Now we just have to tell the GUI to show this image.
@@ -152,4 +175,5 @@ public class Photo extends Domain {
             }
         };
     }
+
 }
