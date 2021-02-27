@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -27,6 +28,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -41,18 +43,24 @@ import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main extends Application {
 
-    Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    final double WINDOW_WIDTH = screenSize.getWidth() - 5;
-    final double WINDOW_HEIGHT = screenSize.getHeight() - 70;
+    //Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    //double WINDOW_WIDTH = screenSize.getWidth() - 5;
+    //double WINDOW_HEIGHT = screenSize.getHeight() - 70;
+
+    int WINDOW_WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
+    int WINDOW_HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
+
     int requestCounter = 0;
 
     boolean flag = true;
     boolean isAgentFree = true;
 
-    Group pane = new Group();
+    Pane pane = new Pane();
     Group imagesLayout;
     Group chatLayout;
 
@@ -200,7 +208,8 @@ public class Main extends Application {
         imagesScrollPane.setTranslateY(editBgButton.getTranslateY()+40);
         pane.getChildren().add(editBgButton);
 
-        weatherWidget = new Rectangle(140, 80);
+        //weatherWidget = new Rectangle(140, 80);
+        weatherWidget = new Rectangle();
         weatherWidget.setTranslateX(28);
         weatherWidget.setTranslateY(130);
         weatherWidget.setStroke(Color.WHITESMOKE);
@@ -210,20 +219,22 @@ public class Main extends Application {
         Stop[] stops = new Stop[] { new Stop(0, Color.SKYBLUE), new Stop(1, Color.WHITESMOKE)};
         LinearGradient lg = new LinearGradient(0, 0, 0, 2.5, true, CycleMethod.NO_CYCLE, stops);
         weatherWidget.setFill(lg);
-        pane.getChildren().add(weatherWidget);
+        //pane.getChildren().add(weatherWidget);
 
         try {
             city = CurrentLocation.getLocation();
         } catch (IOException e){
             e.printStackTrace();
-            city = "UNKNOWN";
+            city = "Unknown";
         }
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
-        weatherCity.setTranslateX(weatherWidget.getTranslateX()+12);
+        weatherWidget.setWidth(findBestWidgetSize(city));
+        weatherWidget.setHeight(80);
+        weatherCity.setTranslateX(weatherWidget.getTranslateX()+17);
         weatherCity.setTranslateY(weatherWidget.getTranslateY()+26);
         weatherCity.setFill(Color.WHITE);
-        pane.getChildren().add(weatherCity);
+        pane.getChildren().addAll(weatherWidget, weatherCity);
 
         String temp = "1000";
 
@@ -248,23 +259,23 @@ public class Main extends Application {
 
         GPS = new Image(new FileInputStream("src/assets/GPSpointer.png"));
         GPSView = new ImageView(GPS);
-        GPSView.setTranslateX(weatherCity.getTranslateX()+95);
+        GPSView.setTranslateX(weatherWidget.getTranslateX()+weatherWidget.getWidth()-30);
         GPSView.setTranslateY(weatherCity.getTranslateY()-18);
         GPSView.setFitWidth(30);
         GPSView.setFitHeight(20);
         pane.getChildren().add(GPSView);
 
         chatWindow = new Rectangle(700, 500);
-        chatWindow.setTranslateX(490);
-        chatWindow.setTranslateY(80);
+        chatWindow.setTranslateX(((double) WINDOW_WIDTH/2)-(chatWindow.getWidth()/2));
+        chatWindow.setTranslateY(100);
         chatWindow.setFill(Color.rgb(160, 160, 160, 0.75));
         chatWindow.setStroke(Color.WHITE);
         chatWindow.setStrokeWidth(1);
         pane.getChildren().add(chatWindow);
 
         chatInputWindow = new Rectangle(700, 100);
-        chatInputWindow.setTranslateX(490);
-        chatInputWindow.setTranslateY(580);
+        chatInputWindow.setTranslateX(chatWindow.getTranslateX());
+        chatInputWindow.setTranslateY(chatWindow.getHeight()+chatWindow.getTranslateY());
         chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.8));
         chatInputWindow.setStroke(Color.WHITE);
         chatInputWindow.setStrokeWidth(1);
@@ -273,8 +284,8 @@ public class Main extends Application {
         textField = new TextField();
         textField.setPromptText("Input...");
         textField.setFocusTraversable(false);
-        textField.setTranslateX(540);
-        textField.setTranslateY(610);
+        textField.setTranslateX(chatInputWindow.getTranslateX()+45);
+        textField.setTranslateY(chatInputWindow.getTranslateY()+30);
         textField.setPrefSize(600, 40);
         textField.setFont(Font.font("Calibri", FontPosture.REGULAR, 16));
         pane.getChildren().add(textField);
@@ -298,16 +309,16 @@ public class Main extends Application {
 
         robot = new Image(new FileInputStream("src/assets/robot.png"));
         robotViewer = new ImageView(robot);
-        robotViewer.setTranslateX(1300);
-        robotViewer.setTranslateY(470);
+        robotViewer.setTranslateX(chatInputWindow.getTranslateX()+850);
+        robotViewer.setTranslateY(chatInputWindow.getTranslateY()-110);
         robotViewer.setFitWidth(200);
         robotViewer.setFitHeight(220);
         pane.getChildren().add(robotViewer);
 
         robotInteraction = new Image(new FileInputStream("src/assets/speechBubbleBot.png"));
         robotInteractionViewer = new ImageView(robotInteraction);
-        robotInteractionViewer.setTranslateX(1200);
-        robotInteractionViewer.setTranslateY(420);
+        robotInteractionViewer.setTranslateX(robotViewer.getTranslateX()-105);
+        robotInteractionViewer.setTranslateY(robotViewer.getTranslateY()-55);
         robotInteractionViewer.setFitWidth(150);
         robotInteractionViewer.setFitHeight(100);
         pane.getChildren().add(robotInteractionViewer);
@@ -329,7 +340,7 @@ public class Main extends Application {
         timeText.setFill(Color.WHITE);
         pane.getChildren().add(timeText);
 
-        Rectangle timezones = new Rectangle(420, 65);
+        Rectangle timezones = new Rectangle(425, 65);
         timezones.setTranslateX(30);
         timezones.setTranslateY(240);
         timezones.setArcWidth(20);
@@ -419,7 +430,7 @@ public class Main extends Application {
         dateText.setFill(Color.WHITE);
         pane.getChildren().add(dateText);
 
-        Rectangle dropFile = new Rectangle(132, 35);
+        Rectangle dropFile = new Rectangle(143, 35);
         dropFile.setTranslateX(30);
         dropFile.setTranslateY(340);
         dropFile.setArcWidth(20);
@@ -474,7 +485,7 @@ public class Main extends Application {
         };
         tickTimer.start();
 
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.setTitle("Digital Assistant");
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
@@ -729,6 +740,41 @@ public class Main extends Application {
         queryThread.start();
     }
 
+    /**
+     * Method used to find the best size of the weather widget
+     * @param city where to find weather
+     * @return size in pixels
+     */
+    public double findBestWidgetSize(String city) {
+
+        return (Math.sqrt(city.length())*50) - 5*(countCharsUsingRegex(city, 'i')+countCharsUsingRegex(city, 'I')
+                +countCharsUsingRegex(city, 'j')+countCharsUsingRegex(city, 'J')
+                +countCharsUsingRegex(city, 'l')+countCharsUsingRegex(city, 'L')
+                +countCharsUsingRegex(city, 'f')+countCharsUsingRegex(city, 'F')
+                +countCharsUsingRegex(city, 'r')+countCharsUsingRegex(city, 'R')
+                +countCharsUsingRegex(city, 't')+countCharsUsingRegex(city, 'T'));
+    }
+
+    /**
+     * Method that computes the occurrence of a character in a string
+     * @param str to look in
+     * @param ch to find in string
+     * @return the count occurrences
+     */
+    private int countCharsUsingRegex(String str, char ch) {
+
+        Pattern pattern = Pattern.compile("[^" + ch + "]*" + ch + "");
+        Matcher matcher = pattern.matcher(str);
+        int count = 0;
+        while (matcher.find()) {
+            count++;
+        }
+        return count;
+    }
+
+    /**
+     * Method that interrupts the threads and then exit the program
+     */
     public void exitProgram() {
 
         assistant.interruptAndWait();
