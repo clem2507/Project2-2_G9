@@ -224,6 +224,7 @@ public class Main extends Application {
             e.printStackTrace();
             city = "Unknown";
         }
+        city = "Maastricht";
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
         weatherWidget.setWidth(findBestWidgetSize(city));
