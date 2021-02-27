@@ -48,12 +48,9 @@ import java.util.regex.Pattern;
 
 public class Main extends Application {
 
-    //Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    //double WINDOW_WIDTH = screenSize.getWidth() - 5;
-    //double WINDOW_HEIGHT = screenSize.getHeight() - 70;
-
-    int WINDOW_WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
-    int WINDOW_HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
+    Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    double WINDOW_WIDTH = screenSize.getWidth() - 5;
+    double WINDOW_HEIGHT = screenSize.getHeight() - 70;
 
     int requestCounter = 0;
 
@@ -266,8 +263,8 @@ public class Main extends Application {
         pane.getChildren().add(GPSView);
 
         chatWindow = new Rectangle(700, 500);
-        chatWindow.setTranslateX(((double) WINDOW_WIDTH/2)-(chatWindow.getWidth()/2));
-        chatWindow.setTranslateY(100);
+        chatWindow.setTranslateX(490);
+        chatWindow.setTranslateY(80);
         chatWindow.setFill(Color.rgb(160, 160, 160, 0.75));
         chatWindow.setStroke(Color.WHITE);
         chatWindow.setStrokeWidth(1);
@@ -309,7 +306,7 @@ public class Main extends Application {
 
         robot = new Image(new FileInputStream("src/assets/robot.png"));
         robotViewer = new ImageView(robot);
-        robotViewer.setTranslateX(chatInputWindow.getTranslateX()+850);
+        robotViewer.setTranslateX(chatInputWindow.getTranslateX()+825);
         robotViewer.setTranslateY(chatInputWindow.getTranslateY()-110);
         robotViewer.setFitWidth(200);
         robotViewer.setFitHeight(220);
