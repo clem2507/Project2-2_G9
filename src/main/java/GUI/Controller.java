@@ -101,7 +101,7 @@ public class Controller {
 
         window.imgView.setOnMousePressed(event -> {
             if (window.iv.getImage()!=window.bg) {
-                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.right.getChildren().remove(window.imagesScrollPane);
                 window.iv.setImage(window.bg);
                 window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
@@ -111,7 +111,7 @@ public class Controller {
         window.imgView1.setOnMousePressed(event -> {
             if (window.iv.getImage()!=window.bg1) {
                 window.iv.setImage(window.bg1);
-                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.right.getChildren().remove(window.imagesScrollPane);
                 window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
@@ -120,7 +120,7 @@ public class Controller {
         window.imgView2.setOnMousePressed(event -> {
             if (window.iv.getImage()!=window.bg2) {
                 window.iv.setImage(window.bg2);
-                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.right.getChildren().remove(window.imagesScrollPane);
                 window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
@@ -129,7 +129,7 @@ public class Controller {
         window.imgView3.setOnMousePressed(event -> {
             if (window.iv.getImage()!=window.bg3) {
                 window.iv.setImage(window.bg3);
-                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.right.getChildren().remove(window.imagesScrollPane);
                 window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
@@ -138,7 +138,7 @@ public class Controller {
         window.imgView4.setOnMousePressed(event -> {
             if (window.iv.getImage()!=window.bg4) {
                 window.iv.setImage(window.bg4);
-                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.right.getChildren().remove(window.imagesScrollPane);
                 window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
@@ -147,7 +147,7 @@ public class Controller {
         window.imgView5.setOnMousePressed(event -> {
             if (window.iv.getImage()!=window.bg5) {
                 window.iv.setImage(window.bg5);
-                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.right.getChildren().remove(window.imagesScrollPane);
                 window.robotInteractionText.setText("Nice background,\nI like it!");
                 window.flag = true;
             }
@@ -155,11 +155,11 @@ public class Controller {
 
         window.editBgButton.setOnMousePressed(event -> {
             if (window.flag) {
-                window.pane.getChildren().add(window.imagesScrollPane);
+                window.right.getChildren().add(window.imagesScrollPane);
                 window.flag = false;
             }
             else {
-                window.pane.getChildren().remove(window.imagesScrollPane);
+                window.right.getChildren().remove(window.imagesScrollPane);
                 window.flag = true;
             }
         });
