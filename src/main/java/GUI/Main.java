@@ -9,6 +9,8 @@ import backend.common.WeatherObject;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,7 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -49,19 +51,15 @@ import java.util.regex.Pattern;
 public class Main extends Application {
 
     Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    double WINDOW_WIDTH = screenSize.getWidth() - 5;
-    double WINDOW_HEIGHT = screenSize.getHeight() - 70;
+    final double WINDOW_WIDTH = screenSize.getWidth() - 5;
+    final double WINDOW_HEIGHT = screenSize.getHeight() - 70;
 
     int requestCounter = 0;
 
     boolean flag = true;
     boolean isAgentFree = true;
 
-    BorderPane pane = new BorderPane();
-
-    Group left = new Group();
-    Group center = new Group();
-    Pane right = new Pane();
+    Pane pane = new Pane();
 
     Group imagesLayout;
     Group chatLayout;
@@ -82,6 +80,8 @@ public class Main extends Application {
     Rectangle chatWindow;
     Rectangle chatInputWindow;
     Rectangle weatherWidget;
+    Rectangle timezones;
+    Rectangle dropFile;
 
     ScrollPane scrollPane;
     ScrollPane imagesScrollPane;
@@ -95,6 +95,11 @@ public class Main extends Application {
     Text timeText3;
     Text timeText4;
     Text timeText5;
+    Text time1city;
+    Text time2city;
+    Text time3city;
+    Text time4city;
+    Text time5city;
     Text userText;
     Text botText;
     Text robotInteractionText;
@@ -111,7 +116,6 @@ public class Main extends Application {
     Image robot;
     Image robotInteraction;
     Image GPS;
-    ImageView webcam;
 
     ImageView iv;
     ImageView imgView;
@@ -123,6 +127,132 @@ public class Main extends Application {
     ImageView robotViewer;
     ImageView robotInteractionViewer;
     ImageView GPSView;
+    ImageView webcam;
+
+    int editBgButtonWidth = 130;
+    int editBgButtonHeight = 20;
+    int editBgButtonX = (int) (WINDOW_WIDTH-170);
+    int editBgButtonY = 40;
+
+    int imagesScrollPaneWidth = 228;
+    int imagesScrollPaneHeight = 310;
+    int imagesScrollPaneX = editBgButtonX-55;
+    int imagesScrollPaneY = editBgButtonY+40;
+
+    int chatWindowWidth = 700;
+    int chatWindowHeight = 500;
+    int chatWindowX = 550;
+    int chatWindowY = 90;
+
+    int chatInputWindowWidth = 700;
+    int chatInputWindowHeight = 100;
+    int chatInputWindowX = chatWindowX;
+    int chatInputWindowY = chatWindowHeight+chatWindowY;
+
+    int textFieldWidth = 600;
+    int textFieldHeight = 40;
+    int textFieldFontSize = 16;
+    int textFieldX = chatInputWindowX+45;
+    int textFieldY = chatInputWindowY+30;
+
+    int scrollPaneWidth = chatWindowWidth-4;
+    int scrollPaneHeight = chatWindowHeight-4;
+    int scrollPaneX = chatWindowX+2;
+    int scrollPaneY = chatWindowY+2;
+
+    int robotViewerWidth = 200;
+    int robotViewerHeight = 220;
+    int robotViewerX = chatInputWindowX+825;
+    int robotViewerY = chatInputWindowY-110;
+
+    int robotInteractionViewerWidth = 150;
+    int robotInteractionViewerHeight = 100;
+    int robotInteractionViewerX = robotViewerX-105;
+    int robotInteractionViewerY = robotViewerY-55;
+
+    int robotInteractionTextFontSize = 15;
+    int robotInteractionTextX = robotInteractionViewerX+20;
+    int robotInteractionTextY = robotInteractionViewerY+30;
+
+    double weatherWidgetWidth;
+    int weatherWidgetHeight = 80;
+    int weatherWidgetX = 28;
+    int weatherWidgetY = 130;
+
+    int weatherCityFontSize = 20;
+    int weatherCityX = weatherWidgetX+17;
+    int weatherCityY = weatherWidgetY+26;
+
+    int weatherDegreeFontSize = 29;
+    int weatherDegreeX = weatherWidgetX+18;
+    int weatherDegreeY = weatherWidgetY+60;
+
+    int gpsViewerWidth = 30;
+    int gpsViewerHeight = 20;
+    double gpsViewerX;
+    int gpsViewerY = weatherCityY-18;
+
+    int timeTextFontSize = 22;
+    int timeTextX = 30;
+    int timeTextY = 50;
+
+    int dateTextFontSize = 22;
+    int dateTextX = 30;
+    int dateTextY = 90;
+
+    int timezonesWidth = 425;
+    int timezonesHeight = 65;
+    int timezonesX = 30;
+    int timezonesY = 240;
+
+    int timeText1FontSize = 17;
+    int timeText1X = timezonesX+15;
+    int timeText1Y = timezonesY+30;
+
+    int time1cityFontSize = 16;
+    int time1cityX = timezonesX+18;
+    int time1cityY = timezonesY+50;
+
+    int timeText2FontSize = 17;
+    int timeText2X = timezonesX+95;
+    int timeText2Y = timezonesY+30;
+
+    int time2cityFontSize = 16;
+    int time2cityX = timezonesX+100;
+    int time2cityY = timezonesY+50;
+
+    int timeText3FontSize = 17;
+    int timeText3X = timezonesX+175;
+    int timeText3Y = timezonesY+30;
+
+    int time3cityFontSize = 16;
+    int time3cityX = timezonesX+180;
+    int time3cityY = timezonesY+50;
+
+    int timeText4FontSize = 17;
+    int timeText4X = timezonesX+260;
+    int timeText4Y = timezonesY+30;
+
+    int time4cityFontSize = 16;
+    int time4cityX = timezonesX+260;
+    int time4cityY = timezonesY+50;
+
+    int timeText5FontSize = 17;
+    int timeText5X = timezonesX+345;
+    int timeText5Y = timezonesY+30;
+
+    int time5cityFontSize = 16;
+    int time5cityX = timezonesX+349;
+    int time5cityY = timezonesY+50;
+
+    int dropFileWidth = 143;
+    int dropFileHeight = 35;
+    int dropFileX = 30;
+    int dropFileY = 340;
+
+    int targetFontSize = 17;
+    int targetX = dropFileX+10;
+    int targetY = dropFileY+22;
 
     Date currentDate;
 
@@ -203,17 +333,19 @@ public class Main extends Application {
         imagesScrollPane.setFitToWidth(true);
 
         editBgButton = new Button("Edit Background");
-        //editBgButton.setTranslateX(WINDOW_WIDTH-170);
-        //editBgButton.setTranslateY(40);
+        editBgButton.setPrefWidth(editBgButtonWidth);
+        editBgButton.setPrefHeight(editBgButtonHeight);
+        editBgButton.setTranslateX(editBgButtonX);
+        editBgButton.setTranslateY(editBgButtonY);
         editBgButton.setStyle(" -fx-background-radius: 30; -fx-background-insets: 0,1,1; -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ) ");
-        //imagesScrollPane.setTranslateX(50);
-        imagesScrollPane.setTranslateY(40);
-        right.getChildren().add(editBgButton);
+        imagesScrollPane.setTranslateX(imagesScrollPaneX);
+        imagesScrollPane.setTranslateY(imagesScrollPaneY);
+        pane.getChildren().add(editBgButton);
 
         //weatherWidget = new Rectangle(140, 80);
         weatherWidget = new Rectangle();
-        weatherWidget.setTranslateX(28);
-        weatherWidget.setTranslateY(130);
+        weatherWidget.setTranslateX(weatherWidgetX);
+        weatherWidget.setTranslateY(weatherWidgetY);
         weatherWidget.setStroke(Color.WHITESMOKE);
         weatherWidget.setStrokeWidth(0.6);
         weatherWidget.setArcWidth(30);
@@ -231,13 +363,14 @@ public class Main extends Application {
         }
         city = "Maastricht";
         weatherCity = new Text(city);
-        weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, 20));
-        weatherWidget.setWidth(findBestWidgetSize(city));
-        weatherWidget.setHeight(80);
-        weatherCity.setTranslateX(weatherWidget.getTranslateX()+17);
-        weatherCity.setTranslateY(weatherWidget.getTranslateY()+26);
+        weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, weatherCityFontSize));
+        weatherWidgetWidth = findBestWidgetSize(city);
+        weatherWidget.setWidth(weatherWidgetWidth);
+        weatherWidget.setHeight(weatherWidgetHeight);
+        weatherCity.setTranslateX(weatherCityX);
+        weatherCity.setTranslateY(weatherCityY);
         weatherCity.setFill(Color.WHITE);
-        left.getChildren().addAll(weatherWidget, weatherCity);
+        pane.getChildren().addAll(weatherWidget, weatherCity);
 
         String temp = "1000";
 
@@ -254,52 +387,53 @@ public class Main extends Application {
         String temperature = Integer.toString(i);
         System.out.println(temperature);
         weatherDegree = new Text(temperature + "'C");
-        weatherDegree.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 29));
-        weatherDegree.setTranslateX(weatherWidget.getTranslateX()+18);
-        weatherDegree.setTranslateY(weatherWidget.getTranslateY()+60);
+        weatherDegree.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, weatherDegreeFontSize));
+        weatherDegree.setTranslateX(weatherDegreeX);
+        weatherDegree.setTranslateY(weatherDegreeY);
         weatherDegree.setFill(Color.WHITE);
-        left.getChildren().add(weatherDegree);
+        pane.getChildren().add(weatherDegree);
 
         GPS = new Image(new FileInputStream("src/assets/GPSpointer.png"));
         GPSView = new ImageView(GPS);
-        GPSView.setTranslateX(weatherWidget.getTranslateX()+weatherWidget.getWidth()-30);
-        GPSView.setTranslateY(weatherCity.getTranslateY()-18);
-        GPSView.setFitWidth(30);
-        GPSView.setFitHeight(20);
-        left.getChildren().add(GPSView);
+        gpsViewerX = weatherWidgetX+weatherWidgetWidth-30;
+        GPSView.setTranslateX(gpsViewerX);
+        GPSView.setTranslateY(gpsViewerY);
+        GPSView.setFitWidth(gpsViewerWidth);
+        GPSView.setFitHeight(gpsViewerHeight);
+        pane.getChildren().add(GPSView);
 
-        chatWindow = new Rectangle(700, 500);
-        chatWindow.setTranslateX(490);
-        chatWindow.setTranslateY(80);
+        chatWindow = new Rectangle(chatWindowWidth, chatWindowHeight);
+        chatWindow.setTranslateX(chatWindowX);
+        chatWindow.setTranslateY(chatWindowY);
         chatWindow.setFill(Color.rgb(160, 160, 160, 0.75));
         chatWindow.setStroke(Color.WHITE);
         chatWindow.setStrokeWidth(1);
-        center.getChildren().add(chatWindow);
+        pane.getChildren().add(chatWindow);
 
-        chatInputWindow = new Rectangle(700, 100);
-        chatInputWindow.setTranslateX(chatWindow.getTranslateX());
-        chatInputWindow.setTranslateY(chatWindow.getHeight()+chatWindow.getTranslateY());
+        chatInputWindow = new Rectangle(chatInputWindowWidth, chatInputWindowHeight);
+        chatInputWindow.setTranslateX(chatInputWindowX);
+        chatInputWindow.setTranslateY(chatInputWindowY);
         chatInputWindow.setFill(Color.rgb(200, 200, 200, 0.8));
         chatInputWindow.setStroke(Color.WHITE);
         chatInputWindow.setStrokeWidth(1);
-        center.getChildren().add(chatInputWindow);
+        pane.getChildren().add(chatInputWindow);
 
         textField = new TextField();
         textField.setPromptText("Input...");
         textField.setFocusTraversable(false);
-        textField.setTranslateX(chatInputWindow.getTranslateX()+45);
-        textField.setTranslateY(chatInputWindow.getTranslateY()+30);
-        textField.setPrefSize(600, 40);
+        textField.setTranslateX(textFieldX);
+        textField.setTranslateY(textFieldY);
+        textField.setPrefSize(textFieldWidth, textFieldHeight);
         textField.setFont(Font.font("Calibri", FontPosture.REGULAR, 16));
-        center.getChildren().add(textField);
+        pane.getChildren().add(textField);
 
         chatLayout = new Group();
 
         scrollPane = new ScrollPane();
         scrollPane.setContent(chatLayout);
-        scrollPane.setTranslateX(chatWindow.getTranslateX()+2);
-        scrollPane.setTranslateY(chatWindow.getTranslateY()+2);
-        scrollPane.setPrefSize(chatWindow.getWidth()-4, chatWindow.getHeight()-4);
+        scrollPane.setTranslateX(scrollPaneX);
+        scrollPane.setTranslateY(scrollPaneY);
+        scrollPane.setPrefSize(scrollPaneWidth, scrollPaneHeight);
         scrollPane.setStyle(" -fx-background: transparent; -fx-background-color: transparent; ");
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -308,44 +442,52 @@ public class Main extends Application {
         chatLayout.layout();
         scrollPane.setVvalue(1.0d);
 
-        center.getChildren().add(scrollPane);
+        pane.getChildren().add(scrollPane);
 
         robot = new Image(new FileInputStream("src/assets/robot.png"));
         robotViewer = new ImageView(robot);
-        robotViewer.setTranslateX(chatInputWindow.getTranslateX()+825);
-        robotViewer.setTranslateY(chatInputWindow.getTranslateY()-110);
-        robotViewer.setFitWidth(200);
-        robotViewer.setFitHeight(220);
-        center.getChildren().add(robotViewer);
+        robotViewer.setTranslateX(robotViewerX);
+        robotViewer.setTranslateY(robotViewerY);
+        robotViewer.setFitWidth(robotViewerWidth);
+        robotViewer.setFitHeight(robotViewerHeight);
+        pane.getChildren().add(robotViewer);
 
         robotInteraction = new Image(new FileInputStream("src/assets/speechBubbleBot.png"));
         robotInteractionViewer = new ImageView(robotInteraction);
-        robotInteractionViewer.setTranslateX(robotViewer.getTranslateX()-105);
-        robotInteractionViewer.setTranslateY(robotViewer.getTranslateY()-55);
-        robotInteractionViewer.setFitWidth(150);
-        robotInteractionViewer.setFitHeight(100);
-        center.getChildren().add(robotInteractionViewer);
+        robotInteractionViewer.setTranslateX(robotInteractionViewerX);
+        robotInteractionViewer.setTranslateY(robotInteractionViewerY);
+        robotInteractionViewer.setFitWidth(robotInteractionViewerWidth);
+        robotInteractionViewer.setFitHeight(robotInteractionViewerHeight);
+        pane.getChildren().add(robotInteractionViewer);
 
         robotInteractionText = new Text("Hi DKE student,\nhow can I help?");
-        robotInteractionText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        robotInteractionText.setTranslateX(robotInteractionViewer.getTranslateX()+20);
-        robotInteractionText.setTranslateY(robotInteractionViewer.getTranslateY()+30);
+        robotInteractionText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, robotInteractionTextFontSize));
+        robotInteractionText.setTranslateX(robotInteractionTextX);
+        robotInteractionText.setTranslateY(robotInteractionTextY);
         robotInteractionText.setFill(Color.BLACK);
-        center.getChildren().add(robotInteractionText);
+        pane.getChildren().add(robotInteractionText);
 
         currentDate = new Date();
 
         time = new SimpleDateFormat("hh:mm:ss");
         timeText = new Text(time.format(currentDate));
-        timeText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 22));
-        timeText.setTranslateX(30);
-        timeText.setTranslateY(50);
+        timeText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeTextFontSize));
+        timeText.setTranslateX(timeTextX);
+        timeText.setTranslateY(timeTextY);
         timeText.setFill(Color.WHITE);
-        left.getChildren().add(timeText);
+        pane.getChildren().add(timeText);
 
-        Rectangle timezones = new Rectangle(425, 65);
-        timezones.setTranslateX(30);
-        timezones.setTranslateY(240);
+        date = new SimpleDateFormat("dd/MM/yyyy");
+        dateText = new Text(date.format(currentDate));
+        dateText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, dateTextFontSize));
+        dateText.setTranslateX(dateTextX);
+        dateText.setTranslateY(dateTextY);
+        dateText.setFill(Color.WHITE);
+        pane.getChildren().add(dateText);
+
+        timezones = new Rectangle(timezonesWidth, timezonesHeight);
+        timezones.setTranslateX(timezonesX);
+        timezones.setTranslateY(timezonesY);
         timezones.setArcWidth(20);
         timezones.setArcHeight(20);
         timezones.setStroke(Color.WHITESMOKE);
@@ -353,89 +495,81 @@ public class Main extends Application {
         Stop[] stops1 = new Stop[] { new Stop(0, Color.TRANSPARENT), new Stop(1, Color.BLACK)};
         LinearGradient lg1 = new LinearGradient(0, 0, 0, 1.9, true, CycleMethod.NO_CYCLE, stops1);
         timezones.setFill(lg1);
-        left.getChildren().add(timezones);
+        pane.getChildren().add(timezones);
 
         time1 = CurrentTime.getTime("Europe", "Istanbul");
         timeText1 = new Text(time1);
-        timeText1.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
-        timeText1.setTranslateX(timezones.getTranslateX() + 15);
-        timeText1.setTranslateY(timezones.getTranslateY() + 30);
+        timeText1.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText1FontSize));
+        timeText1.setTranslateX(timeText1X);
+        timeText1.setTranslateY(timeText1Y);
         timeText1.setFill(Color.WHITE);
-        Text time1city = new Text("Istanbul");
-        time1city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
-        time1city.setTranslateX(timezones.getTranslateX() + 18);
-        time1city.setTranslateY(timezones.getTranslateY() + 50);
+        time1city = new Text("Istanbul");
+        time1city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, time1cityFontSize));
+        time1city.setTranslateX(time1cityX);
+        time1city.setTranslateY(time1cityY);
         time1city.setFill(Color.WHITE);
-        left.getChildren().add(time1city);
-        left.getChildren().add(timeText1);
+        pane.getChildren().add(time1city);
+        pane.getChildren().add(timeText1);
 
         time2 = CurrentTime.getTime("Asia", "Tokyo");
         timeText2 = new Text(time2);
-        timeText2.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
-        timeText2.setTranslateX(timezones.getTranslateX() + 95);
-        timeText2.setTranslateY(timezones.getTranslateY() + 30);
+        timeText2.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText2FontSize));
+        timeText2.setTranslateX(timeText2X);
+        timeText2.setTranslateY(timeText2Y);
         timeText2.setFill(Color.WHITE);
-        Text time2city = new Text("Tokyo");
-        time2city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
-        time2city.setTranslateX(timezones.getTranslateX() + 100);
-        time2city.setTranslateY(timezones.getTranslateY() + 50);
+        time2city = new Text("Tokyo");
+        time2city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, time2cityFontSize));
+        time2city.setTranslateX(time2cityX);
+        time2city.setTranslateY(time2cityY);
         time2city.setFill(Color.WHITE);
-        left.getChildren().add(time2city);
-        left.getChildren().add(timeText2);
+        pane.getChildren().add(time2city);
+        pane.getChildren().add(timeText2);
 
         time3 = CurrentTime.getTime("Australia", "Sydney");
         timeText3 = new Text(time3);
-        timeText3.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
-        timeText3.setTranslateX(timezones.getTranslateX() + 175);
-        timeText3.setTranslateY(timezones.getTranslateY() + 30);
+        timeText3.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText3FontSize));
+        timeText3.setTranslateX(timeText3X);
+        timeText3.setTranslateY(timeText3Y);
         timeText3.setFill(Color.WHITE);
-        Text time3city = new Text("Sydney");
-        time3city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
-        time3city.setTranslateX(timezones.getTranslateX() + 180);
-        time3city.setTranslateY(timezones.getTranslateY() + 50);
+        time3city = new Text("Sydney");
+        time3city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, time3cityFontSize));
+        time3city.setTranslateX(time3cityX);
+        time3city.setTranslateY(time3cityY);
         time3city.setFill(Color.WHITE);
-        left.getChildren().add(timeText3);
-        left.getChildren().add(time3city);
+        pane.getChildren().add(timeText3);
+        pane.getChildren().add(time3city);
 
         time4 = CurrentTime.getTime("Africa", "Khartoum");
         timeText4 = new Text(time4);
-        timeText4.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
-        timeText4.setTranslateX(timezones.getTranslateX() + 260);
-        timeText4.setTranslateY(timezones.getTranslateY() + 30);
+        timeText4.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText4FontSize));
+        timeText4.setTranslateX(timeText4X);
+        timeText4.setTranslateY(timeText4Y);
         timeText4.setFill(Color.WHITE);
-        Text time4city = new Text("Khartoum");
-        time4city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
-        time4city.setTranslateX(timezones.getTranslateX() + 260);
-        time4city.setTranslateY(timezones.getTranslateY() + 50);
+        time4city = new Text("Khartoum");
+        time4city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, time4cityFontSize));
+        time4city.setTranslateX(time4cityX);
+        time4city.setTranslateY(time4cityY);
         time4city.setFill(Color.WHITE);
-        left.getChildren().add(time4city);
-        left.getChildren().add(timeText4);
+        pane.getChildren().add(time4city);
+        pane.getChildren().add(timeText4);
 
         time5 = CurrentTime.getTime("America", "Jamaica");
         timeText5 = new Text(time5);
-        timeText5.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
-        timeText5.setTranslateX(timezones.getTranslateX() + 345);
-        timeText5.setTranslateY(timezones.getTranslateY() + 30);
+        timeText5.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText5FontSize));
+        timeText5.setTranslateX(timeText5X);
+        timeText5.setTranslateY(timeText5Y);
         timeText5.setFill(Color.WHITE);
-        Text time5city = new Text("Jamaica");
-        time5city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
-        time5city.setTranslateX(timezones.getTranslateX() + 349);
-        time5city.setTranslateY(timezones.getTranslateY() + 50);
+        time5city = new Text("Jamaica");
+        time5city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, time5cityFontSize));
+        time5city.setTranslateX(time5cityX);
+        time5city.setTranslateY(time5cityY);
         time5city.setFill(Color.WHITE);
-        left.getChildren().add(time5city);
-        left.getChildren().add(timeText5);
+        pane.getChildren().add(time5city);
+        pane.getChildren().add(timeText5);
 
-        date = new SimpleDateFormat("dd/MM/yyyy");
-        dateText = new Text(date.format(currentDate));
-        dateText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 22));
-        dateText.setTranslateX(30);
-        dateText.setTranslateY(90);
-        dateText.setFill(Color.WHITE);
-        left.getChildren().add(dateText);
-
-        Rectangle dropFile = new Rectangle(143, 35);
-        dropFile.setTranslateX(30);
-        dropFile.setTranslateY(340);
+        dropFile = new Rectangle(dropFileWidth, dropFileHeight);
+        dropFile.setTranslateX(dropFileX);
+        dropFile.setTranslateY(dropFileY);
         dropFile.setArcWidth(20);
         dropFile.setArcHeight(20);
         dropFile.setStroke(Color.WHITESMOKE);
@@ -443,24 +577,14 @@ public class Main extends Application {
         Stop[] stops2 = new Stop[] { new Stop(0, Color.TRANSPARENT), new Stop(1, Color.BLACK)};
         LinearGradient lg2 = new LinearGradient(0, 0, 0, 1.9, true, CycleMethod.NO_CYCLE, stops2);
         dropFile.setFill(lg2);
-        left.getChildren().add(dropFile);
+        pane.getChildren().add(dropFile);
 
-        target = new Text(dropFile.getTranslateX() + 10 , dropFile.getTranslateY() + 22, "DROP FILE HERE");
-        target.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 17));
+        target = new Text("DROP FILE HERE");
+        target.setTranslateX(targetX);
+        target.setTranslateY(targetY);
+        target.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, targetFontSize));
         target.setFill(Color.WHITE);
-        left.getChildren().add(target);
-
-        right.setPrefWidth(230);
-        right.setTranslateY(10);
-
-        center.setTranslateX(10);
-
-        left.setTranslateX(10);
-        left.setTranslateY(10);
-
-        pane.setLeft(left);
-        pane.setCenter(center);
-        pane.setRight(right);
+        pane.getChildren().add(target);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -472,11 +596,6 @@ public class Main extends Application {
 
         primaryStage.setOnCloseRequest(t -> {
             exitProgram();
-        });
-
-        primaryStage.setOnShowing(t -> {
-            iv.setFitHeight(screenSize.getHeight());
-            iv.setFitWidth(screenSize.getWidth());
         });
 
         Thread mainThread = new Thread(() -> {
@@ -505,8 +624,6 @@ public class Main extends Application {
         };
         tickTimer.start();
 
-        primaryStage.setMinWidth(1680);
-        primaryStage.setMinHeight(680);
         primaryStage.setResizable(true);
         primaryStage.setTitle("Digital Assistant");
         primaryStage.setScene(scene);
