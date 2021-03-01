@@ -141,7 +141,7 @@ public class Main extends Application {
 
     int chatWindowWidth = 700;
     int chatWindowHeight = 500;
-    int chatWindowX = 550;
+    int chatWindowX = 490;
     int chatWindowY = 90;
 
     int chatInputWindowWidth = 700;

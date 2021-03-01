@@ -201,8 +201,8 @@ public class Controller {
                 window.robotInteractionViewer.setFitWidth(window.robotInteractionViewerWidth/widthScale);
                 window.robotInteractionViewer.setTranslateX(window.robotInteractionViewerX/widthScale);
 
-                window.robotInteractionText.setTranslateX(window.robotInteractionTextX/widthScale);
                 window.robotInteractionText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, window.robotInteractionTextFontSize/widthScale));
+                window.robotInteractionText.setTranslateX(window.robotInteractionTextX/widthScale);
 
                 window.weatherWidget.setWidth(window.weatherWidgetWidth/widthScale);
                 window.weatherWidget.setTranslateX(window.weatherWidgetX/widthScale);
@@ -283,9 +283,9 @@ public class Controller {
                 window.chatInputWindow.setHeight(window.chatInputWindowHeight/heightScale);
                 window.chatInputWindow.setTranslateY(window.chatInputWindowY/heightScale);
 
+                window.textField.setFont(Font.font("Calibri", FontPosture.REGULAR, window.textFieldFontSize/heightScale));
                 window.textField.setPrefHeight(window.textFieldHeight/heightScale);
                 window.textField.setTranslateY(window.textFieldY/heightScale);
-                window.textField.setFont(Font.font("Calibri", FontPosture.REGULAR, window.textFieldFontSize/heightScale));
 
                 window.scrollPane.setPrefHeight(window.scrollPaneHeight/heightScale);
                 window.scrollPane.setTranslateY(window.scrollPaneY/heightScale);
@@ -296,8 +296,8 @@ public class Controller {
                 window.robotInteractionViewer.setFitHeight(window.robotInteractionViewerHeight/heightScale);
                 window.robotInteractionViewer.setTranslateY(window.robotInteractionViewerY/heightScale);
 
-                window.robotInteractionText.setTranslateY(window.robotInteractionTextY/heightScale);
                 window.robotInteractionText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, window.robotInteractionTextFontSize/heightScale));
+                window.robotInteractionText.setTranslateY(window.robotInteractionTextY/heightScale);
 
                 window.weatherWidget.setHeight(window.weatherWidgetHeight/heightScale);
                 window.weatherWidget.setTranslateY(window.weatherWidgetY/heightScale);
