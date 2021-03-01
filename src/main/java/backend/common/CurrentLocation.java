@@ -10,7 +10,7 @@ import java.net.URL;
 public class CurrentLocation {
     public static String getLocation() throws IOException {
 
-        String API_KEY = "at_m5i0t9AxZ4tvBszOg56sYNdRG56Rm";
+        String API_KEY = "at_ci2SFOqsrPElmtSt0BN4LLq2XY5cu";
         String API_URL = "https://ip-geolocation.whoisxmlapi.com/api/v1?";
         String url = API_URL + "apiKey=" + API_KEY;
 

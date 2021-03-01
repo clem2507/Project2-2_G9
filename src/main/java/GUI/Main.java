@@ -355,12 +355,14 @@ public class Main extends Application {
         weatherWidget.setFill(lg);
         //pane.getChildren().add(weatherWidget);
 
+        /**
         try {
             city = CurrentLocation.getLocation();
         } catch (IOException e){
             e.printStackTrace();
             city = "Unknown";
-        }
+        }**/
+
         city = "Maastricht";
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, weatherCityFontSize));
