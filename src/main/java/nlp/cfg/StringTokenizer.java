@@ -3,7 +3,6 @@ package nlp.cfg;
 import nlp.NLPError;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class StringTokenizer {
     private static char[] SYMBOLS = new char[]{
-            '.', ',', '/', '\\', '!', '?'
+            '.', ',', '/', '\\', '!', '?', '+', '-', '*', '^', '(', ')'
     };
 
     private static char[] ALPHABET = ("abcdefghijklmnopqrstuvwxyz".toUpperCase() + "abcdefghijklmnopqrstuvwxyz")
@@ -30,7 +29,7 @@ public class StringTokenizer {
     };
 
     private enum CharType {
-        DIGIT, LETTER, PUNCTUATION, GAP
+        DIGIT, LETTER, SEPARATOR, WHITESPACE
     }
 
     private static boolean existsIn(final char chr, final char[] set) {
@@ -45,13 +44,13 @@ public class StringTokenizer {
         return false;
     }
 
-    private static CharType getCharType(char chr) throws NLPError {
+    private static CharType getCharType(final char chr) throws NLPError {
 
         if(existsIn(chr, WHITESPACES))
-            return CharType.GAP;
+            return CharType.WHITESPACE;
 
         if(existsIn(chr, SYMBOLS))
-            return CharType.PUNCTUATION;
+            return CharType.SEPARATOR;
 
         if(existsIn(chr, DIGITS))
             return CharType.DIGIT;
@@ -62,14 +61,14 @@ public class StringTokenizer {
         throw new NLPError("Unknown character type: " + chr);
     }
 
-    private static String getNextWord(List<Character> seq) throws NLPError {
+    private static String getNextWord(final List<Character> seq) throws NLPError {
         String output = "";
 
         while (!seq.isEmpty()) {
             char currentChar = seq.get(0);
             CharType type = getCharType(currentChar);
 
-            if(!type.equals(CharType.GAP) && !type.equals(CharType.PUNCTUATION)) {
+            if(!type.equals(CharType.WHITESPACE) && !type.equals(CharType.SEPARATOR)) {
                 char chr = seq.get(0); seq.remove(0);
                 output += chr;
                 continue;
@@ -82,15 +81,15 @@ public class StringTokenizer {
         return output;
     }
 
-    private static String getNextPunctuation(List<Character> seq) throws NLPError {
+    private static String getNextPunctuation(final List<Character> seq) throws NLPError {
         char currentChar = seq.get(0); seq.remove(0);
         CharType type = getCharType(currentChar);
 
-        assert type.equals(CharType.PUNCTUATION);
+        assert type.equals(CharType.SEPARATOR);
         return "" + currentChar;
     }
 
-    private static String getNextNumber(List<Character> seq) throws NLPError {
+    private static String getNextNumber(final List<Character> seq) throws NLPError {
         String output = "";
         boolean dotFound = false;
 
@@ -117,7 +116,7 @@ public class StringTokenizer {
         return output;
     }
 
-    public static List<String> toTokenList(String string) throws NLPError {
+    public static List<String> toTokenList(final String string) throws NLPError {
         // Convert the string into a linked list of characters.
         List<Character> charSequence = string
                 .chars()
@@ -131,7 +130,7 @@ public class StringTokenizer {
 
             switch (getCharType(firstChar)) {
 
-                case GAP:
+                case WHITESPACE:
                     charSequence.remove(0);
                     break;
 
@@ -139,7 +138,7 @@ public class StringTokenizer {
                     output.add(getNextWord(charSequence));
                     break;
 
-                case PUNCTUATION:
+                case SEPARATOR:
                     output.add(getNextPunctuation(charSequence));
                     break;
 
@@ -156,7 +155,7 @@ public class StringTokenizer {
     }
 
     public static void main(String[] args) {
-        String input = "hello world!., ? 4.5.hello 5.hello 9.";
+        String input = "2.4 + 5*4^2**4";
 
         try {
             List<String> tokens = toTokenList(input);
