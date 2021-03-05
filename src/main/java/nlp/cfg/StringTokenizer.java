@@ -44,6 +44,12 @@ public class StringTokenizer {
         return false;
     }
 
+    /**
+     * Determines the type of a character.
+     * @param chr char to classify
+     * @return CharType representing the class of a character
+     * @throws NLPError if the character is unknown
+     */
     private static CharType getCharType(final char chr) throws NLPError {
 
         if(existsIn(chr, WHITESPACES))
@@ -116,6 +122,13 @@ public class StringTokenizer {
         return output;
     }
 
+    /**
+     * Splits a string into tokens. Note that this tokenizer assumes the
+     * string represents an expression in natural language.
+     * @param string a string to split
+     * @return a list of strings representing a sequence of tokens
+     * @throws NLPError if the string could not be tokenized
+     */
     public static List<String> toTokenList(final String string) throws NLPError {
         // Convert the string into a linked list of characters.
         List<Character> charSequence = string
@@ -146,7 +159,7 @@ public class StringTokenizer {
                     output.add(getNextNumber(charSequence));
                     break;
 
-                default: throw new NLPError("Unforeseen character " + firstChar + " (this should be impossible)");
+                default: throw new NLPError("Unforeseen character " + firstChar);
             }
 
         }

@@ -1,5 +1,7 @@
 package nlp.cfg.parsing;
 
+import nlp.Pattern;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +9,16 @@ public class GrammarRule {
     protected String nonTerminal;
     protected List<String> production;
 
+    private boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
+
     public GrammarRule(final String nonTerminal, final List<String> production) {
         this.nonTerminal = nonTerminal;
         this.production = new ArrayList<>(production);
     }
 
-    public boolean applicable(final List<Node> seq) {
+    public boolean isApplicable(final List<Node> seq) {
         System.out.print("Testing rule applicability " + toString() + " on " + seq.toString() + " : ");
 
         if(seq.size() != production.size()) {
@@ -24,9 +30,24 @@ public class GrammarRule {
             final String symbol = production.get(i);
             final String token = seq.get(i).toString();
 
-            if(!ParsingUtils.compareTokenWithSymbol(token, symbol)) {
-                System.out.println("Not applicable, mismatch " + token + " =/= " + symbol);
-                return false;
+            switch (symbol) {
+                case "::numeric::":
+
+                    if (!isNumeric(token)) {
+                        System.out.println("Not applicable, " + token + " is not a number");
+                        return false;
+                    }
+
+                    break;
+
+                default:
+
+                    if (!token.equals(symbol)) {
+                        System.out.println("Not applicable, mismatch " + token + " =/= " + symbol);
+                        return false;
+                    }
+
+                    break;
             }
 
         }
@@ -34,8 +55,8 @@ public class GrammarRule {
         return true;
     }
 
-    public Node transform(final List<Node> seq) {
-        assert applicable(seq);
+    public Node apply(final List<Node> seq) {
+        assert isApplicable(seq);
         System.out.println("Applying production rule " + toString() + " on " + seq.toString());
         return new Node(nonTerminal, new ArrayList<>(seq));
     }

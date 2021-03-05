@@ -23,8 +23,17 @@ public class Node {
     }
 
     public String flat() {
-        return "( " + definition + " " + children.stream()
-                .map(Node::flat).reduce((a, b) -> a + " " + b).orElse("") + " )";
+        return "(" + (definition + " " + children.stream()
+                .map(n -> {
+                    if (n.toString().equals("("))
+                        return new Node("[", n.getChildren());
+
+                    if (n.toString().equals(")"))
+                        return new Node("]", n.getChildren());
+
+                    return n;
+                })
+                .map(Node::flat).reduce((a, b) -> a + " " + b).orElse("")).trim() + ")";
     }
 
     @Override
