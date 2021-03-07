@@ -31,7 +31,11 @@ public class FindWeather extends Domain {
 
     @Override
     public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
-        String city = sequence.getStringAt(2);
+        String nameParam = sequence.getStringAt(2);
+
+        // This is to also allow the user to present the query as a question.
+        String city = nameParam.endsWith("?")? nameParam.substring(0, nameParam.length() - 1):nameParam;
+
         return new Skill(this, outputChannel) {
             @Override
             public void run() {
