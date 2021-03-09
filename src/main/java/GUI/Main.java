@@ -382,13 +382,17 @@ public class Main extends Application {
         } catch (IOException e){
             e.printStackTrace();
         }
+        String temperature = "";
+        if(!WeatherObject.isNumeric(temp)){
+            weatherDegree = new Text("Error");
+        }else{
+            double d = Double.parseDouble(temp);
+            double rounded = Math.round(d);
+            int i = (int) rounded;
+            temperature = Integer.toString(i);
+            weatherDegree = new Text(temperature + "'C");
 
-        double d = Double.parseDouble(temp);
-        double rounded = Math.round(d);
-        int i = (int) rounded;
-        String temperature = Integer.toString(i);
-        System.out.println(temperature);
-        weatherDegree = new Text(temperature + "'C");
+        }
         weatherDegree.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, weatherDegreeFontSize));
         weatherDegree.setTranslateX(weatherDegreeX);
         weatherDegree.setTranslateY(weatherDegreeY);

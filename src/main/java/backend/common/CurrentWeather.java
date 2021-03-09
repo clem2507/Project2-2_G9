@@ -15,13 +15,25 @@ public class CurrentWeather {
 
         StringBuilder result = new StringBuilder();
         URL url = new URL(urlString);
-        URLConnection connection = url.openConnection();
-        BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader rd = null;
+        try{
+            URLConnection connection = url.openConnection();
+            rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        }catch(IOException e){
+
+        }
         String line;
-        while((line = rd.readLine()) != null){
+        if(rd != null){
+            while((line = rd.readLine()) != null){
+                result.append(line);
+            }
+            rd.close();
+
+        }else{
+            line = "No internet connection";
             result.append(line);
         }
-        rd.close();
+
 
         return result;
     }
