@@ -614,7 +614,10 @@ public class Main extends Application {
         quoteHeading.setFill(Color.WHITE);
         pane.getChildren().add(quoteHeading);
 
-        quote = new Text(Quote.getQuote());
+        // TODO: Uncomment when submitting
+        //String quoteText = Quote.getQuote();
+        String quoteText = "Every saint has a past, and every sinner has a future.";
+        quote = new Text(quoteText);
         quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, quoteFontSize));
         quote.setTranslateX(quoteX);
         quote.setTranslateY(quoteY);
