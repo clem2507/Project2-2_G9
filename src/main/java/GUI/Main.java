@@ -5,6 +5,7 @@ import backend.AssistantMessage;
 import backend.MessageType;
 import backend.common.CurrentLocation;
 import backend.common.CurrentTime;
+import backend.common.Quote;
 import backend.common.WeatherObject;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -82,6 +83,7 @@ public class Main extends Application {
     Rectangle weatherWidget;
     Rectangle timezones;
     Rectangle dropFile;
+    Rectangle quoteOutline;
 
     ScrollPane scrollPane;
     ScrollPane imagesScrollPane;
@@ -106,6 +108,8 @@ public class Main extends Application {
     Text messageTime;
     Text weatherCity;
     Text weatherDegree;
+    Text quote;
+    Text quoteHeading;
 
     Image bg;
     Image bg1;
@@ -248,11 +252,17 @@ public class Main extends Application {
     int dropFileWidth = 143;
     int dropFileHeight = 35;
     int dropFileX = 30;
-    int dropFileY = 340;
+    int dropFileY = 440;
 
     int targetFontSize = 17;
     int targetX = dropFileX+10;
     int targetY = dropFileY+22;
+
+    int quoteOutlineX = 30;
+    int quoteOutlineY = 340;
+
+    int quoteX = quoteOutlineX + 10;
+    int quoteY = quoteOutlineY + 50;
 
     Date currentDate;
 
@@ -355,6 +365,7 @@ public class Main extends Application {
         weatherWidget.setFill(lg);
         //pane.getChildren().add(weatherWidget);
 
+        // TODO: Change when submitting the project
         /**
         try {
             city = CurrentLocation.getLocation();
@@ -591,6 +602,30 @@ public class Main extends Application {
         target.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, targetFontSize));
         target.setFill(Color.WHITE);
         pane.getChildren().add(target);
+
+        quoteOutline = new Rectangle(timezonesWidth, timezonesHeight);
+        quoteOutline.setTranslateX(quoteOutlineX);
+        quoteOutline.setTranslateY(quoteOutlineY );
+        quoteOutline.setArcWidth(20);
+        quoteOutline.setArcHeight(20);
+        quoteOutline.setStroke(Color.WHITESMOKE);
+        quoteOutline.setStrokeWidth(0.6);
+        quoteOutline.setFill(lg1);
+        pane.getChildren().add(quoteOutline);
+
+        quoteHeading = new Text("Quote of the day");
+        quoteHeading.setFont(Font.font("Calibri", FontWeight.BOLD,  FontPosture.REGULAR, 19));
+        quoteHeading.setTranslateX(quoteX);
+        quoteHeading.setTranslateY(quoteY - 25);
+        quoteHeading.setFill(Color.WHITE);
+        pane.getChildren().add(quoteHeading);
+
+        quote = new Text(Quote.getQuote());
+        quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+        quote.setTranslateX(quoteX);
+        quote.setTranslateY(quoteY);
+        quote.setFill(Color.WHITE);
+        pane.getChildren().add(quote);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
 
