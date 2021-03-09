@@ -13,25 +13,36 @@ public class Quote {
 
         StringBuilder result = new StringBuilder();
         URL url = new URL(urlString);
-        URLConnection connection = url.openConnection();
-        BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String line;
-        while((line = rd.readLine()) != null){
-            result.append(line);
-        }
-        rd.close();
 
-        int start = result.indexOf("quote")+49;
+        BufferedReader rd = null;
+        try{
+            URLConnection connection = url.openConnection();
+            rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        }catch(IOException e){
+
+        }
         String quote = "";
-        for (int k = start ; k <result.length(); k++){
-            if(result.charAt(k) != '"'){
-                quote= quote+ result.charAt(k);
-            }else{
-                break;
+
+        String line;
+        if (rd != null){
+            while((line = rd.readLine()) != null){
+                result.append(line);
+            }
+            rd.close();
+            int start = result.indexOf("quote")+49;
+            for (int k = start ; k <result.length(); k++){
+                if(result.charAt(k) != '"'){
+                    quote= quote+ result.charAt(k);
+                }else{
+                    break;
+                }
             }
         }
+
+
+
         if (quote.equals("")){
-            quote = "No Quote Available.";
+            quote = "Every saint has a past, and every sinner has a future.";
         }
 
         return quote;
