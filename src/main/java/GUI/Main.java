@@ -3,15 +3,12 @@ package GUI;
 import backend.Assistant;
 import backend.AssistantMessage;
 import backend.MessageType;
-import backend.common.CurrentLocation;
 import backend.common.CurrentTime;
 import backend.common.Quote;
 import backend.common.WeatherObject;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -31,9 +28,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -258,9 +253,11 @@ public class Main extends Application {
     int targetX = dropFileX+10;
     int targetY = dropFileY+22;
 
+    int quoteOutlineFontSize = 19;
     int quoteOutlineX = 30;
     int quoteOutlineY = 340;
 
+    int quoteFontSize = 16;
     int quoteX = quoteOutlineX + 10;
     int quoteY = quoteOutlineY + 50;
 
@@ -269,7 +266,6 @@ public class Main extends Application {
     SimpleDateFormat time;
     SimpleDateFormat date;
 
-    Text source;
     Text target;
 
     Assistant assistant = new Assistant();
@@ -591,9 +587,7 @@ public class Main extends Application {
         dropFile.setArcHeight(20);
         dropFile.setStroke(Color.WHITESMOKE);
         dropFile.setStrokeWidth(0.6);
-        Stop[] stops2 = new Stop[] { new Stop(0, Color.TRANSPARENT), new Stop(1, Color.BLACK)};
-        LinearGradient lg2 = new LinearGradient(0, 0, 0, 1.9, true, CycleMethod.NO_CYCLE, stops2);
-        dropFile.setFill(lg2);
+        dropFile.setFill(lg1);
         pane.getChildren().add(dropFile);
 
         target = new Text("DROP FILE HERE");
@@ -614,14 +608,14 @@ public class Main extends Application {
         pane.getChildren().add(quoteOutline);
 
         quoteHeading = new Text("Quote of the day");
-        quoteHeading.setFont(Font.font("Calibri", FontWeight.BOLD,  FontPosture.REGULAR, 19));
+        quoteHeading.setFont(Font.font("Calibri", FontWeight.BOLD,  FontPosture.REGULAR, quoteOutlineFontSize));
         quoteHeading.setTranslateX(quoteX);
         quoteHeading.setTranslateY(quoteY - 25);
         quoteHeading.setFill(Color.WHITE);
         pane.getChildren().add(quoteHeading);
 
         quote = new Text(Quote.getQuote());
-        quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+        quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, quoteFontSize));
         quote.setTranslateX(quoteX);
         quote.setTranslateY(quoteY);
         quote.setFill(Color.WHITE);
