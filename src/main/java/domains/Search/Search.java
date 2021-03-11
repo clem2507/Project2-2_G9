@@ -24,7 +24,7 @@ public class Search {
         Document doc = Jsoup.connect(url).get();
         String html = doc.html();
 
-        Files.write(Paths.get("/Users/zein/IdeaProjects/Project2-2_G9/src/main/java/domains/Search/file.txt"), html.getBytes());
+        Files.write(Paths.get("file.txt"), html.getBytes());
 
         Elements links = doc.select("cite");
 
