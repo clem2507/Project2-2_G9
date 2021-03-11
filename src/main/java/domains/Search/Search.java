@@ -37,7 +37,7 @@ public class Search {
             if(CurrentOS.getOperatingSystem() == OSName.WINDOWS) {
                 for (int i = 0; i < current.length(); i++) {
                     if (Character.UnicodeBlock.of(current.charAt(i)) != Character.UnicodeBlock.BASIC_LATIN) {
-                        current = current.replaceAll(String.valueOf(current.charAt(i)), "/");
+                        current = current.replaceAll(" "+current.charAt(i)+" ", "/");
                     }
                 }
             }else if(CurrentOS.getOperatingSystem() == OSName.WINDOWS) {
