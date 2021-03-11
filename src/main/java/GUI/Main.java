@@ -270,7 +270,7 @@ public class Main extends Application {
     int emptyTemplateWidth = 130;
     int emptyTemplateHeight = 30;
     int emptyTemplateX = dropFileX + 170;
-    int emptyTemplateY = dropFileY;
+    int emptyTemplateY = dropFileY + 2;
 
     Date currentDate;
 

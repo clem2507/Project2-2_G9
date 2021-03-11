@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.input.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -20,6 +21,8 @@ public class Controller {
 
     private final Main window;
     private int historyCount = 0;
+    Assistant assistant = new Assistant();
+
 
     /**
      * Constructor of the main possible control with the graphic interface
@@ -402,6 +405,12 @@ public class Controller {
                 target.setFill(Color.WHITE);
                 event.consume();
             }
+        });
+
+        Button clearTemplate = window.emptyTemplate;
+
+        clearTemplate.setOnAction(actionEvent ->  {
+                assistant.forgetTemplates();
         });
     }
     private String getExtension(String fileName){
