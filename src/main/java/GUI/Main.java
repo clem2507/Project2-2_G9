@@ -270,7 +270,7 @@ public class Main extends Application {
     int emptyTemplateWidth = 130;
     int emptyTemplateHeight = 30;
     int emptyTemplateX = dropFileX + 170;
-    int emptyTemplateY = dropFileY + 2;
+    int emptyTemplateY = 440;
 
     Date currentDate;
 
@@ -662,7 +662,13 @@ public class Main extends Application {
 
         Thread mainThread = new Thread(() -> {
             while (true) {
-                updateTime();
+                try {
+                    tick(); // USED TO CALL UPDATETIME()
+                } catch (InterruptedException e) {  // idk whx the exception but yeah
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         mainThread.setDaemon(false);
@@ -719,6 +725,8 @@ public class Main extends Application {
      *
      * Update the seconds for the time display
      */
+
+    // CONTENT GOT MOVED TO TICK()
     public void updateTime() {
 
         wait(980);
@@ -893,6 +901,61 @@ public class Main extends Application {
         //      b) The user spams with messages every frame
         // Since both cases are expected to be avoided (if we code carefully), I do not see a reason to
         // work around them. In other words, they are very very unlikely to happen, so let them be.
+
+        wait(980);
+        currentDate = new Date();
+        timeText.setText(time.format(currentDate));
+
+        DateFormat formatterIstanbul = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneIstanbul = TimeZone.getTimeZone("GMT" + "+3");
+        Calendar calendarIstanbul = Calendar.getInstance(timezoneIstanbul);
+        formatterIstanbul.setCalendar(calendarIstanbul);
+        formatterIstanbul.setTimeZone(timezoneIstanbul);
+        time1 = formatterIstanbul.format(calendarIstanbul.getTime());
+        timeText1.setText(time1);
+
+        DateFormat formatterTokyo = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneTokyo = TimeZone.getTimeZone("GMT" + "+9");
+        Calendar calendarTokyo = Calendar.getInstance(timezoneTokyo);
+        formatterTokyo.setCalendar(calendarTokyo);
+        formatterTokyo.setTimeZone(timezoneTokyo);
+        time2 = formatterTokyo.format(calendarTokyo.getTime());
+        timeText2.setText(time2);
+
+        DateFormat formatterSydney = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneSydney = TimeZone.getTimeZone("GMT" + "+11");
+        Calendar calendarSydney = Calendar.getInstance(timezoneSydney);
+        formatterSydney.setCalendar(calendarSydney);
+        formatterSydney.setTimeZone(timezoneSydney);
+        time3 = formatterSydney.format(calendarSydney.getTime());
+        timeText3.setText(time3);
+
+        DateFormat formatterKhartoum = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneKhartoum = TimeZone.getTimeZone("GMT" + "+2");
+        Calendar calendarKhartoum = Calendar.getInstance(timezoneKhartoum);
+        formatterKhartoum.setCalendar(calendarKhartoum);
+        formatterKhartoum.setTimeZone(timezoneKhartoum);
+        time4 = formatterKhartoum.format(calendarKhartoum.getTime());
+        timeText4.setText(time4);
+
+        DateFormat formatterJamaica = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneJamaica = TimeZone.getTimeZone("GMT" + "-5");
+        Calendar calendarJamaica = Calendar.getInstance(timezoneJamaica);
+        formatterJamaica.setCalendar(calendarJamaica);
+        formatterJamaica.setTimeZone(timezoneJamaica);
+        time5 = formatterJamaica.format(calendarJamaica.getTime());
+        timeText5.setText(time5);
+
+//        time1 = CurrentTime.getTime("Europe", "Istanbul");
+//        timeText1.setText(time1);
+//        time2 = CurrentTime.getTime("Asia", "Tokyo");
+//        timeText2.setText(time2);
+//        time3 = CurrentTime.getTime("Australia", "Sydney");
+//        timeText3.setText(time3);
+//        time4 = CurrentTime.getTime("Africa", "Khartoum");
+//        timeText4.setText(time4);
+//        time5 = CurrentTime.getTime("America", "Jamaica");
+//        timeText5.setText(time5);
     }
 
     public void createThread() {
