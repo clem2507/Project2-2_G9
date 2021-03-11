@@ -83,6 +83,7 @@ public class Main extends Application {
     ScrollPane imagesScrollPane;
 
     Button editBgButton;
+    Button emptyTemplate;
 
     Text dateText;
     Text timeText;
@@ -266,6 +267,11 @@ public class Main extends Application {
     int quoteRectangleX = quoteOutlineX;
     int quoteRectangleY = quoteOutlineY;
 
+    int emptyTemplateWidth = 130;
+    int emptyTemplateHeight = 30;
+    int emptyTemplateX = dropFileX + 170;
+    int emptyTemplateY = dropFileY;
+
     Date currentDate;
 
     SimpleDateFormat time;
@@ -346,12 +352,22 @@ public class Main extends Application {
         imagesScrollPane.setFitToHeight(true);
         imagesScrollPane.setFitToWidth(true);
 
+        emptyTemplate = new Button("Clear Templates");
+        emptyTemplate.setPrefWidth(emptyTemplateWidth);
+        emptyTemplate.setPrefHeight(emptyTemplateHeight);
+        emptyTemplate.setTranslateX(emptyTemplateX);
+        emptyTemplate.setTranslateY(emptyTemplateY);
+        emptyTemplate.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 12;");
+        pane.getChildren().add(emptyTemplate);
+
         editBgButton = new Button("Edit Background");
         editBgButton.setPrefWidth(editBgButtonWidth);
         editBgButton.setPrefHeight(editBgButtonHeight);
         editBgButton.setTranslateX(editBgButtonX);
         editBgButton.setTranslateY(editBgButtonY);
-        editBgButton.setStyle(" -fx-background-radius: 30; -fx-background-insets: 0,1,1; -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ) ");
+        editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 12; ");
         imagesScrollPane.setTranslateX(imagesScrollPaneX);
         imagesScrollPane.setTranslateY(imagesScrollPaneY);
         pane.getChildren().add(editBgButton);
