@@ -10,26 +10,30 @@ import domains.SmallTalk;
 import domains.FindWeather;
 import nlp.MatchedSequence;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Assistant {
+    private final String USER_DEFINED_TEMPLATES_PATH = "src/assets/ProjectData/PatternTemplates/";
+
     private final Set<Domain> domains;
     private final BlockingQueue<AssistantMessage> outputChannel;
     private Set<Thread> runningSkills, backgroundSkills;
-    private final FallbackInterpreter customFallback;
+    private FallbackInterpreter primaryFallbackInterpreter;
 
     public Assistant(){
         domains = new HashSet<>();
         outputChannel = new LinkedBlockingQueue<>();
         runningSkills = new HashSet<>();
         backgroundSkills = new HashSet<>();
-        customFallback = new DummyFallback();
+
+        primaryFallbackInterpreter = new FallbackMachine();
 
         addDomain(new SayThis());
         addDomain(new FindMe());
@@ -39,6 +43,19 @@ public class Assistant {
         addDomain(new Leave());
         addDomain(new SmallTalk());
         addDomain(new Calendar());
+
+        // Here we load user defined templates from previous sessions.
+        try {
+            Path templatesFolder = Paths.get(USER_DEFINED_TEMPLATES_PATH);
+            Files.createDirectories(templatesFolder);
+
+            Files.list(templatesFolder).forEach(p -> {
+                String absolutePath = p.toAbsolutePath().toString();
+                primaryFallbackInterpreter.notifyNewPath(absolutePath);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -49,7 +66,7 @@ public class Assistant {
      * to be the main thread
      * @param query a string
      */
-    public void processQuery(final String query){
+    synchronized public void processQuery(final String query){
         Domain selectedDomain = null; // Best domain matched so far
         MatchedSequence obtainedSequence = null; // Best matched sequence so far
 
@@ -76,20 +93,18 @@ public class Assistant {
         }
 
         else{
-            String customResponse;
 
-            synchronized (customFallback) {
-                customResponse = customFallback.processQuery(query);
+            for(FallbackInterpreter interpreter : new FallbackInterpreter[]{primaryFallbackInterpreter}) {
+                String response = interpreter.processQuery(query);
+
+                if(response != null) {
+                    pushMessage(response);
+                    return;
+                }
+
             }
 
-            if(customResponse != null){
-                pushMessage(customResponse);
-            }
-
-            else{
-                pushMessage("Query not understood"); // Push failure message to the queue
-            }
-
+            pushMessage("I do not understand");
         }
 
     }
@@ -100,6 +115,9 @@ public class Assistant {
      */
     public void cleanSkillPool(){
         runningSkills = runningSkills.stream()
+                .filter(Thread::isAlive)
+                .collect(Collectors.toSet());
+        backgroundSkills = backgroundSkills.stream()
                 .filter(Thread::isAlive)
                 .collect(Collectors.toSet());
     }
@@ -169,7 +187,7 @@ public class Assistant {
 
     /**
      * Adds a new domain to the set. This should only be called in the constructor.
-     * @param domain
+     * @param domain a domain to add
      */
     private void addDomain(final Domain domain){
         assert !domains.contains(domain);
@@ -187,40 +205,41 @@ public class Assistant {
     }
 
     /**
-     * Removes a domain from the set. This should only be called in the same thread as
-     * processQuery
-     * @param domain
-     */
-    public void removeDomain(final Domain domain){
-        assert domains.contains(domain);
-        domains.remove(domain);
-    }
-
-    /**
-     * Checks if a domain is already in the set. This should only be called
-     * in the same thread as processQuery
-     * @param domain
-     * @return boolean - true if the domain is present, false otherwise
-     */
-    public boolean hasDomain(final Domain domain){
-        return domains.contains(domain);
-    }
-
-    /**
      * Tells the fallback system that the user has defined a new set of responses in a file
-     * identified by the path. This can be called from any thead at any point - i.e. thread safe
+     * identified by the path. This can be called from any thread at any point - i.e. thread safe
      * @param path String representing the new path
      */
-    public void notifyOfNewPath(String path){
+    synchronized public void notifyOfNewPath(String path){
+        Path source = Paths.get(path);
+        Path destination = Paths.get(
+                USER_DEFINED_TEMPLATES_PATH + source.getName(source.getNameCount() - 1).toString()
+        );
 
-        synchronized (customFallback) {
-            customFallback.notifyNewPath(path);
+        try {
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+            primaryFallbackInterpreter.notifyNewPath(path);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
 
-    public void forgetTemplates() {
+    synchronized public void forgetTemplates() {
 
+        // A bit of a hack, but still readable -Dennis
+        try {
+            Files.list(Paths.get(USER_DEFINED_TEMPLATES_PATH)).forEach(p -> {
+                try {
+                    Files.deleteIfExists(p);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        primaryFallbackInterpreter = new FallbackMachine();
     }
 
 }
