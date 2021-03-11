@@ -34,10 +34,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -706,20 +705,60 @@ public class Main extends Application {
      */
     public void updateTime() {
 
-        wait(1000);
+        wait(980);
         currentDate = new Date();
         timeText.setText(time.format(currentDate));
 
-        time1 = CurrentTime.getTime("Europe", "Istanbul");
+        DateFormat formatterIstanbul = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneIstanbul = TimeZone.getTimeZone("GMT" + "+3");
+        Calendar calendarIstanbul = Calendar.getInstance(timezoneIstanbul);
+        formatterIstanbul.setCalendar(calendarIstanbul);
+        formatterIstanbul.setTimeZone(timezoneIstanbul);
+        time1 = formatterIstanbul.format(calendarIstanbul.getTime());
         timeText1.setText(time1);
-        time2 = CurrentTime.getTime("Asia", "Tokyo");
+
+        DateFormat formatterTokyo = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneTokyo = TimeZone.getTimeZone("GMT" + "+9");
+        Calendar calendarTokyo = Calendar.getInstance(timezoneTokyo);
+        formatterTokyo.setCalendar(calendarTokyo);
+        formatterTokyo.setTimeZone(timezoneTokyo);
+        time2 = formatterTokyo.format(calendarTokyo.getTime());
         timeText2.setText(time2);
-        time3 = CurrentTime.getTime("Australia", "Sydney");
+
+        DateFormat formatterSydney = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneSydney = TimeZone.getTimeZone("GMT" + "+11");
+        Calendar calendarSydney = Calendar.getInstance(timezoneSydney);
+        formatterSydney.setCalendar(calendarSydney);
+        formatterSydney.setTimeZone(timezoneSydney);
+        time3 = formatterSydney.format(calendarSydney.getTime());
         timeText3.setText(time3);
-        time4 = CurrentTime.getTime("Africa", "Khartoum");
+
+        DateFormat formatterKhartoum = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneKhartoum = TimeZone.getTimeZone("GMT" + "+2");
+        Calendar calendarKhartoum = Calendar.getInstance(timezoneKhartoum);
+        formatterKhartoum.setCalendar(calendarKhartoum);
+        formatterKhartoum.setTimeZone(timezoneKhartoum);
+        time4 = formatterKhartoum.format(calendarKhartoum.getTime());
         timeText4.setText(time4);
-        time5 = CurrentTime.getTime("America", "Jamaica");
+
+        DateFormat formatterJamaica = new SimpleDateFormat("hh:mm:ss");
+        TimeZone timezoneJamaica = TimeZone.getTimeZone("GMT" + "-5");
+        Calendar calendarJamaica = Calendar.getInstance(timezoneJamaica);
+        formatterJamaica.setCalendar(calendarJamaica);
+        formatterJamaica.setTimeZone(timezoneJamaica);
+        time5 = formatterJamaica.format(calendarJamaica.getTime());
         timeText5.setText(time5);
+
+//        time1 = CurrentTime.getTime("Europe", "Istanbul");
+//        timeText1.setText(time1);
+//        time2 = CurrentTime.getTime("Asia", "Tokyo");
+//        timeText2.setText(time2);
+//        time3 = CurrentTime.getTime("Australia", "Sydney");
+//        timeText3.setText(time3);
+//        time4 = CurrentTime.getTime("Africa", "Khartoum");
+//        timeText4.setText(time4);
+//        time5 = CurrentTime.getTime("America", "Jamaica");
+//        timeText5.setText(time5);
     }
 
     /**
