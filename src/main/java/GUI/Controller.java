@@ -378,7 +378,7 @@ public class Controller {
 
         Text target = window.target;
 
-        target.setOnDragExited(new EventHandler <DragEvent>() {
+        target.setOnDragEntered(new EventHandler <DragEvent>() {
             public void handle(DragEvent event) {
 
                 Dragboard db = event.getDragboard();
@@ -392,6 +392,14 @@ public class Controller {
                     System.out.println("This is not a text file");
                 }
                 target.setFill(Color.BLACK);
+                event.consume();
+            }
+        });
+
+        target.setOnDragExited(new EventHandler <DragEvent>() {
+            public void handle(DragEvent event) {
+
+                target.setFill(Color.WHITE);
                 event.consume();
             }
         });
