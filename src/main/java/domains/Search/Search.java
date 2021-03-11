@@ -31,8 +31,9 @@ public class Search {
         List<String> linkss = new ArrayList<>();
         for(Element link : links){
             String current  = link.text();
-            if(current.contains(" › ")){
+            if(current.contains(" › ") || current.contains(" > ")){
                 current = current.replaceAll(" › ", "/");
+                current = current.replaceAll(" > ", "/");
             }
             if(current.contains("...")){
                 current = current.replace("...", "");

@@ -18,7 +18,6 @@ public class SearchDomain extends Domain {
         addPattern("<search> <...>");
         addPattern("<look up> <...>");
         addPattern("<link number:> <param:int>");
-
         // Multiple patterns are supported
     }
     @Override
