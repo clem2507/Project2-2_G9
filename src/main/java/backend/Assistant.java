@@ -228,6 +228,7 @@ public class Assistant {
     synchronized public void forgetTemplates() {
 
         // A bit of a hack, but still readable -Dennis
+
         try {
             Files.list(Paths.get(USER_DEFINED_TEMPLATES_PATH)).forEach(p -> {
                 try {
