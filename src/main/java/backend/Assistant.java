@@ -6,6 +6,7 @@ import domains.FindMe;
 import domains.OpenApplication;
 import domains.Photo;
 import domains.SayThis;
+import domains.Search.SearchDomain;
 import domains.SmallTalk;
 import domains.FindWeather;
 import nlp.MatchedSequence;
@@ -39,6 +40,7 @@ public class Assistant {
         addDomain(new Leave());
         addDomain(new SmallTalk());
         addDomain(new Calendar());
+        addDomain(new SearchDomain());
     }
 
     /**
