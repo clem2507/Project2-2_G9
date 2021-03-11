@@ -1,6 +1,7 @@
 package domains.Search;
 
 import backend.*;
+import backend.common.OS.UnsupportedOSException;
 import nlp.MatchedSequence;
 
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class SearchDomain extends Domain {
                         System.out.println(line);
                         Search.open(line);
                     }
-                } catch (IOException e) {
+                } catch (IOException | UnsupportedOSException e) {
                     e.printStackTrace();
                 }
 
