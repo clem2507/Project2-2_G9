@@ -6,11 +6,11 @@ import domains.FindMe;
 import domains.OpenApplication;
 import domains.Photo;
 import domains.SayThis;
+import domains.Search.SearchDomain;
 import domains.SmallTalk;
 import domains.FindWeather;
 import nlp.MatchedSequence;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
@@ -43,6 +43,7 @@ public class Assistant {
         addDomain(new Leave());
         addDomain(new SmallTalk());
         addDomain(new Calendar());
+        addDomain(new SearchDomain());
 
         // Here we load user defined templates from previous sessions.
         try {
