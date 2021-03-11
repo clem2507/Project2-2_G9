@@ -219,4 +219,8 @@ public class Assistant {
 
     }
 
+    public void forgetTemplates() {
+
+    }
+
 }
