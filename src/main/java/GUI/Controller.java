@@ -260,6 +260,15 @@ public class Controller {
 
                 window.time5city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, window.time5cityFontSize/widthScale));
                 window.time5city.setTranslateX(window.time5cityX/widthScale);
+
+                window.quoteOutline.setWidth(window.quoteRectangleWidth/widthScale);
+                window.quoteOutline.setTranslateX(window.quoteRectangleX/widthScale);
+
+                window.quoteHeading.setFont(Font.font("Calibri", FontWeight.BOLD,  FontPosture.REGULAR, window.quoteOutlineFontSize/widthScale));
+                window.quoteHeading.setTranslateX(window.quoteX/widthScale);
+
+                window.quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, window.quoteFontSize/widthScale));
+                window.quote.setTranslateX(window.quoteX/widthScale);
             }
         });
 
@@ -355,6 +364,15 @@ public class Controller {
 
                 window.time5city.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, window.time5cityFontSize/heightScale));
                 window.time5city.setTranslateY(window.time5cityY/heightScale);
+
+                window.quoteOutline.setHeight(window.quoteRectangleHeight/heightScale);
+                window.quoteOutline.setTranslateY(window.quoteRectangleY/heightScale);
+
+                window.quoteHeading.setFont(Font.font("Calibri", FontWeight.BOLD,  FontPosture.REGULAR, window.quoteOutlineFontSize/heightScale));
+                window.quoteHeading.setTranslateY((window.quoteY-25)/heightScale);
+
+                window.quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, window.quoteFontSize/heightScale));
+                window.quote.setTranslateY(window.quoteY/heightScale);
             }
         });
 

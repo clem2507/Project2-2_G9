@@ -261,6 +261,12 @@ public class Main extends Application {
     int quoteX = quoteOutlineX + 10;
     int quoteY = quoteOutlineY + 50;
 
+    int quoteRectangleWidth = timezonesWidth;
+    int quoteRectangleHeightIndicator;
+    int quoteRectangleHeight = timezonesHeight;
+    int quoteRectangleX = quoteOutlineX;
+    int quoteRectangleY = quoteOutlineY;
+
     Date currentDate;
 
     SimpleDateFormat time;
@@ -276,6 +282,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        String quoteText = Quote.getQuote();
+        quoteText = processText(quoteText);
 
         //Default Background
         bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));
@@ -373,7 +382,7 @@ public class Main extends Application {
         city = "Maastricht";
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, weatherCityFontSize));
-        weatherWidgetWidth = findBestWidgetSize(city);
+        weatherWidgetWidth = findBestWeatherWidgetWidth(city);
         weatherWidget.setWidth(weatherWidgetWidth);
         weatherWidget.setHeight(weatherWidgetHeight);
         weatherCity.setTranslateX(weatherCityX);
@@ -581,6 +590,7 @@ public class Main extends Application {
         pane.getChildren().add(timeText5);
 
         dropFile = new Rectangle(dropFileWidth, dropFileHeight);
+        dropFileY+=quoteRectangleHeightIndicator*18;
         dropFile.setTranslateX(dropFileX);
         dropFile.setTranslateY(dropFileY);
         dropFile.setArcWidth(20);
@@ -591,15 +601,17 @@ public class Main extends Application {
         pane.getChildren().add(dropFile);
 
         target = new Text("DROP FILE HERE");
+        targetY+=quoteRectangleHeightIndicator*18;
         target.setTranslateX(targetX);
         target.setTranslateY(targetY);
         target.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, targetFontSize));
         target.setFill(Color.WHITE);
         pane.getChildren().add(target);
 
-        quoteOutline = new Rectangle(timezonesWidth, timezonesHeight);
-        quoteOutline.setTranslateX(quoteOutlineX);
-        quoteOutline.setTranslateY(quoteOutlineY );
+        quoteRectangleHeight+=quoteRectangleHeightIndicator*18;
+        quoteOutline = new Rectangle(quoteRectangleWidth, quoteRectangleHeight);
+        quoteOutline.setTranslateX(quoteRectangleX);
+        quoteOutline.setTranslateY(quoteRectangleY);
         quoteOutline.setArcWidth(20);
         quoteOutline.setArcHeight(20);
         quoteOutline.setStroke(Color.WHITESMOKE);
@@ -614,7 +626,6 @@ public class Main extends Application {
         quoteHeading.setFill(Color.WHITE);
         pane.getChildren().add(quoteHeading);
 
-        String quoteText = Quote.getQuote();
         quote = new Text(quoteText);
         quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, quoteFontSize));
         quote.setTranslateX(quoteX);
@@ -659,6 +670,7 @@ public class Main extends Application {
             }
         };
         tickTimer.start();
+
 
         primaryStage.setResizable(true);
         primaryStage.setTitle("Digital Assistant");
@@ -920,7 +932,7 @@ public class Main extends Application {
      * @param city where to find weather
      * @return size in pixels
      */
-    public double findBestWidgetSize(String city) {
+    public double findBestWeatherWidgetWidth(String city) {
 
         return (Math.sqrt(city.length())*50) - 5*(countCharsUsingRegex(city, 'i')+countCharsUsingRegex(city, 'I')
                 +countCharsUsingRegex(city, 'j')+countCharsUsingRegex(city, 'J')
@@ -928,6 +940,32 @@ public class Main extends Application {
                 +countCharsUsingRegex(city, 'f')+countCharsUsingRegex(city, 'F')
                 +countCharsUsingRegex(city, 'r')+countCharsUsingRegex(city, 'R')
                 +countCharsUsingRegex(city, 't')+countCharsUsingRegex(city, 'T'));
+    }
+
+    /**
+     * Method used to cut the quote text in different lines based on the length
+     * @param text current quote text
+     */
+    public String processText(String text) {
+
+        int cutSize = 55;
+        int count = 1;
+        quoteRectangleHeightIndicator = (int) Math.floor((double) text.length()/cutSize);
+        String newLine = "\n";
+        String newString = "";
+        if (quoteRectangleHeightIndicator > 0) {
+            for (int i = 0; i < text.length(); i++) {
+                newString += text.charAt(i);
+                if (i > (cutSize*count) && (text.charAt(i)==' ')) {
+                    newString+=newLine;
+                    count++;
+                }
+            }
+        }
+        else {
+            newString = text;
+        }
+        return newString;
     }
 
     /**
