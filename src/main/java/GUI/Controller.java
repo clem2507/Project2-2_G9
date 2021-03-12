@@ -22,6 +22,8 @@ public class Controller {
     private final Main window;
     private int historyCount = 0;
     Assistant assistant = new Assistant();
+    private double heightScale = 1;
+    private double widthScale = 1;
 
 
     /**
@@ -173,23 +175,19 @@ public class Controller {
         });
 
         window.editBgButton.setOnMouseEntered(event -> {
-            window.editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                    " -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+            adaptButtonStyle(window.editBgButton, "black", window.editBgButtonFontSize);
         });
 
         window.editBgButton.setOnMouseExited(event -> {
-            window.editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                    " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+            adaptButtonStyle(window.editBgButton, "white", window.editBgButtonFontSize);
         });
 
         window.emptyTemplate.setOnMouseEntered(event -> {
-            window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                    " -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+            adaptButtonStyle(window.emptyTemplate, "black", window.emptyTemplateFontSize);
         });
 
         window.emptyTemplate.setOnMouseExited(event -> {
-            window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                    " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+            adaptButtonStyle(window.emptyTemplate, "white", window.emptyTemplateFontSize);
         });
 
         window.scene.widthProperty().addListener(new ChangeListener<Number>() {
@@ -198,7 +196,7 @@ public class Controller {
 
                 window.iv.setFitWidth((Double) newSceneWidth);
 
-                double widthScale = (window.WINDOW_WIDTH / (double) newSceneWidth);
+                widthScale = (window.WINDOW_WIDTH / (double) newSceneWidth);
 
                 window.editBgButton.setPrefWidth(window.editBgButtonWidth/widthScale);
                 window.editBgButton.setTranslateX(window.editBgButtonX/widthScale);
@@ -310,7 +308,7 @@ public class Controller {
 
                 window.iv.setFitHeight((Double) newSceneHeight);
 
-                double heightScale = (window.WINDOW_HEIGHT / (double) newSceneHeight);
+                heightScale = (window.WINDOW_HEIGHT / (double) newSceneHeight);
 
                 window.editBgButton.setPrefHeight(window.editBgButtonHeight/heightScale);
                 window.editBgButton.setTranslateY(window.editBgButtonY/heightScale);
@@ -451,6 +449,7 @@ public class Controller {
                 assistant.forgetTemplates();
         });
     }
+
     private String getExtension(String fileName){
         String extension = "";
 
@@ -461,4 +460,17 @@ public class Controller {
         return extension;
     }
 
+    private void adaptButtonStyle(Button button, String color, int fontSize) {
+
+        if (widthScale > heightScale) {
+            String fontSizeStr = "-fx-font-size: " + fontSize/widthScale +"px;";
+            button.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                    " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+        }
+        else {
+            String fontSizeStr = "-fx-font-size: " + fontSize/heightScale +"px;";
+            button.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                    " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+        }
+    }
 }

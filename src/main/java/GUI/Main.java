@@ -103,6 +103,7 @@ public class Main extends Application {
     Text messageTime;
     Text weatherCity;
     Text weatherDegree;
+    Text target;
     Text quote;
     Text quoteHeading;
 
@@ -272,15 +273,13 @@ public class Main extends Application {
     int emptyTemplateX = dropFileX + 170;
     int emptyTemplateY = dropFileY;
 
-    int editBgButtonFontSize = 15;
+    int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
 
     Date currentDate;
 
     SimpleDateFormat time;
     SimpleDateFormat date;
-
-    Text target;
 
     Assistant assistant = new Assistant();
     BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
@@ -371,7 +370,7 @@ public class Main extends Application {
         editBgButton.setTranslateX(editBgButtonX);
         editBgButton.setTranslateY(editBgButtonY);
         editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
         imagesScrollPane.setTranslateX(imagesScrollPaneX);
         imagesScrollPane.setTranslateY(imagesScrollPaneY);
         pane.getChildren().add(editBgButton);
