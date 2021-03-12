@@ -1,5 +1,5 @@
 package backend;
 
 public enum MessageType {
-    STRING, IMAGE, EXIT
+    STRING, IMAGE, EXIT, HYPER_LINK
 }

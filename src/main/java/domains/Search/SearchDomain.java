@@ -35,10 +35,10 @@ public class SearchDomain extends Domain {
                         int count = 0;
                         for(String x: links){
 
-                            pushMessage(count +") "+x, MessageType.STRING);
+                            pushMessage(x, MessageType.HYPER_LINK);
                             count++;
                         }
-                        pushMessage("Please specify which link you want to visit by typing-> link number: <number>", MessageType.STRING);
+                        //pushMessage("Please specify which link you want to visit by typing-> link number: <number>", MessageType.STRING);
                     }
 
                     if(sequence.getStringAt(0).toLowerCase().contains("link number")){

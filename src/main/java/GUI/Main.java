@@ -9,10 +9,12 @@ import backend.common.WeatherObject;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -24,10 +26,8 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.awt.*;
 import java.io.File;
@@ -836,7 +836,7 @@ public class Main extends Application {
                 msgText.setTranslateX(50);
                 msgText.setTranslateY(msgTime.getTranslateY());
                 msgText.setFill(Color.WHITE);
-                if (prefix.equals("[User]: ")) {
+                if (!output.isBot()) {
                     messageHistory.add(output.getContent());
                 }
 
@@ -871,6 +871,24 @@ public class Main extends Application {
 
                 chatLayout.getChildren().addAll(msgTime, outputImage);
                 outputMessageHeight += outputImage.getImage().getHeight()*outputImage.getScaleY() + 5;
+            }
+
+            else if(output.getMessageType().equals(MessageType.HYPER_LINK)){ // If the message is a string
+                outputMessageHeight += 20;
+                Date currentDate = new Date();
+                Text msgTime = new Text(time.format(currentDate));
+                msgTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
+                msgTime.setTranslateY(outputMessageHeight);
+                msgTime.setFill(Color.BLACK);
+
+                Hyperlink link = new Hyperlink(output.getContent());
+                link.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 16));
+                link.setTranslateX(50);
+                link.setTranslateY(msgTime.getTranslateY() - 20);
+
+                link.setOnAction(t -> getHostServices().showDocument(link.getText()));
+
+                chatLayout.getChildren().addAll(msgTime, link);
             }
 
             else if (output.getMessageType().equals(MessageType.EXIT)) {

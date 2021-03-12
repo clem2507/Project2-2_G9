@@ -19,7 +19,7 @@ import java.util.List;
 
 public class Search {
 
-    public static ArrayList search(String keyword) throws IOException, UnsupportedOSException {
+    public static ArrayList<String> search(String keyword) throws IOException, UnsupportedOSException {
 
         String url = "http://www.google.com/search"+"?q="+keyword;
 
