@@ -63,6 +63,7 @@ public class Search {
         }
         writer.close();
 
+        noDuplicates.remove(noDuplicates.indexOf(keyword));
         return noDuplicates;
     }
 
@@ -83,6 +84,10 @@ public class Search {
 
     public static void googleSearch(String keyword) throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
+
+        if(keyword.contains(" ")){
+            keyword = keyword.replaceAll(" ", "-");
+        }
 
         if(os.indexOf("mac") >= 0){
             Runtime rt = Runtime.getRuntime();
