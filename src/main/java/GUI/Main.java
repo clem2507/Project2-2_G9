@@ -159,13 +159,13 @@ public class Main extends Application {
     int scrollPaneX = chatWindowX+2;
     int scrollPaneY = chatWindowY+2;
 
-    int robotViewerWidth = 200;
-    int robotViewerHeight = 220;
-    int robotViewerX = chatInputWindowX+750;
-    int robotViewerY = chatInputWindowY-110;
+    int robotViewerWidth = 170;
+    int robotViewerHeight = 200;
+    int robotViewerX = chatInputWindowX+730;
+    int robotViewerY = chatInputWindowY-90;
 
-    int robotInteractionViewerWidth = 150;
-    int robotInteractionViewerHeight = 100;
+    int robotInteractionViewerWidth = 130;
+    int robotInteractionViewerHeight = 85;
     int robotInteractionViewerX = robotViewerX-105;
     int robotInteractionViewerY = robotViewerY-55;
 
