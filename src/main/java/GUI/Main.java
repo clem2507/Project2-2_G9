@@ -281,6 +281,8 @@ public class Main extends Application {
     SimpleDateFormat time;
     SimpleDateFormat date;
 
+    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
     Assistant assistant = new Assistant();
     BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
     private int outputMessageHeight = 0;
@@ -386,7 +388,6 @@ public class Main extends Application {
         Stop[] stops = new Stop[] { new Stop(0, Color.SKYBLUE), new Stop(1, Color.WHITESMOKE)};
         LinearGradient lg = new LinearGradient(0, 0, 0, 2.5, true, CycleMethod.NO_CYCLE, stops);
         weatherWidget.setFill(lg);
-        //pane.getChildren().add(weatherWidget);
 
         // TODO: Change when submitting the project
         /**
@@ -509,7 +510,7 @@ public class Main extends Application {
 
         currentDate = new Date();
 
-        time = new SimpleDateFormat("hh:mm:ss");
+        time = new SimpleDateFormat("HH:mm:ss");
         timeText = new Text(time.format(currentDate));
         timeText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeTextFontSize));
         timeText.setTranslateX(timeTextX);
@@ -663,20 +664,6 @@ public class Main extends Application {
             exitProgram();
         });
 
-//        Thread mainThread = new Thread(() -> {
-//            while (true) {
-//                try {
-//                    tick(); // USED TO CALL UPDATETIME()
-//                } catch (InterruptedException e) {  // idk whx the exception but yeah
-//                    e.printStackTrace();
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//        mainThread.setDaemon(false);
-//        mainThread.start();
-
         // Here we start the tick() process - think of it as the main
         // loop.
         // NOTE: It is asynchronous but sill runs in the main thread.
@@ -695,7 +682,8 @@ public class Main extends Application {
         };
         tickTimer.start();
 
-
+        primaryStage.setMinWidth(700);
+        primaryStage.setMinHeight(450);
         primaryStage.setResizable(true);
         primaryStage.setTitle("Digital Assistant");
         primaryStage.setScene(scene);
@@ -704,88 +692,48 @@ public class Main extends Application {
     }
 
     /**
-     * Display the request and the answer in the chat
-     * @param text query
-     */
-    public void sendUserText(String text) {
-
-        currentDate = new Date();
-        messageTime = new Text(time.format(currentDate));
-        messageTime.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 12));
-        messageTime.setTranslateY(55*requestCounter);
-        messageTime.setFill(Color.BLACK);
-
-        userText = new Text("User: " + text);
-        userText.setFont(Font.font("Gadugi", FontWeight.BOLD,  FontPosture.REGULAR, 16));
-        userText.setTranslateX(50);
-        userText.setTranslateY(messageTime.getTranslateY()+2);
-        userText.setFill(Color.WHITE);
-
-        chatLayout.getChildren().addAll(messageTime, userText);
-    }
-
-    /**
-     *
      * Update the seconds for the time display
      */
-
-    // CONTENT GOT MOVED TO TICK()
     public void updateTime() {
 
         //wait(980);
         currentDate = new Date();
         timeText.setText(time.format(currentDate));
 
-        DateFormat formatterIstanbul = new SimpleDateFormat("hh:mm:ss");
         TimeZone timezoneIstanbul = TimeZone.getTimeZone("GMT" + "+3");
         Calendar calendarIstanbul = Calendar.getInstance(timezoneIstanbul);
-        formatterIstanbul.setCalendar(calendarIstanbul);
-        formatterIstanbul.setTimeZone(timezoneIstanbul);
-        time1 = formatterIstanbul.format(calendarIstanbul.getTime());
+        dateFormat.setCalendar(calendarIstanbul);
+        dateFormat.setTimeZone(timezoneIstanbul);
+        time1 = dateFormat.format(calendarIstanbul.getTime());
         timeText1.setText(time1);
 
-        DateFormat formatterTokyo = new SimpleDateFormat("hh:mm:ss");
         TimeZone timezoneTokyo = TimeZone.getTimeZone("GMT" + "+9");
         Calendar calendarTokyo = Calendar.getInstance(timezoneTokyo);
-        formatterTokyo.setCalendar(calendarTokyo);
-        formatterTokyo.setTimeZone(timezoneTokyo);
-        time2 = formatterTokyo.format(calendarTokyo.getTime());
+        dateFormat.setCalendar(calendarTokyo);
+        dateFormat.setTimeZone(timezoneTokyo);
+        time2 = dateFormat.format(calendarTokyo.getTime());
         timeText2.setText(time2);
 
-        DateFormat formatterSydney = new SimpleDateFormat("hh:mm:ss");
         TimeZone timezoneSydney = TimeZone.getTimeZone("GMT" + "+11");
         Calendar calendarSydney = Calendar.getInstance(timezoneSydney);
-        formatterSydney.setCalendar(calendarSydney);
-        formatterSydney.setTimeZone(timezoneSydney);
-        time3 = formatterSydney.format(calendarSydney.getTime());
+        dateFormat.setCalendar(calendarSydney);
+        dateFormat.setTimeZone(timezoneSydney);
+        time3 = dateFormat.format(calendarSydney.getTime());
         timeText3.setText(time3);
 
-        DateFormat formatterKhartoum = new SimpleDateFormat("hh:mm:ss");
         TimeZone timezoneKhartoum = TimeZone.getTimeZone("GMT" + "+2");
         Calendar calendarKhartoum = Calendar.getInstance(timezoneKhartoum);
-        formatterKhartoum.setCalendar(calendarKhartoum);
-        formatterKhartoum.setTimeZone(timezoneKhartoum);
-        time4 = formatterKhartoum.format(calendarKhartoum.getTime());
+        dateFormat.setCalendar(calendarKhartoum);
+        dateFormat.setTimeZone(timezoneKhartoum);
+        time4 = dateFormat.format(calendarKhartoum.getTime());
         timeText4.setText(time4);
 
-        DateFormat formatterJamaica = new SimpleDateFormat("hh:mm:ss");
         TimeZone timezoneJamaica = TimeZone.getTimeZone("GMT" + "-5");
         Calendar calendarJamaica = Calendar.getInstance(timezoneJamaica);
-        formatterJamaica.setCalendar(calendarJamaica);
-        formatterJamaica.setTimeZone(timezoneJamaica);
-        time5 = formatterJamaica.format(calendarJamaica.getTime());
+        dateFormat.setCalendar(calendarJamaica);
+        dateFormat.setTimeZone(timezoneJamaica);
+        time5 = dateFormat.format(calendarJamaica.getTime());
         timeText5.setText(time5);
-
-//        time1 = CurrentTime.getTime("Europe", "Istanbul");
-//        timeText1.setText(time1);
-//        time2 = CurrentTime.getTime("Asia", "Tokyo");
-//        timeText2.setText(time2);
-//        time3 = CurrentTime.getTime("Australia", "Sydney");
-//        timeText3.setText(time3);
-//        time4 = CurrentTime.getTime("Africa", "Khartoum");
-//        timeText4.setText(time4);
-//        time5 = CurrentTime.getTime("America", "Jamaica");
-//        timeText5.setText(time5);
     }
 
     /**
@@ -891,7 +839,7 @@ public class Main extends Application {
                 chatLayout.getChildren().addAll(msgTime, link);
             }
 
-            else if (output.getMessageType().equals(MessageType.EXIT)) {
+            else if (output.getMessageType().equals(MessageType.EXIT)) { // If the message ask to exit the program
                 exitProgram();
             }
         }
@@ -904,7 +852,6 @@ public class Main extends Application {
      * @throws InterruptedException
      */
     public void moveFromAssistantToQueue() throws InterruptedException {
-        //System.out.println("Moving message from assistant to queue");
         Optional<AssistantMessage> container = assistant.getOutputOrContinue(); // Get message or empty optional
 
         if(container.isPresent()){ // If there is a message

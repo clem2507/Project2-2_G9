@@ -21,7 +21,6 @@ public class Controller {
 
     private final Main window;
     private int historyCount = 0;
-    Assistant assistant = new Assistant();
     private double heightScale = 1;
     private double widthScale = 1;
 
@@ -48,21 +47,15 @@ public class Controller {
                     break;
                 case ENTER:
                     if (window.textField.getText().length() > 0) {
-                        //window.isAgentFree = false;
-                        //window.requestCounter++;
-                        //window.sendUserText(window.textField.getText());
                         window.robotInteractionText.setText("...");
-
                         try {
                             window.pushMessageOrWait(new ConsoleOutput(window.textField.getText(), true, MessageType.STRING));
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-
                         window.assistant.processQuery(window.textField.getText());
                         window.textField.setText("");
                         historyCount = window.messageHistory.size()+1;
-                        //window.createThread();
                     }
                     break;
             }
@@ -95,7 +88,7 @@ public class Controller {
             }
         });
 
-        // automatic scroll down
+        // automatic chat scroll down
         window.chatLayout.getChildren().addListener(
                 (ListChangeListener.Change<? extends Node> c) -> {
                     window.chatLayout.layout();
@@ -192,7 +185,6 @@ public class Controller {
 
         window.scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                //System.out.println("Width: " + newSceneWidth);
 
                 window.iv.setFitWidth((Double) newSceneWidth);
 
@@ -304,7 +296,6 @@ public class Controller {
 
         window.scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                //System.out.println("Height: " + newSceneHeight);
 
                 window.iv.setFitHeight((Double) newSceneHeight);
 
@@ -446,7 +437,7 @@ public class Controller {
         Button clearTemplate = window.emptyTemplate;
 
         clearTemplate.setOnAction(actionEvent ->  {
-                assistant.forgetTemplates();
+                window.assistant.forgetTemplates();
         });
     }
 
