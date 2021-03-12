@@ -4,8 +4,10 @@ import backend.Assistant;
 import backend.AssistantMessage;
 import backend.MessageType;
 import backend.common.CurrentTime;
+import backend.common.OS.UnsupportedOSException;
 import backend.common.Quote;
 import backend.common.WeatherObject;
+import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -833,7 +835,16 @@ public class Main extends Application {
                 link.setTranslateX(50);
                 link.setTranslateY(msgTime.getTranslateY() - 20);
 
-                link.setOnAction(t -> getHostServices().showDocument(link.getText()));
+
+                link.setOnAction(t -> {
+                    try {
+                        Search.open(link.getText());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedOSException e) {
+                        e.printStackTrace();
+                    }
+                });
 
                 chatLayout.getChildren().addAll(msgTime, link);
             }
