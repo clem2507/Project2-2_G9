@@ -1,7 +1,5 @@
 package nlp.cfg.parsing;
 
-import nlp.Pattern;
-
 import java.util.ArrayList;
 import java.util.List;
 

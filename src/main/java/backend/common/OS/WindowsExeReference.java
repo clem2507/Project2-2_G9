@@ -1,8 +1,5 @@
 package backend.common.OS;
 
-import backend.common.JaroWinklerScore;
-import nlp.Tokenizer;
-
 import java.io.File;
 import java.io.IOException;
 

@@ -1,8 +1,6 @@
 package backend;
 
 import nlp.MatchedSequence;
-import nlp.NLPError;
-import nlp.Pattern;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

@@ -8,7 +8,7 @@ import java.util.*;
  * and the second term is a list of tokens (i.e. [slot, tokens]).
  */
 public class MatchedSequence extends ArrayList<Map.Entry<Slot, List<String>>> {
-    private String pattern, query;
+    private final String pattern, query;
 
     public MatchedSequence(String pattern, String query){
         super();

@@ -26,7 +26,7 @@ public class Pattern {
 
     private static List<String> groupByContent(List<String> pattern) throws NLPError {
         List<String> contents = new ArrayList<>(); // List of tokens put together as either delimiters or contents
-        String accumulator = ""; // Current content
+        StringBuilder accumulator = new StringBuilder(); // Current content
         int openSlots = 0; // This is to keep track of misplaced '<' and '>'
 
         for(String t : pattern){ // Iterate over tokens
@@ -41,9 +41,9 @@ public class Pattern {
                     openSlots--;
                 }
 
-                if(!accumulator.isEmpty()){ // If there is a content being parsed
-                    contents.add(accumulator.trim().toLowerCase()); // Add it to the list
-                    accumulator = ""; // Then start over with the remaining set of tokens
+                if(accumulator.length() > 0){ // If there is a content being parsed
+                    contents.add(accumulator.toString().trim().toLowerCase()); // Add it to the list
+                    accumulator = new StringBuilder(); // Then start over with the remaining set of tokens
                 }
 
                 contents.add(t); // Add delimiter to the list
@@ -51,7 +51,7 @@ public class Pattern {
 
             else{
                 // TODO: The accumulator could be replaced with a StringBuilder for better performance
-                accumulator += t + " "; // Accumulate token
+                accumulator.append(t).append(" "); // Accumulate token
             }
 
         }
@@ -93,6 +93,7 @@ public class Pattern {
             }
 
             else if(!t.equals(",")){ // If the token is a conjunction clause ','
+                assert slot != null;
                 slot.add(t); // Att token to the working set
             }
 

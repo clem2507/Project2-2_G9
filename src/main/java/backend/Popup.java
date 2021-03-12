@@ -2,7 +2,6 @@ package backend;
 
 import javax.swing.*;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class Popup {
     private static final String DEFAULT_TITLE = "DKE Assistant";

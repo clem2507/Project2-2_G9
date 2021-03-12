@@ -47,12 +47,12 @@ public class Tokenizer {
     }
 
     public static String asString(final List<String> tokens){
-        String out = "";
+        StringBuilder out = new StringBuilder();
 
         for(String t : tokens)
-            out += t + " ";
+            out.append(t).append(" ");
 
-        return out.trim();
+        return out.toString().trim();
     }
 
     public static String normalize(String text){

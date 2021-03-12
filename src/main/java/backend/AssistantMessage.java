@@ -8,11 +8,11 @@ import java.util.Optional;
  * NOTE: Domains do not generate messages
  */
 public class AssistantMessage {
-    private final Optional<Domain> sender;
+    private final Domain sender;
     private final String message;
     private final MessageType messageType;
 
-    public AssistantMessage(final Optional<Domain> sender, final String message, final MessageType messageType){
+    public AssistantMessage(final Domain sender, final String message, final MessageType messageType){
         this.sender = sender;
         this.message = message;
         this.messageType = messageType;
@@ -26,7 +26,7 @@ public class AssistantMessage {
      * @return reference to a skill
      */
     public Optional<Domain> getSender(){
-        return sender;
+        return Optional.ofNullable(sender);
     }
 
     /**

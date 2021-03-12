@@ -1,12 +1,10 @@
 package backend;
 
 import nlp.MatchedSequence;
-import nlp.Pattern;
 import nlp.PatternMatcher;
 
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
-import java.util.stream.Collectors;
 
 public abstract class Domain {
     private final DomainNames uniqueName;
@@ -19,10 +17,6 @@ public abstract class Domain {
 
     public void addPattern(String newPattern){
         patterns.add(newPattern);
-    }
-
-    public List<String> getPatterns(){
-        return new ArrayList<>(patterns);
     }
 
     public MatchedSequence matchQuery(String query){

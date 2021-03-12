@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
  * new context-free grammar parser.
  */
 public class StringTokenizer {
-    private static char[] SYMBOLS = new char[]{
+    private static final char[] SYMBOLS = new char[]{
             '.', ',', '/', '\\', '!', '?', '+', '-', '*', '^', '(', ')'
     };
 
-    private static char[] ALPHABET = ("abcdefghijklmnopqrstuvwxyz".toUpperCase() + "abcdefghijklmnopqrstuvwxyz")
+    private static final char[] ALPHABET = ("abcdefghijklmnopqrstuvwxyz".toUpperCase() + "abcdefghijklmnopqrstuvwxyz")
             .toCharArray();
 
-    private static char[] DIGITS = "0123456789".toCharArray();
+    private static final char[] DIGITS = "0123456789".toCharArray();
 
-    private static char[] WHITESPACES = new char[]{
+    private static final char[] WHITESPACES = new char[]{
             ' ', '\t', '\n'
     };
 
@@ -68,7 +68,7 @@ public class StringTokenizer {
     }
 
     private static String getNextWord(final List<Character> seq) throws NLPError {
-        String output = "";
+        StringBuilder output = new StringBuilder();
 
         while (!seq.isEmpty()) {
             char currentChar = seq.get(0);
@@ -76,15 +76,15 @@ public class StringTokenizer {
 
             if(!type.equals(CharType.WHITESPACE) && !type.equals(CharType.SEPARATOR)) {
                 char chr = seq.get(0); seq.remove(0);
-                output += chr;
+                output.append(chr);
                 continue;
             }
 
             break;
         }
 
-        assert !output.isEmpty();
-        return output;
+        assert output.length() > 0;
+        return output.toString();
     }
 
     private static String getNextPunctuation(final List<Character> seq) throws NLPError {
@@ -96,8 +96,7 @@ public class StringTokenizer {
     }
 
     private static String getNextNumber(final List<Character> seq) throws NLPError {
-        String output = "";
-        boolean dotFound = false;
+        StringBuilder output = new StringBuilder();
 
         while (!seq.isEmpty()) {
             char currentChar = seq.get(0);
@@ -105,21 +104,21 @@ public class StringTokenizer {
 
             if(type.equals(CharType.DIGIT)) {
                 seq.remove(0);
-                output += currentChar;
+                output.append(currentChar);
                 continue;
             }
 
             if(currentChar == '.' && seq.size() >= 2 && getCharType(seq.get(1)).equals(CharType.DIGIT)) {
                 seq.remove(0);
-                output += currentChar;
+                output.append(currentChar);
                 continue;
             }
 
             break;
         }
 
-        assert !output.isEmpty();
-        return output;
+        assert output.length() > 0;
+        return output.toString();
     }
 
     /**

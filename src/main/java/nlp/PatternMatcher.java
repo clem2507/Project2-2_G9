@@ -91,7 +91,7 @@ public class PatternMatcher {
             else if(Pattern.getSlotType(slot).equals(Pattern.SlotType.BLANK)){ // If slot is BLANK
                 int limit = Pattern.getBlankSlotParameter(slot); // Read the blank slot's parameter
                 // NOTE: The limit is bounded to be [1, Integer.MAX_VALUE/2]. If <...> or <#:n> where n < 1, then
-                // limit = Integer.MAX_VALUE/2 (this is akin to saying limit = +infinity - We devide by 2 to prevent
+                // limit = Integer.MAX_VALUE/2 (this is akin to saying limit = +infinity - We divide by 2 to prevent
                 // integer overflow when doing calculations with -limit-)
                 Slot nextSlot = slot_i < slots.size() - 1? slots.get(slot_i + 1):null; // Get the next slot
                 // NOTE: IF there is not next slot, then we assign null
@@ -165,7 +165,7 @@ public class PatternMatcher {
             }
 
             else{
-                throw new NLPError("Undefined slot type in position " + Integer.toString(slot_i));
+                throw new NLPError("Undefined slot type in position " + slot_i);
             }
 
         }
