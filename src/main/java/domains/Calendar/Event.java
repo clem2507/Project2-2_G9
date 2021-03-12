@@ -86,6 +86,22 @@ public class Event {
     }
 
     /**
+     *
+     * @param time
+     * @return
+     */
+    public boolean getBlockOutput(int time)
+    {
+        if(time == -1)
+            return true;
+
+        if(time >= startTime.getMinutes() && time<= endTime.getMinutes())
+            return true;
+        else
+            return false;
+    }
+
+    /**
      * Return a string of the event
      * @return
      */

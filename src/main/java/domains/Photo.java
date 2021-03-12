@@ -142,12 +142,12 @@ public class Photo extends Domain {
                     File outputImage = new File(imagePath);
                     ImageIO.write(image, "png", outputImage);
                     System.out.println(System.getenv("JAVA_HOME"));
-                } catch (UnsatisfiedLinkError | Exception e) {
+                } catch (UnsatisfiedLinkError | IOException e) {
 
                     if(System.getProperty("os.name").startsWith("Windows"))
                     {
 
-                        String javaPath = "C:\\Users\\aless\\.jdks\\openjdk-14.0.2\\bin";
+                        String javaPath = Popup.userInput("Please insert the path your jdk directory inside the bin folder:").get();
                         System.out.println("Updating Lib + -" + javaPath);
                         File nativeLib = new File("lib/opencv/opencv_java430.dll");
                         File nativeLibToHome = new File(javaPath + "/opencv_java430.dll");
@@ -160,11 +160,12 @@ public class Photo extends Domain {
                     }
                     else
                     {
-                        pushMessage("Please open the build framework file inside the libraries folder", MessageType.STRING);
+                        pushMessage("Yeah, macOS still does not work...", MessageType.STRING);
                     }
 
 
-                    pushMessage("Libraries error please try again.", MessageType.STRING);
+                    pushMessage("Error " + e, MessageType.STRING);
+                    pushMessage("Try again", MessageType.STRING);
                     return;
                 }
 
