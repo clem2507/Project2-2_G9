@@ -138,9 +138,9 @@ public class Main extends Application {
     int imagesScrollPaneX = editBgButtonX-55;
     int imagesScrollPaneY = editBgButtonY+40;
 
-    int chatWindowWidth = 650;
+    int chatWindowWidth = 600;
     int chatWindowHeight = 550;
-    int chatWindowX = (int) ((WINDOW_WIDTH/2)-(chatWindowWidth/2))+50;
+    int chatWindowX = (int) ((WINDOW_WIDTH/2)-(chatWindowWidth/2))+100;
     int chatWindowY = 90;
 
     int chatInputWindowWidth = chatWindowWidth;
@@ -148,7 +148,7 @@ public class Main extends Application {
     int chatInputWindowX = chatWindowX;
     int chatInputWindowY = chatWindowHeight+chatWindowY;
 
-    int textFieldWidth = 550;
+    int textFieldWidth = 500;
     int textFieldHeight = 40;
     int textFieldFontSize = 16;
     int textFieldX = chatInputWindowX+45;
@@ -161,7 +161,7 @@ public class Main extends Application {
 
     int robotViewerWidth = 200;
     int robotViewerHeight = 220;
-    int robotViewerX = chatInputWindowX+825;
+    int robotViewerX = chatInputWindowX+750;
     int robotViewerY = chatInputWindowY-110;
 
     int robotInteractionViewerWidth = 150;
