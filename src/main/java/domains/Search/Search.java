@@ -40,7 +40,7 @@ public class Search {
                         current = current.replaceAll(" "+current.charAt(i)+" ", "/");
                     }
                 }
-            }else if(CurrentOS.getOperatingSystem() == OSName.WINDOWS) {
+            }else if(CurrentOS.getOperatingSystem() == OSName.MAC) {
                 if(current.contains(" › ")){
                     current = current.replaceAll(" › ", "/");
                 }
