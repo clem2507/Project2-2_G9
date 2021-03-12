@@ -172,6 +172,26 @@ public class Controller {
             }
         });
 
+        window.editBgButton.setOnMouseEntered(event -> {
+            window.editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                    " -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+        });
+
+        window.editBgButton.setOnMouseExited(event -> {
+            window.editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                    " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+        });
+
+        window.emptyTemplate.setOnMouseEntered(event -> {
+            window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                    " -fx-text-fill: black; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+        });
+
+        window.emptyTemplate.setOnMouseExited(event -> {
+            window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                    " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+        });
+
         window.scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
                 //System.out.println("Width: " + newSceneWidth);
@@ -182,6 +202,9 @@ public class Controller {
 
                 window.editBgButton.setPrefWidth(window.editBgButtonWidth/widthScale);
                 window.editBgButton.setTranslateX(window.editBgButtonX/widthScale);
+                String editBgButtonFontSizeStr = "-fx-font-size: " + window.emptyTemplateFontSize/widthScale +"px;";
+                window.editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + editBgButtonFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
 
                 window.imagesScrollPane.setPrefWidth(window.imagesScrollPaneWidth/widthScale);
                 window.imagesScrollPane.setTranslateX(window.imagesScrollPaneX/widthScale);
@@ -272,6 +295,12 @@ public class Controller {
 
                 window.quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, window.quoteFontSize/widthScale));
                 window.quote.setTranslateX(window.quoteX/widthScale);
+
+                window.emptyTemplate.setPrefWidth(window.emptyTemplateWidth/widthScale);
+                window.emptyTemplate.setTranslateX(window.emptyTemplateX/widthScale);
+                String emptyTemplateFontSizeStr = "-fx-font-size: " + window.emptyTemplateFontSize/widthScale +"px;";
+                window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
             }
         });
 
@@ -285,6 +314,9 @@ public class Controller {
 
                 window.editBgButton.setPrefHeight(window.editBgButtonHeight/heightScale);
                 window.editBgButton.setTranslateY(window.editBgButtonY/heightScale);
+                String editBgButtonFontSizeStr = "-fx-font-size: " + window.editBgButtonFontSize/heightScale +"px;";
+                window.editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + editBgButtonFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
 
                 window.imagesScrollPane.setPrefHeight(window.imagesScrollPaneHeight/heightScale);
                 window.imagesScrollPane.setTranslateY(window.imagesScrollPaneY/heightScale);
@@ -376,6 +408,12 @@ public class Controller {
 
                 window.quote.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, window.quoteFontSize/heightScale));
                 window.quote.setTranslateY(window.quoteY/heightScale);
+
+                window.emptyTemplate.setPrefHeight(window.emptyTemplateHeight/heightScale);
+                window.emptyTemplate.setTranslateY(window.emptyTemplateY/heightScale);
+                String emptyTemplateFontSizeStr = "-fx-font-size: " + window.emptyTemplateFontSize/heightScale +"px;";
+                window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
             }
         });
 

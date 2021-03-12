@@ -249,9 +249,9 @@ public class Main extends Application {
     int dropFileX = 30;
     int dropFileY = 440;
 
-    int targetFontSize = 17;
-    int targetX = dropFileX+10;
-    int targetY = dropFileY+22;
+    int targetFontSize = 15;
+    int targetX = dropFileX+18;
+    int targetY = dropFileY+23;
 
     int quoteOutlineFontSize = 19;
     int quoteOutlineX = 30;
@@ -267,10 +267,13 @@ public class Main extends Application {
     int quoteRectangleX = quoteOutlineX;
     int quoteRectangleY = quoteOutlineY;
 
-    int emptyTemplateWidth = 130;
-    int emptyTemplateHeight = 30;
+    int emptyTemplateWidth = 160;
+    int emptyTemplateHeight = dropFileHeight;
     int emptyTemplateX = dropFileX + 170;
-    int emptyTemplateY = 440;
+    int emptyTemplateY = dropFileY;
+
+    int editBgButtonFontSize = 15;
+    int emptyTemplateFontSize = 15;
 
     Date currentDate;
 
@@ -352,13 +355,14 @@ public class Main extends Application {
         imagesScrollPane.setFitToHeight(true);
         imagesScrollPane.setFitToWidth(true);
 
-        emptyTemplate = new Button("Clear Templates");
+        emptyTemplate = new Button("CLEAR TEMPLATES");
+        emptyTemplateY+=quoteRectangleHeightIndicator*18;
         emptyTemplate.setPrefWidth(emptyTemplateWidth);
         emptyTemplate.setPrefHeight(emptyTemplateHeight);
         emptyTemplate.setTranslateX(emptyTemplateX);
         emptyTemplate.setTranslateY(emptyTemplateY);
         emptyTemplate.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 12;");
+                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
         pane.getChildren().add(emptyTemplate);
 
         editBgButton = new Button("Edit Background");
@@ -367,7 +371,7 @@ public class Main extends Application {
         editBgButton.setTranslateX(editBgButtonX);
         editBgButton.setTranslateY(editBgButtonY);
         editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 12; ");
+                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
         imagesScrollPane.setTranslateX(imagesScrollPaneX);
         imagesScrollPane.setTranslateY(imagesScrollPaneY);
         pane.getChildren().add(editBgButton);
@@ -534,7 +538,7 @@ public class Main extends Application {
         timezones.setFill(lg1);
         pane.getChildren().add(timezones);
 
-        time1 = CurrentTime.getTime("Europe", "Istanbul");
+        time1 = "";
         timeText1 = new Text(time1);
         timeText1.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText1FontSize));
         timeText1.setTranslateX(timeText1X);
@@ -548,7 +552,7 @@ public class Main extends Application {
         pane.getChildren().add(time1city);
         pane.getChildren().add(timeText1);
 
-        time2 = CurrentTime.getTime("Asia", "Tokyo");
+        time2 = "";
         timeText2 = new Text(time2);
         timeText2.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText2FontSize));
         timeText2.setTranslateX(timeText2X);
@@ -562,7 +566,7 @@ public class Main extends Application {
         pane.getChildren().add(time2city);
         pane.getChildren().add(timeText2);
 
-        time3 = CurrentTime.getTime("Australia", "Sydney");
+        time3 = "";
         timeText3 = new Text(time3);
         timeText3.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText3FontSize));
         timeText3.setTranslateX(timeText3X);
@@ -576,7 +580,7 @@ public class Main extends Application {
         pane.getChildren().add(timeText3);
         pane.getChildren().add(time3city);
 
-        time4 = CurrentTime.getTime("Africa", "Khartoum");
+        time4 = "";
         timeText4 = new Text(time4);
         timeText4.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText4FontSize));
         timeText4.setTranslateX(timeText4X);
@@ -590,7 +594,7 @@ public class Main extends Application {
         pane.getChildren().add(time4city);
         pane.getChildren().add(timeText4);
 
-        time5 = CurrentTime.getTime("America", "Jamaica");
+        time5 = "";
         timeText5 = new Text(time5);
         timeText5.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeText5FontSize));
         timeText5.setTranslateX(timeText5X);
@@ -660,19 +664,19 @@ public class Main extends Application {
             exitProgram();
         });
 
-        Thread mainThread = new Thread(() -> {
-            while (true) {
-                try {
-                    tick(); // USED TO CALL UPDATETIME()
-                } catch (InterruptedException e) {  // idk whx the exception but yeah
-                    e.printStackTrace();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mainThread.setDaemon(false);
-        mainThread.start();
+//        Thread mainThread = new Thread(() -> {
+//            while (true) {
+//                try {
+//                    tick(); // USED TO CALL UPDATETIME()
+//                } catch (InterruptedException e) {  // idk whx the exception but yeah
+//                    e.printStackTrace();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        mainThread.setDaemon(false);
+//        mainThread.start();
 
         // Here we start the tick() process - think of it as the main
         // loop.
@@ -729,7 +733,7 @@ public class Main extends Application {
     // CONTENT GOT MOVED TO TICK()
     public void updateTime() {
 
-        wait(980);
+        //wait(980);
         currentDate = new Date();
         timeText.setText(time.format(currentDate));
 
@@ -902,60 +906,7 @@ public class Main extends Application {
         // Since both cases are expected to be avoided (if we code carefully), I do not see a reason to
         // work around them. In other words, they are very very unlikely to happen, so let them be.
 
-        wait(980);
-        currentDate = new Date();
-        timeText.setText(time.format(currentDate));
-
-        DateFormat formatterIstanbul = new SimpleDateFormat("hh:mm:ss");
-        TimeZone timezoneIstanbul = TimeZone.getTimeZone("GMT" + "+3");
-        Calendar calendarIstanbul = Calendar.getInstance(timezoneIstanbul);
-        formatterIstanbul.setCalendar(calendarIstanbul);
-        formatterIstanbul.setTimeZone(timezoneIstanbul);
-        time1 = formatterIstanbul.format(calendarIstanbul.getTime());
-        timeText1.setText(time1);
-
-        DateFormat formatterTokyo = new SimpleDateFormat("hh:mm:ss");
-        TimeZone timezoneTokyo = TimeZone.getTimeZone("GMT" + "+9");
-        Calendar calendarTokyo = Calendar.getInstance(timezoneTokyo);
-        formatterTokyo.setCalendar(calendarTokyo);
-        formatterTokyo.setTimeZone(timezoneTokyo);
-        time2 = formatterTokyo.format(calendarTokyo.getTime());
-        timeText2.setText(time2);
-
-        DateFormat formatterSydney = new SimpleDateFormat("hh:mm:ss");
-        TimeZone timezoneSydney = TimeZone.getTimeZone("GMT" + "+11");
-        Calendar calendarSydney = Calendar.getInstance(timezoneSydney);
-        formatterSydney.setCalendar(calendarSydney);
-        formatterSydney.setTimeZone(timezoneSydney);
-        time3 = formatterSydney.format(calendarSydney.getTime());
-        timeText3.setText(time3);
-
-        DateFormat formatterKhartoum = new SimpleDateFormat("hh:mm:ss");
-        TimeZone timezoneKhartoum = TimeZone.getTimeZone("GMT" + "+2");
-        Calendar calendarKhartoum = Calendar.getInstance(timezoneKhartoum);
-        formatterKhartoum.setCalendar(calendarKhartoum);
-        formatterKhartoum.setTimeZone(timezoneKhartoum);
-        time4 = formatterKhartoum.format(calendarKhartoum.getTime());
-        timeText4.setText(time4);
-
-        DateFormat formatterJamaica = new SimpleDateFormat("hh:mm:ss");
-        TimeZone timezoneJamaica = TimeZone.getTimeZone("GMT" + "-5");
-        Calendar calendarJamaica = Calendar.getInstance(timezoneJamaica);
-        formatterJamaica.setCalendar(calendarJamaica);
-        formatterJamaica.setTimeZone(timezoneJamaica);
-        time5 = formatterJamaica.format(calendarJamaica.getTime());
-        timeText5.setText(time5);
-
-//        time1 = CurrentTime.getTime("Europe", "Istanbul");
-//        timeText1.setText(time1);
-//        time2 = CurrentTime.getTime("Asia", "Tokyo");
-//        timeText2.setText(time2);
-//        time3 = CurrentTime.getTime("Australia", "Sydney");
-//        timeText3.setText(time3);
-//        time4 = CurrentTime.getTime("Africa", "Khartoum");
-//        timeText4.setText(time4);
-//        time5 = CurrentTime.getTime("America", "Jamaica");
-//        timeText5.setText(time5);
+        updateTime();
     }
 
     public void createThread() {
