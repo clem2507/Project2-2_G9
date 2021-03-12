@@ -36,7 +36,7 @@ public class SearchDomain extends Domain {
                         for(String x: links){
                             pushMessage(x, MessageType.HYPER_LINK);
                         }
-                        pushMessage("If you would like to open google for more choices, type 'Open Google'", MessageType.STRING);
+                        pushMessage("For more choices, type 'Open Google'", MessageType.STRING);
                     }
                     if(sequence.getStringAt(0).toLowerCase().contains("open google") || sequence.getStringAt(0).toLowerCase().contains("look up")){
                         Search.googleSearch(Files.readAllLines(Paths.get("output.txt")).get(0));
