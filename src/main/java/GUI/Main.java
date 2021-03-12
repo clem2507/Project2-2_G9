@@ -171,9 +171,9 @@ public class Main extends Application {
     int robotInteractionViewerX = robotViewerX-105;
     int robotInteractionViewerY = robotViewerY-55;
 
-    int robotInteractionTextFontSize = 15;
+    int robotInteractionTextFontSize = 12;
     int robotInteractionTextX = robotInteractionViewerX+20;
-    int robotInteractionTextY = robotInteractionViewerY+30;
+    int robotInteractionTextY = robotInteractionViewerY+27;
 
     double weatherWidgetWidth;
     int weatherWidgetHeight = 80;
@@ -503,7 +503,7 @@ public class Main extends Application {
         pane.getChildren().add(robotInteractionViewer);
 
         robotInteractionText = new Text("Hi DKE student,\nhow can I help?");
-        robotInteractionText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, robotInteractionTextFontSize));
+        robotInteractionText.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, robotInteractionTextFontSize));
         robotInteractionText.setTranslateX(robotInteractionTextX);
         robotInteractionText.setTranslateY(robotInteractionTextY);
         robotInteractionText.setFill(Color.BLACK);
