@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+// IMPORTANT: We don't use this anywhere. Do we need it? -Dennis
 public class CurrentTime {
     public static String getTime(String continent, String city) {
         String urlString = "http://worldtimeapi.org/api/timezone/"+continent+"/"+city;
@@ -39,6 +40,7 @@ public class CurrentTime {
         }
         return time;
     }
+
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;

@@ -22,7 +22,17 @@ public class Calendar extends Domain {
         addPattern("<reset calendar>");
         addPattern("<help calendar>");
 
+        // Patterns for the calendar -Dennis
+        String base = "<schedule, agenda, things to do, events, chores, tasks> <#:1>";
 
+        // i.e. "schedule for monday" (schedule for the nearest incoming monday
+        addPattern(base + " <param:day>");
+
+        // i.e. "agenda for today" (schedule for this current day)
+        addPattern(base + " <today, now, this day>");
+
+        // i.e. "things to do on 12/03/2021" (schedule for a specific date)
+        addPattern(base + " <param:int> <\\, /> <param:int> <\\, /> <param:int>");
     }
     @Override
     public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
