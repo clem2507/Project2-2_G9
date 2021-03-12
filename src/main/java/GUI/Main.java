@@ -100,7 +100,6 @@ public class Main extends Application {
     Text userText;
     Text botText;
     Text robotInteractionText;
-    Text messageTime;
     Text weatherCity;
     Text weatherDegree;
     Text target;
@@ -139,17 +138,17 @@ public class Main extends Application {
     int imagesScrollPaneX = editBgButtonX-55;
     int imagesScrollPaneY = editBgButtonY+40;
 
-    int chatWindowWidth = 700;
-    int chatWindowHeight = 500;
-    int chatWindowX = 490;
+    int chatWindowWidth = 650;
+    int chatWindowHeight = 550;
+    int chatWindowX = (int) ((WINDOW_WIDTH/2)-(chatWindowWidth/2))+50;
     int chatWindowY = 90;
 
-    int chatInputWindowWidth = 700;
+    int chatInputWindowWidth = chatWindowWidth;
     int chatInputWindowHeight = 100;
     int chatInputWindowX = chatWindowX;
     int chatInputWindowY = chatWindowHeight+chatWindowY;
 
-    int textFieldWidth = 600;
+    int textFieldWidth = 550;
     int textFieldHeight = 40;
     int textFieldFontSize = 16;
     int textFieldX = chatInputWindowX+45;
@@ -363,7 +362,7 @@ public class Main extends Application {
         emptyTemplate.setTranslateX(emptyTemplateX);
         emptyTemplate.setTranslateY(emptyTemplateY);
         emptyTemplate.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 15px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; ");
         pane.getChildren().add(emptyTemplate);
 
         editBgButton = new Button("Edit Background");
@@ -372,7 +371,7 @@ public class Main extends Application {
         editBgButton.setTranslateX(editBgButtonX);
         editBgButton.setTranslateY(editBgButtonY);
         editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; ");
         imagesScrollPane.setTranslateX(imagesScrollPaneX);
         imagesScrollPane.setTranslateY(imagesScrollPaneY);
         pane.getChildren().add(editBgButton);

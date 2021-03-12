@@ -194,7 +194,7 @@ public class Controller {
                 window.editBgButton.setTranslateX(window.editBgButtonX/widthScale);
                 String editBgButtonFontSizeStr = "-fx-font-size: " + window.emptyTemplateFontSize/widthScale +"px;";
                 window.editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + editBgButtonFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + editBgButtonFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
 
                 window.imagesScrollPane.setPrefWidth(window.imagesScrollPaneWidth/widthScale);
                 window.imagesScrollPane.setTranslateX(window.imagesScrollPaneX/widthScale);
@@ -290,7 +290,7 @@ public class Controller {
                 window.emptyTemplate.setTranslateX(window.emptyTemplateX/widthScale);
                 String emptyTemplateFontSizeStr = "-fx-font-size: " + window.emptyTemplateFontSize/widthScale +"px;";
                 window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
             }
         });
 
@@ -305,7 +305,7 @@ public class Controller {
                 window.editBgButton.setTranslateY(window.editBgButtonY/heightScale);
                 String editBgButtonFontSizeStr = "-fx-font-size: " + window.editBgButtonFontSize/heightScale +"px;";
                 window.editBgButton.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + editBgButtonFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + editBgButtonFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
 
                 window.imagesScrollPane.setPrefHeight(window.imagesScrollPaneHeight/heightScale);
                 window.imagesScrollPane.setTranslateY(window.imagesScrollPaneY/heightScale);
@@ -402,7 +402,7 @@ public class Controller {
                 window.emptyTemplate.setTranslateY(window.emptyTemplateY/heightScale);
                 String emptyTemplateFontSizeStr = "-fx-font-size: " + window.emptyTemplateFontSize/heightScale +"px;";
                 window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                        " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
             }
         });
 
@@ -456,12 +456,12 @@ public class Controller {
         if (widthScale > heightScale) {
             String fontSizeStr = "-fx-font-size: " + fontSize/widthScale +"px;";
             button.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                    " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                    " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
         }
         else {
             String fontSizeStr = "-fx-font-size: " + fontSize/heightScale +"px;";
             button.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                    " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 13;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+                    " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
         }
     }
 }
