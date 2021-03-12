@@ -18,7 +18,7 @@ public class SearchDomain extends Domain {
         // Define patterns for this domain in the constructor
         addPattern("<search> <...>");
         addPattern("<look up> <...>");
-        addPattern("<link number:> <param:int>");
+        addPattern("<open google> <...>");
         // Multiple patterns are supported
     }
     @Override
@@ -27,28 +27,19 @@ public class SearchDomain extends Domain {
 
         return new Skill(this, outputChannel) {
             ArrayList<String> links;
+
             @Override
             public void run() {
                 try {
                     if(sequence.getStringAt(0).toLowerCase().contains("search") || sequence.getStringAt(0).toLowerCase().contains("look up")){
                         links = Search.search(str);
-                        int count = 0;
                         for(String x: links){
-
                             pushMessage(x, MessageType.HYPER_LINK);
-                            count++;
                         }
-                        //pushMessage("Please specify which link you want to visit by typing-> link number: <number>", MessageType.STRING);
+                        pushMessage("If you would like to open google for more choices, type 'Open Google'", MessageType.STRING);
                     }
-
-                    if(sequence.getStringAt(0).toLowerCase().contains("link number")){
-                        String number =  sequence.getStringAt(1);
-                        System.out.println(number);
-                        int num = Integer.parseInt(number);
-                        System.out.println(num);
-                        String line = Files.readAllLines(Paths.get("output.txt")).get(num);
-                        System.out.println(line);
-                        Search.open(line);
+                    if(sequence.getStringAt(0).toLowerCase().contains("open google") || sequence.getStringAt(0).toLowerCase().contains("look up")){
+                        Search.googleSearch(Files.readAllLines(Paths.get("output.txt")).get(0));
                     }
                 } catch (IOException | UnsupportedOSException e) {
                     e.printStackTrace();

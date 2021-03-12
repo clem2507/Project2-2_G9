@@ -31,6 +31,8 @@ public class Search {
         Elements links = doc.select("cite");
 
         List<String> linkss = new ArrayList<>();
+        linkss.add(keyword);
+
         for(Element link : links){
             String current  = link.text();
 
@@ -45,6 +47,7 @@ public class Search {
                     current = current.replaceAll(" › ", "/");
                 }
             }
+
             if(current.contains("...")){
                 current = current.replace("...", "");
             }
@@ -52,23 +55,18 @@ public class Search {
         }
 
         LinkedHashSet<String> hashSet = new LinkedHashSet<>(linkss);
-        ArrayList<String> noduplicates = new ArrayList<>(hashSet);
-
-        for(String k : noduplicates){
-            System.out.println(k);
-        }
+        ArrayList<String> noDuplicates = new ArrayList<>(hashSet);
 
         FileWriter writer = new FileWriter("output.txt");
-        for(String str: noduplicates) {
+        for(String str: noDuplicates) {
             writer.write(str + System.lineSeparator());
         }
         writer.close();
 
-        return noduplicates;
+        return noDuplicates;
     }
 
     public static void open(String keyword) throws IOException, UnsupportedOSException {
-        String os = System.getProperty("os.name").toLowerCase();
 
         if(CurrentOS.getOperatingSystem() == OSName.MAC){
             Runtime rt = Runtime.getRuntime();
