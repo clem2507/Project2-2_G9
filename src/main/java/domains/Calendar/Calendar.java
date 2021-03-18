@@ -298,6 +298,21 @@ public class Calendar extends Domain {
                         output += e;
                     }
                 }
+                if(output.length() < 4 && output.length() != 1)
+                {
+                    for (int i = output.length(); i < 5; i++) {
+                        output += "0";
+                    }
+                }
+                else if(output.length() == 1)
+                {
+                    String temp = "0";
+                    output = temp += output;
+
+                    for (int i = output.length(); i < 5; i++) {
+                        output += "0";
+                    }
+                }
                 return output;
             }
 
