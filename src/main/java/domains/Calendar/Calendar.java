@@ -8,7 +8,8 @@ import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
@@ -17,15 +18,15 @@ public class Calendar extends Domain {
 
     private static int fromScale(String spec) throws NLPError {
 
-        if(Arrays.asList("am").contains(spec)){
+        if(Collections.singletonList("am").contains(spec)){
             return 0;
         }
 
-        if(Arrays.asList("pm").contains(spec)){
+        if(Collections.singletonList("pm").contains(spec)){
             return 12;
         }
 
-        if(!Arrays.asList("am").contains(spec) && !Arrays.asList("pm").contains(spec))
+        if(!Collections.singletonList("am").contains(spec) && !Collections.singletonList("pm").contains(spec))
         {
             return 0;
         }
@@ -33,33 +34,26 @@ public class Calendar extends Domain {
         throw new NLPError("Illegal time scale " + spec);
     }
 
-
+    /**
+     * This is the Calendar skill
+     * It's connected with the UM calender and it has its own calendar
+     * It's able to create events and in future phases also edit and delete them.
+     */
     public Calendar()
     {
         super(DomainNames.Calendar);
 
-        addPattern("<schedule> <...>");
-        addPattern("<schedule> <#:4> <at> <@block, param:int> <@day_part, am, pm>");
-        addPattern("<at> <@block, param:int> <@day_part, am, pm> <#:5> <schedule>");
-        addPattern("<schedule> <#:4> <at> <@block, param:int>");
-        addPattern("<at> <@block, param:int> <#:5> <schedule>");
-        addPattern("<do> <...>");
+        addPattern("<schedule, tasks, events, do, agenda> <...>");
+        addPattern("<schedule, tasks, events, do, agenda> <#:4> <at> <@block, param:int> <@day_part, am, pm>");
+        addPattern("<at> <@block, param:int> <@day_part, am, pm> <#:5> <schedule, tasks, events, do, agenda>");
+        addPattern("<schedule, tasks, events, do, agenda> <#:4> <at> <@block, param:int>");
+        addPattern("<at> <@block, param:int> <#:5> <schedule, tasks, events, do, agenda>");
         addPattern("<set calendar> <...>");
         addPattern("<reset calendar>");
         addPattern("<help calendar>");
         addPattern("<create event>");
 
-       /* // Patterns for the calendar -Dennis
-        String base = "<schedule, agenda, things to do, events, chores, tasks> <#:1>";
-
-        // i.e. "schedule for monday" (schedule for the nearest incoming monday
-        addPattern(base + " <param:day>");
-
-        // i.e. "agenda for today" (schedule for this current day)
-        addPattern(base + " <today, now, this day>");
-
-        // i.e. "things to do on 12/03/2021" (schedule for a specific date)
-        addPattern(base + " <param:int> <\\, /> <param:int> <\\, /> <param:int>");*/
+        //TODO implement pattern parameter configuration for next phase
     }
     @Override
     public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
@@ -95,9 +89,9 @@ public class Calendar extends Domain {
 
 
                 if (sequence.getStringAt(0).toLowerCase().contains(("set calendar").toLowerCase())) {
-                    setCal();
+                    setCal();   //Reads the calendar.txt file to set up the link to download the UM calendar.
                 } else if (sequence.getStringAt(0).toLowerCase().contains(("reset calendar").toLowerCase())) {
-
+                    //Resets the calendar.txt file to set up the link to download the UM calendar.
                     try {
                         File file = new File("src/assets/ProjectData/Calendar/calendar.txt");
                         FileWriter fileWriter = new FileWriter(file);
@@ -110,9 +104,10 @@ public class Calendar extends Domain {
                     return;
 
                 } else if (sequence.getStringAt(0).toLowerCase().contains(("create event").toLowerCase())) {
+                    //Allows the user to create events in the user calendar. Note that the user calendar is not the UM calendar.
                     pushMessage("Event created", MessageType.STRING);
                     String mac = getMacAddress();
-                    File file = null;
+                    File file;
                     file = new File("src/assets/ProjectData/Calendar/" + mac + ".txt");
                     try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
                         System.out.println("POPUP");
@@ -122,9 +117,7 @@ public class Calendar extends Domain {
                         String eStartTime = Popup.userInput("Start Time:").get();
                         String eEndTime = Popup.userInput("End Time:").get();
                         String eLocation = Popup.userInput("Location:").get();
-                        if (eName.equals(null) || eDate.equals(null))
-                            return;
-                        writer.println("START:" + optimizeInput(eDate) + "T" + optimizeInput(eStartTime) + "\nEND:" + optimizeInput(eDate) + "T" + optimizeInput(eEndTime) + "\nNAME:" + eName + "\nLOCATION:" + eLocation);
+                        writer.println("START:" + optimizeInput(eDate,false) + "T" + optimizeInput(eStartTime,false) + "\nEND:" + optimizeInput(eDate,false) + "T" + optimizeInput(eEndTime,false) + "\nNAME:" + eName + "\nLOCATION:" + eLocation);
                         writer.println("END:VEVENT\n\n");
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -132,6 +125,7 @@ public class Calendar extends Domain {
                 }
                 else if(sequence.getStringAt(0).toLowerCase().contains(("help calendar").toLowerCase()))
                 {
+                    //Return messages to help the user using the skill.
                     pushMessage("To get your timetable link", MessageType.STRING);
                     pushMessage("1) Go to the UM student portal", MessageType.STRING);
                     pushMessage("2) Go to the My timetable tab", MessageType.STRING);
@@ -156,6 +150,7 @@ public class Calendar extends Domain {
                     return;
                 }
                 if(!isCalendarBuffered()){
+                    //Checks if the UM calendar has been set up properly.
                     pushMessage("The calendar is not set.", MessageType.STRING);
                     pushMessage("Use command \"set calendar\" to set it", MessageType.STRING);
                     pushMessage("or use the command \"help calendar\"",  MessageType.STRING);
@@ -163,7 +158,9 @@ public class Calendar extends Domain {
                     setCal();
                 }
                 else {
+                    //Returns the events of a determined day and if the user chooses to can return the events in hour blocks.
                     if(sequence.getStringAt(1).toLowerCase().contains(("tomorrow").toLowerCase())){
+
                         try {
                             File file = new File("src/assets/ProjectData/Calendar/calendar.txt");
                             Scanner reader = new Scanner(file);
@@ -259,12 +256,15 @@ public class Calendar extends Domain {
                 }
             }
 
+            /**
+             * Sets up the UM calendar
+             */
             public void setCal()
             {
                 try {
                 File file = new File("src/assets/ProjectData/Calendar/calendar.txt");
                 FileWriter fileWriter = new FileWriter(file);
-                fileWriter.write(clearLink(Popup.userInput("Insert here your link please:").get()));
+                fileWriter.write(optimizeInput(Popup.userInput("Insert here your link please:").get(), true));
                 fileWriter.close();
                 pushMessage("Done", MessageType.STRING);
                 return;
@@ -273,7 +273,12 @@ public class Calendar extends Domain {
                 }
             }
 
-            public String optimizeInput(String s)
+            /**
+             * Due to the .ics standard we have to optimize the input when creating new events
+             * @param s
+             * @return
+             */
+            public String optimizeInput(String s, Boolean link)
             {
                 String output = "";
 
@@ -284,7 +289,11 @@ public class Calendar extends Domain {
                     e == ' ' ||
                     e == '-' ||
                     e == '_' ||
-                    e == '.'))
+                    e == '.') && !link)
+                    {
+                        output += e;
+                    }
+                    else if(!(e == ' ') && link)
                     {
                         output += e;
                     }
@@ -292,16 +301,25 @@ public class Calendar extends Domain {
                 return output;
             }
 
+            /**
+             * returns the USER calendar
+             * @return
+             */
             public File getCurrentUserCalendar()
             {
-                File file = null;
+                File file;
                 file = new File("src/assets/ProjectData/Calendar/" + getMacAddress() + ".txt");
                 return file;
             }
 
+            /**
+             * Returns the user MAC address
+             * @return
+             */
+            @SuppressWarnings("UnnecessaryLocalVariable")
             public String getMacAddress()
             {
-                InetAddress localHost = null;
+                InetAddress localHost;
                 byte[] hardwareAddress = null;
                 try {
                     localHost = InetAddress.getLocalHost();
@@ -314,10 +332,13 @@ public class Calendar extends Domain {
                 for (int i = 0; i < hardwareAddress.length; i++) {
                     hexadecimal[i] = String.format("%02X", hardwareAddress[i]);
                 }
-                String macAddress = String.join("-", hexadecimal);
-                return macAddress;
+                return String.join("-", hexadecimal);
             }
 
+            /**
+             * Prints to screen and Event e
+             * @param e
+             */
             public void printEvent(Event e)
             {
                 pushMessage("You have:",MessageType.STRING);
@@ -329,6 +350,11 @@ public class Calendar extends Domain {
                 pushMessage("At " + e.getLocation(), MessageType.STRING);
             }
 
+            /**
+             * This method is used to add or subtract days to a date
+             * @param days
+             * @return
+             */
             public Date getDate(long days)
             {
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -339,6 +365,10 @@ public class Calendar extends Domain {
                 return date;
             }
 
+            /**
+             * Returns the current date
+             * @return
+             */
             public Date getCurrentDate()
             {
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -346,25 +376,16 @@ public class Calendar extends Domain {
                 return new Date(Integer.parseInt(dtf.format(now).split("-")[0]),Integer.parseInt(dtf.format(now).split("-")[1]),Integer.parseInt(dtf.format(now).split("-")[2]));
             }
 
-            public String clearLink(String input)
-            {
-                String output = "";
-                for(Character c : input.toCharArray())
-                {
-                    if(!c.equals(' '))
-                    {
-                        output += c;
-                    }
-                }
-                return output;
-            }
-
+            /**
+             * This is the method that checks if the UM calender is buffered.
+             * @return
+             */
             public boolean isCalendarBuffered()
             {
                 try{
                     files = new FileInputStream("src/assets/ProjectData/Calendar/calendar.txt");
                     Scanner scanner = new Scanner(files);
-                    if(!scanner.hasNextLine() || scanner.nextLine() == "")
+                    if(!scanner.hasNextLine() || Objects.equals(scanner.nextLine(), ""))
                     {
                         return false;
                     }
