@@ -17,7 +17,7 @@ Skills can also produce output messages (text, images, links, etc.) without inte
 
 ##### Diagram of  user-assistant interaction
 
-![Interaction Model](./Readmestuff/DKE Multimodal Assistant Execution Diagram.png)
+![Interaction Model](Readmestuff/interaction_diagram.png)
 
 Seeking to elucidate; this loop-like interaction is broken either by closing the window or triggering the 'Leave' domain.
 
@@ -25,7 +25,7 @@ Seeking to elucidate; this loop-like interaction is broken either by closing the
 
 [Pattern Language](./Readmestuff/Project 2-2 Group 9 (Pattern Language Doc).pdf)
 
-[Custom Responses](./Readmestuff/Fallback Custom Skills_Skill Editor.pdf)
+[Custom Responses](Readmestuff/custom_skills_lang.pdf)
 
 [How to build a domain?](./Readmestuff/Project 2-2 Group 9 - Building A Domain.pdf)
 
