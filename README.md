@@ -37,7 +37,7 @@ The assistant will remember previously defined custom skills, to get rid of them
 
 ### Dependencies:
 
-[OpenCV](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html)
+[OpenCV](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html) (OpenCV dependent skills will not run on MacOS for the time being)
 
 ### External Resources:
 
