@@ -1,32 +1,40 @@
-# Project 2-2 Group 9
-Maastricht University
+# Maastricht University (Multimodal Digital Assistant)
+## Project 2-2 Group 9
 
-Structure proposal
-Things to consider:
-The virtual assistant should allow for multiple tasks to run at the same time.
-The user should be able to query even if another task is running at the moment.
-The program should be modular, where each module is responsible for a specific thing.
+### Quick Introduction
 
-Observe the following diagram:
+##### Language & Terminology
 
-![Diagram](http://alessandrocorvi.me/ita/project_2_2_diagram.PNG)
+* Domain: A 'Domain' is a module responsible for handling a narrow set of queries.  (a calendar domain is responsible for handling queries related to  scheduling tasks). Every domain is also responsible for running skills.
+* Skill: A 'Skill' represents an action the assistant can perform (reading the  schedule from MyUM Calendar or reading my notes, etc.). Skills are  essentially simple actions that, together, conform a set of actions that belong to a domain.
+* Fallback Skill: A 'Fallback Skill' is a user-defined skill composed of a pattern and a corresponding response. When a query does not match with any domain, then it will try matching with a fallback skill.
 
-GUI: We all know what this module is. A simple design must contain at least a textbox for queries, and a textbox for outputs. (an error of mine, this should rather be UI module because in the future it will take care of other non graphical demands regarding human-computer interface - detecting a person in front of the computer, for instance)
+##### Why 'multimodal'?
 
-Query Stack: This module is simply a thread safe stack for the queries.
+Our design allows multiple skills to run at the same time and each one of them can output messages to the user. In other words, the assistant can be requested to search for a file in the device while trying to perform a google search. This is a stark contrast with single-threaded versions which would require the user to wait longer.
 
-Task Selector: This module pulls a query from the Query Stack and then goes through the entire list of tasks. For each task, the Task Selector provides the query parsed in tokens. Then, each task returns a weight between 0 and 1 (inclusive). This value intends to represent how sure each task is that the query corresponds to them. The Task Selector will then select the task with the maximum weight. In case of a tie, the task selection must print the list of tasks in tie and tell the user to rephrase (this can be done through prompts or through the GUI module, we should discuss). Once the task is selected, it starts processing in a different thread and the task object is pushed to the next module.
+Skills can also produce output messages (text, images, links, etc.) without interrupting back-and-forth interaction.
 
-Tasks Running: This is a set of tasks running. Akin to a thread pool.
-Task: (Implicitly stated) This is an object that runs a subroutine in a separate thread. When the subroutine is finished, the Task pushes the output to the Output Stack.
+##### Diagram of  user-assistant interaction
 
-Output Stack: Same as the Query Stack. Outputs get pulled by the GUI module periodically.
+![Interaction Model](./Readmestuff/DKE Multimodal Assistant Execution Diagram.png)
 
-Notes:
-Since each task is akin to a small program, nothing stops them from opening their own GUI or running other programs.
-This way tasks are self contained and the assistant is simply a task manager.
-The reason we don't parse the query entirely (recognizing sentence structure and such) at the beginning (it is implied that this is done by each task individually) is because each task will require different parse and search techniques. There is no single NLP algorithm to fit all needs.
-Adding new tasks would not require modifications in the assistant.
+Seeking to elucidate; this loop-like interaction is broken either by closing the window or triggering the 'Leave' domain.
 
-Other suggestions:
-To detect if a person is in front of the camera, we can use Viola-Jones object detection framework. It is very easy to train and is also very fast. It was proposed in 2001 and now most phone selfie cameras use it.
+### Documentation & Tutorials
+
+[Pattern Language](./Readmestuff/Project 2-2 Group 9 (Pattern Language Doc).pdf)
+
+[Custom Responses](./Readmestuff/Fallback Custom Skills_Skill Editor.pdf)
+
+[How to build a domain?](./Readmestuff/Project 2-2 Group 9 - Building A Domain.pdf)
+
+### Dependencies:
+
+[OpenCV](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html)
+
+[Windows lnk parser](https://stackoverflow.com/questions/309495/windows-shortcut-lnk-parser-in-java)
+
+[String similarity metric](https://gist.github.com/thotro/af2dcbcf6bd7ecd9f5fc)
+
+### Using Calendar Domain:
