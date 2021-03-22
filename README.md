@@ -33,6 +33,8 @@ Seeking to elucidate; this loop-like interaction is broken either by closing the
 
 [OpenCV](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html)
 
+### External Resources:
+
 [Windows lnk parser](https://stackoverflow.com/questions/309495/windows-shortcut-lnk-parser-in-java)
 
 [String similarity metric](https://gist.github.com/thotro/af2dcbcf6bd7ecd9f5fc)
