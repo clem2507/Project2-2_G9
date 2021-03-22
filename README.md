@@ -29,6 +29,12 @@ Seeking to elucidate; this loop-like interaction is broken either by closing the
 
 [How to build a domain?](./Readmestuff/howto_build_domain.pdf)
 
+#### How to define custom skills?
+  1) Write a text file with custom responses such as in [Custom Responses](Readmestuff/custom_skills_lang.pdf)
+  2) Run the assistant and drop the text file in "drop file"
+
+The assistant will remember previously defined custom skills, to get rid of them press "clear templates".
+
 ### Dependencies:
 
 [OpenCV](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html)
