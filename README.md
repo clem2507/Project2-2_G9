@@ -1,4 +1,4 @@
-# Maastricht University (Multimodal Digital Assistant)
+# Maastricht University - Multimodal Digital Assistant
 ## Project 2-2 Group 9
 
 ### Quick Introduction
