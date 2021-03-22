@@ -45,4 +45,9 @@ The assistant will remember previously defined custom skills, to get rid of them
 
 [String similarity metric](https://gist.github.com/thotro/af2dcbcf6bd7ecd9f5fc)
 
+### Running For The First Time:
+  1) Install OpenCV
+  2) Clone this repository
+  3) Gradle > Execute Gradle Task > run
+
 ### Using Calendar Domain:
