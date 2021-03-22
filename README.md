@@ -23,11 +23,11 @@ Seeking to elucidate; this loop-like interaction is broken either by closing the
 
 ### Documentation & Tutorials
 
-[Pattern Language](./Readmestuff/Project 2-2 Group 9 (Pattern Language Doc).pdf)
+[Pattern Language](./Readmestuff/pattern_lang.pdf)
 
 [Custom Responses](Readmestuff/custom_skills_lang.pdf)
 
-[How to build a domain?](./Readmestuff/Project 2-2 Group 9 - Building A Domain.pdf)
+[How to build a domain?](./Readmestuff/howto_build_domain.pdf)
 
 ### Dependencies:
 
