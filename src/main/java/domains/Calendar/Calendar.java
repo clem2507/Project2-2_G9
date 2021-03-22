@@ -18,20 +18,20 @@ public class Calendar extends Domain {
 
     private static int fromScale(String spec) throws NLPError {
 
-        if(Collections.singletonList("am").contains(spec)){
+        if(Objects.equals("am", spec)){
             return 0;
         }
 
-        if(Collections.singletonList("pm").contains(spec)){
+        if(Objects.equals("pm", spec)){
             return 12;
         }
 
-        if(!Collections.singletonList("am").contains(spec) && !Collections.singletonList("pm").contains(spec))
+        if(!Objects.equals("am", spec) && !Objects.equals("pm", spec))
         {
             return 0;
         }
 
-        throw new NLPError("Illegal time scale " + spec);
+        throw new NLPError("Illegal time scale " + spec); // Then you don't need this, it's unreachable code
     }
 
     /**
@@ -69,7 +69,6 @@ public class Calendar extends Domain {
             if(timeScaleSlotIndex.isPresent()){
                 part = fromScale(sequence.getStringAt(timeScaleSlotIndex.get()));
             }
-
 
         }catch (NLPError e)
         {

@@ -53,7 +53,10 @@ public class FindWeather extends Domain {
                     String matched = sequence.getStringAt(0).toLowerCase();
 
                     if(currentWeather.getTemp().equals("")){
-                        pushMessage("Please check your internet connection or enter a valid city name.", MessageType.STRING);
+                        pushMessage("No results for " + city, MessageType.STRING);
+                        // Sorry for the change, the line was longer than the margin.
+                        // Normally I would leave it, but this is a pretty common message
+                        // that may appear if the user makes a mistake. - Dennis
                     }else{
                         if(currentWeather!=null){
                             if(matched.contains("weather")){

@@ -20,7 +20,6 @@ import java.util.concurrent.BlockingQueue;
 
 public class Photo extends Domain {
     private static final String DIR = "src/assets/ProjectData/PhotoTaken"; // Default directory
-    private static String absPath = "C:\\Users\\aless\\IdeaProjects\\Project2-2_G9\\lib\\";
 
     private static double fromScale(String spec) throws NLPError {
 
@@ -141,32 +140,10 @@ public class Photo extends Domain {
                     // Save the image
                     File outputImage = new File(imagePath);
                     ImageIO.write(image, "png", outputImage);
-                    System.out.println(System.getenv("JAVA_HOME"));
-                } catch (UnsatisfiedLinkError | IOException e) {
-
-                    if(System.getProperty("os.name").startsWith("Windows"))
-                    {
-
-                        String javaPath = Popup.userInput("Please insert the path your jdk directory inside the bin folder:").get();
-                        System.out.println("Updating Lib + -" + javaPath);
-                        File nativeLib = new File("lib/opencv/opencv_java430.dll");
-                        File nativeLibToHome = new File(javaPath + "/opencv_java430.dll");
-                        try {
-                            FileUtils.copyFile(nativeLib.getAbsoluteFile(),nativeLibToHome);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                            System.out.println("Failed Lib");
-                        }
-                    }
-                    else
-                    {
-                        pushMessage("Yeah, macOS still does not work...", MessageType.STRING);
-                    }
-
-
-                    pushMessage("Error " + e, MessageType.STRING);
-                    pushMessage("Try again", MessageType.STRING);
-                    return;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    pushMessage("Something went wrong while taking the picture", MessageType.STRING);
+                    return; // Early stop
                 }
 
                 // Now we just have to tell the GUI to show this image.
