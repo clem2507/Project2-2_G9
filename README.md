@@ -11,7 +11,7 @@
 
 ##### Why 'multimodal'?
 
-Our design allows multiple skills to run at the same time and each one of them can output messages to the user. In other words, the assistant can be requested to search for a file in the device while trying to perform a google search. This is a stark contrast with single-threaded versions which would require the user to wait longer.
+Our design allows multiple skills to run at the same time. In other words, the assistant can be requested to search for a file in the device while trying to perform a google search. This is a stark contrast with single-threaded versions which would require the user to wait longer.
 
 Skills can also produce output messages (text, images, links, etc.) without interrupting back-and-forth interaction.
 
