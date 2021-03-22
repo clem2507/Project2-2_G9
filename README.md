@@ -17,7 +17,7 @@ Skills can also produce output messages (text, images, links, etc.) without inte
 
 ##### Diagram of  user-assistant interaction
 
-![Interaction Model](Readmestuff/interaction_diagram.png)
+<img src="Readmestuff/interaction_diagram.png" alt="Interaction Model" width="50%" height="50%">
 
 Seeking to elucidate; this loop-like interaction is broken either by closing the window or triggering the 'Leave' domain.
 
