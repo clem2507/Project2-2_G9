@@ -17,7 +17,7 @@ Skills can also produce output messages (text, images, links, etc.) without inte
 
 ##### Diagram of  user-assistant interaction
 
-![Interaction Model](./Readmestuff/DKE Multimodal Assistant Execution Diagram.png)
+![Interaction Model](DKE Multimodal Assistant Execution Diagram.png)
 
 Seeking to elucidate; this loop-like interaction is broken either by closing the window or triggering the 'Leave' domain.
 
