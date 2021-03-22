@@ -4,7 +4,6 @@ import backend.*;
 import backend.common.camera.Camera;
 import nlp.MatchedSequence;
 import nlp.NLPError;
-import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -140,9 +139,19 @@ public class Photo extends Domain {
                     // Save the image
                     File outputImage = new File(imagePath);
                     ImageIO.write(image, "png", outputImage);
-                } catch (IOException e) {
+                } catch (IOException | UnsatisfiedLinkError e) {
                     e.printStackTrace();
                     pushMessage("Something went wrong while taking the picture", MessageType.STRING);
+                    if(!System.getProperty("os.name").startsWith("Windows"))
+                    {
+                        pushMessage("This operating system is not yet supported", MessageType.STRING);
+                    }
+                    else {
+                        if(FixCamera.fix())
+                            pushMessage("Fixed, try again",MessageType.STRING);
+                        else
+                            pushMessage("Fatal camera error",MessageType.STRING);
+                    }
                     return; // Early stop
                 }
 

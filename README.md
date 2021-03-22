@@ -46,8 +46,17 @@ The assistant will remember previously defined custom skills, to get rid of them
 [String similarity metric](https://gist.github.com/thotro/af2dcbcf6bd7ecd9f5fc)
 
 ### Running For The First Time:
-  1) Install OpenCV
+  1) Install OpenCV (On Windows you will just need to invoke the photo skill, other OSs are not yet supported)
   2) Clone this repository
   3) Gradle > Execute Gradle Task > run
 
 ### Using Calendar Domain:
+
+  1) For more information use the "help calendar" command or [click here](https://www.youtube.com/watch?v=Gqyd9Ot5a7s)
+  2) Go to the student portal
+  3) Go to the My Timetable tab
+  4) Go to the calendar section and scroll to the bottom
+  5) Click "Agenda connect manual" and open "General Timetables"
+  6) Click the "Connect calendar" button on the top right of the page (next to the download calendar button)
+  7) Click the "other" options
+  8) You now can copy the link and use the command "set calendar" to set it up in the application
