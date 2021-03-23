@@ -30,7 +30,6 @@ public class FallbackMachine implements FallbackInterpreter {
                 .filter(Objects::nonNull)
                 .max(Comparator.comparingDouble(MatchedSequence::useRatio))
                 .orElse(null);
-        // TODO: I feel like there should be an easier way to do this, getting the singleSkill from the previous method
         if (match != null) {
             for (CustomSkill skill : listOfSkills) {
                 if (match.getPattern().equals(skill.getPattern())) {
