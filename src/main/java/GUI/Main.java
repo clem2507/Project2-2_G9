@@ -391,13 +391,16 @@ public class Main extends Application {
         LinearGradient lg = new LinearGradient(0, 0, 0, 2.5, true, CycleMethod.NO_CYCLE, stops);
         weatherWidget.setFill(lg);
 
+        //TODO: Comment this out submitting
+        /**
         try {
             city = CurrentLocation.getLocation();
         } catch (IOException e){
             e.printStackTrace();
             city = "Unknown";
-        }
+        }**/
 
+        city = "Maastricht";
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, weatherCityFontSize));
         weatherWidgetWidth = findBestWeatherWidgetWidth(city);
