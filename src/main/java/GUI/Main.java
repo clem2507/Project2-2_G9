@@ -3,6 +3,7 @@ package GUI;
 import backend.Assistant;
 import backend.AssistantMessage;
 import backend.MessageType;
+import backend.common.CurrentLocation;
 import backend.common.CurrentTime;
 import backend.common.OS.UnsupportedOSException;
 import backend.common.Quote;
@@ -390,16 +391,13 @@ public class Main extends Application {
         LinearGradient lg = new LinearGradient(0, 0, 0, 2.5, true, CycleMethod.NO_CYCLE, stops);
         weatherWidget.setFill(lg);
 
-        // TODO: Change when submitting the project
-        /**
         try {
             city = CurrentLocation.getLocation();
         } catch (IOException e){
             e.printStackTrace();
             city = "Unknown";
-        }**/
+        }
 
-        city = "Maastricht";
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, weatherCityFontSize));
         weatherWidgetWidth = findBestWeatherWidgetWidth(city);
