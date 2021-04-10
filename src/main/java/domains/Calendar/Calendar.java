@@ -8,7 +8,7 @@ import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
@@ -43,12 +43,12 @@ public class Calendar extends Domain {
     {
         super(DomainNames.Calendar);
 
-        addPattern("<schedule, tasks, events, do, agenda> <...>");
-        addPattern("<schedule, tasks, events, do, agenda> <#:4> <at> <@block, param:int> <@day_part, am, pm>");
+        addPattern("<schedule, tasks, events, agenda> <...>");
+        addPattern("<schedule, tasks, events, agenda> <#:4> <at> <@block, param:int> <@day_part, am, pm>");
         addPattern("<at> <@block, param:int> <@day_part, am, pm> <#:5> <schedule, tasks, events, do, agenda>");
         addPattern("<schedule, tasks, events, do, agenda> <#:4> <at> <@block, param:int>");
         addPattern("<at> <@block, param:int> <#:5> <schedule, tasks, events, do, agenda>");
-        addPattern("<set calendar> <...>");
+        addPattern("<set calendar>");
         addPattern("<reset calendar>");
         addPattern("<help calendar>");
         addPattern("<create event>");
@@ -110,16 +110,19 @@ public class Calendar extends Domain {
                     file = new File("src/assets/ProjectData/Calendar/" + mac + ".txt");
                     try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
                         System.out.println("POPUP");
-                        writer.println("BEGIN:VEVENT\n");
                         String eName = Popup.userInput("Event Name:").get();
                         String eDate = Popup.userInput("Date:").get();
                         String eStartTime = Popup.userInput("Start Time:").get();
                         String eEndTime = Popup.userInput("End Time:").get();
                         String eLocation = Popup.userInput("Location:").get();
+                        writer.println("BEGIN:VEVENT\n");
                         writer.println("START:" + optimizeInput(eDate,false) + "T" + optimizeInput(eStartTime,false) + "\nEND:" + optimizeInput(eDate,false) + "T" + optimizeInput(eEndTime,false) + "\nNAME:" + eName + "\nLOCATION:" + eLocation);
                         writer.println("END:VEVENT\n\n");
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (NoSuchElementException e) {
+                        pushMessage("Error while creating event.", MessageType.STRING);
+                        return;
                     }
                 }
                 else if(sequence.getStringAt(0).toLowerCase().contains(("help calendar").toLowerCase()))
@@ -269,6 +272,8 @@ public class Calendar extends Domain {
                 return;
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (NoSuchElementException e) {
+                    return;
                 }
             }
 
