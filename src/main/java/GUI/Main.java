@@ -3,8 +3,6 @@ package GUI;
 import backend.Assistant;
 import backend.AssistantMessage;
 import backend.MessageType;
-import backend.common.CurrentLocation;
-import backend.common.CurrentTime;
 import backend.common.OS.UnsupportedOSException;
 import backend.common.Quote;
 import backend.common.WeatherObject;
