@@ -20,7 +20,11 @@ import org.openimaj.image.processing.face.detection.DetectedFace;
 import org.openimaj.image.processing.face.detection.HaarCascadeDetector;
 import org.openimaj.math.geometry.shape.Rectangle;
 
-
+/**
+ * Paint troll smile on all detected faces.
+ *
+ * @author Bartosz Firyn (SarXos)
+ */
 public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.Painter {
 
     private static final long serialVersionUID = 1L;
