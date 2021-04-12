@@ -10,10 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
@@ -23,11 +21,6 @@ import org.openimaj.image.processing.face.detection.HaarCascadeDetector;
 import org.openimaj.math.geometry.shape.Rectangle;
 
 
-/**
- * Paint troll smile on all detected faces.
- *
- * @author Bartosz Firyn (SarXos)
- */
 public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.Painter {
 
     private static final long serialVersionUID = 1L;
@@ -39,13 +32,13 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
     private Webcam webcam = null;
     private WebcamPanel.Painter painter = null;
     private List<DetectedFace> faces = null;
-    private BufferedImage troll = null;
+    private BufferedImage greenSquare = null;
 
     public FacePainterExample() throws IOException {
 
         super();
 
-        troll = ImageIO.read(getClass().getResourceAsStream("/troll-face.png"));
+        greenSquare = ImageIO.read(getClass().getResourceAsStream("/GreenSquare.png"));
 
         webcam = Webcam.getDefault();
         webcam.setViewSize(WebcamResolution.VGA.getSize());
@@ -114,7 +107,7 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
             int w = (int) bounds.width + 2 * dx;
             int h = (int) bounds.height + dy;
 
-            g2.drawImage(troll, x, y, w, h, null);
+            g2.drawImage(greenSquare, x, y, w, h, null);
             g2.setStroke(STROKE);
             g2.setColor(Color.RED);
             g2.drawRect(x, y, w, h);
