@@ -1,10 +1,14 @@
 package backend.common.camera;
 
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
+//import org.opencv.core.Core;
+//import org.opencv.core.Mat;
+//import org.opencv.videoio.VideoCapture;
 
+import com.github.sarxos.webcam.Webcam;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +22,7 @@ import java.util.Map;
  * of used camera - So, if you forget to close a camera, it will remain open until the program closes
  */
 public class Camera {
-    private static final Map<Integer, VideoCapture> videoCaptures = new HashMap<>(); // List of open cameras
+    private static final Map<Integer, Webcam> videoCaptures = new HashMap<>(); // List of open cameras
     private static final Map<Integer, Integer> useCounter = new HashMap<>();
 
     /**
@@ -29,22 +33,36 @@ public class Camera {
     public static void openCamera(int channel) throws IOException {
 
         synchronized (videoCaptures){
-            System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // This can be called multiple times
-            // but it is not thread safe, so we put it inside of the synchronized block.
 
             if (!videoCaptures.containsKey(channel)){ // If the camera hasn't been open yet
-                VideoCapture newCapture = new VideoCapture();
-                newCapture.open(channel);
+                Webcam webcam = Webcam.getDefault();
+                webcam.open();
 
-                if(!newCapture.isOpened()){
+                if(!webcam.isOpen()){
                     throw new IOException("Unable to open camera on channel " + channel);
                 }
 
                 useCounter.put(channel, 0); // Initialize counter to 0
-                videoCaptures.put(channel, newCapture);
+                videoCaptures.put(channel, webcam);
             }
 
-            useCounter.put(channel, useCounter.get(channel) + 1); // Increment counter by 1
+//
+//            System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // This can be called multiple times
+//            // but it is not thread safe, so we put it inside of the synchronized block.
+//
+//            if (!videoCaptures.containsKey(channel)){ // If the camera hasn't been open yet
+//                VideoCapture newCapture = new VideoCapture();
+//                newCapture.open(channel);
+//
+//                if(!newCapture.isOpened()){
+//                    throw new IOException("Unable to open camera on channel " + channel);
+//                }
+//
+//                useCounter.put(channel, 0); // Initialize counter to 0
+//                videoCaptures.put(channel, newCapture);
+//            }
+//
+//            useCounter.put(channel, useCounter.get(channel) + 1); // Increment counter by 1
         }
 
     }
@@ -57,17 +75,32 @@ public class Camera {
 
         synchronized (videoCaptures){
 
+
+
             if(videoCaptures.containsKey(channel)){
-                VideoCapture videoCapture = videoCaptures.get(channel);
+                Webcam videoCapture = videoCaptures.get(channel);
                 useCounter.put(channel, useCounter.get(channel) - 1);
 
                 if(useCounter.get(channel) <= 0){
                     useCounter.remove(channel);
                     videoCaptures.remove(channel);
-                    videoCapture.release();
+                    videoCapture.close();
                 }
 
             }
+
+
+//            if(videoCaptures.containsKey(channel)){
+//                VideoCapture videoCapture = videoCaptures.get(channel);
+//                useCounter.put(channel, useCounter.get(channel) - 1);
+//
+//                if(useCounter.get(channel) <= 0){
+//                    useCounter.remove(channel);
+//                    videoCaptures.remove(channel);
+//                    videoCapture.release();
+//                }
+//
+//            }
 
         }
 
@@ -80,19 +113,34 @@ public class Camera {
      * @throws IOException if the video feed cannot be accessed
      */
     public static BufferedImage getFrame(int channel) throws IOException {
-        Mat mat = new Mat();
+
+
 
         synchronized (videoCaptures){
-            VideoCapture videoCapture = videoCaptures.get(channel);
+            Webcam webcam = videoCaptures.get(channel);
 
-            if(!videoCapture.isOpened()){
+            if(!webcam.open()){
                 throw new IOException("An error occurred while trying to read from camera");
             }
 
-            videoCapture.read(mat);
-            Mat2Image mat2Image = new Mat2Image();
-            return mat2Image.getImage(mat);
+            BufferedImage image =webcam.getImage();
+            return image;
         }
+
+
+//        Mat mat = new Mat();
+//
+//        synchronized (videoCaptures){
+//            VideoCapture videoCapture = videoCaptures.get(channel);
+//
+//            if(!videoCapture.isOpened()){
+//                throw new IOException("An error occurred while trying to read from camera");
+//            }
+//
+//            videoCapture.read(mat);
+//            Mat2Image mat2Image = new Mat2Image();
+//            return mat2Image.getImage(mat);
+//        }
 
     }
 
