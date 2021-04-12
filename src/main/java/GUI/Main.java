@@ -794,12 +794,12 @@ public class Main extends Application {
             else if(output.getMessageType().equals(MessageType.IMAGE)){ // If the message is an image
                 Image imageFile = new Image(new FileInputStream(output.getContent()));
                 ImageView outputImage = new ImageView(imageFile);
-                outputImage.setScaleX(0.3);
-                outputImage.setScaleY(0.3);
-                outputImage.setScaleZ(0.3);
-                outputImage.setTranslateX(-172);
+                outputImage.setScaleX(0.6);
+                outputImage.setScaleY(0.6);
+                outputImage.setScaleZ(0.6);
+                outputImage.setTranslateX(-10);
                 outputImage.setPreserveRatio(true);
-                outputImage.setTranslateY(outputMessageHeight - 160);
+                outputImage.setTranslateY(outputMessageHeight - 30);
                 outputImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     File file = new File(output.getContent());
                     Desktop dt = Desktop.getDesktop();
