@@ -10,7 +10,6 @@ import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -302,7 +301,7 @@ public class Main extends Application {
         iv.setFitWidth(WINDOW_WIDTH);
         pane.getChildren().add(iv);
 
-        //Creating image view files for background menu
+        // BACKGROUND OPTION
         imgView = new ImageView(bg);
         imgView.setTranslateX(1000);
         imgView.setTranslateY(200);
@@ -377,72 +376,7 @@ public class Main extends Application {
         imagesScrollPane.setTranslateY(imagesScrollPaneY);
         pane.getChildren().add(editBgButton);
 
-        //weatherWidget = new Rectangle(140, 80);
-        weatherWidget = new Rectangle();
-        weatherWidget.setTranslateX(weatherWidgetX);
-        weatherWidget.setTranslateY(weatherWidgetY);
-        weatherWidget.setStroke(Color.WHITESMOKE);
-        weatherWidget.setStrokeWidth(0.6);
-        weatherWidget.setArcWidth(30);
-        weatherWidget.setArcHeight(30);
-        Stop[] stops = new Stop[] { new Stop(0, Color.SKYBLUE), new Stop(1, Color.WHITESMOKE)};
-        LinearGradient lg = new LinearGradient(0, 0, 0, 2.5, true, CycleMethod.NO_CYCLE, stops);
-        weatherWidget.setFill(lg);
-
-        //TODO: Comment this out submitting
-        /**
-        try {
-            city = CurrentLocation.getLocation();
-        } catch (IOException e){
-            e.printStackTrace();
-            city = "Unknown";
-        }**/
-
-        city = "Maastricht";
-        weatherCity = new Text(city);
-        weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, weatherCityFontSize));
-        weatherWidgetWidth = findBestWeatherWidgetWidth(city);
-        weatherWidget.setWidth(weatherWidgetWidth);
-        weatherWidget.setHeight(weatherWidgetHeight);
-        weatherCity.setTranslateX(weatherCityX);
-        weatherCity.setTranslateY(weatherCityY);
-        weatherCity.setFill(Color.WHITE);
-        pane.getChildren().addAll(weatherWidget, weatherCity);
-
-        String temp = "1000";
-
-        try{
-            WeatherObject currentweather = new WeatherObject(city);
-            temp = currentweather.getTemp();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        String temperature = "";
-        if(!WeatherObject.isNumeric(temp)){
-            weatherDegree = new Text("Error");
-        }else{
-            double d = Double.parseDouble(temp);
-            double rounded = Math.round(d);
-            int i = (int) rounded;
-            temperature = Integer.toString(i);
-            weatherDegree = new Text(temperature + "'C");
-
-        }
-        weatherDegree.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, weatherDegreeFontSize));
-        weatherDegree.setTranslateX(weatherDegreeX);
-        weatherDegree.setTranslateY(weatherDegreeY);
-        weatherDegree.setFill(Color.WHITE);
-        pane.getChildren().add(weatherDegree);
-
-        GPS = new Image(new FileInputStream("src/assets/GPSpointer.png"));
-        GPSView = new ImageView(GPS);
-        gpsViewerX = weatherWidgetX+weatherWidgetWidth-30;
-        GPSView.setTranslateX(gpsViewerX);
-        GPSView.setTranslateY(gpsViewerY);
-        GPSView.setFitWidth(gpsViewerWidth);
-        GPSView.setFitHeight(gpsViewerHeight);
-        pane.getChildren().add(GPSView);
-
+        // CHAT
         chatWindow = new Rectangle(chatWindowWidth, chatWindowHeight);
         chatWindow.setTranslateX(chatWindowX);
         chatWindow.setTranslateY(chatWindowY);
@@ -508,8 +442,73 @@ public class Main extends Application {
         robotInteractionText.setFill(Color.BLACK);
         pane.getChildren().add(robotInteractionText);
 
-        currentDate = new Date();
+        // WIDGETS
+        weatherWidget = new Rectangle();
+        weatherWidget.setTranslateX(weatherWidgetX);
+        weatherWidget.setTranslateY(weatherWidgetY);
+        weatherWidget.setStroke(Color.WHITESMOKE);
+        weatherWidget.setStrokeWidth(0.6);
+        weatherWidget.setArcWidth(30);
+        weatherWidget.setArcHeight(30);
+        Stop[] stops = new Stop[] { new Stop(0, Color.SKYBLUE), new Stop(1, Color.WHITESMOKE)};
+        LinearGradient lg = new LinearGradient(0, 0, 0, 2.5, true, CycleMethod.NO_CYCLE, stops);
+        weatherWidget.setFill(lg);
 
+        //TODO: Comment this out when submitting
+        /**
+         try {
+         city = CurrentLocation.getLocation();
+         } catch (IOException e){
+         e.printStackTrace();
+         city = "Unknown";
+         }**/
+
+        city = "Maastricht";
+        weatherCity = new Text(city);
+        weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, weatherCityFontSize));
+        weatherWidgetWidth = findBestWeatherWidgetWidth(city);
+        weatherWidget.setWidth(weatherWidgetWidth);
+        weatherWidget.setHeight(weatherWidgetHeight);
+        weatherCity.setTranslateX(weatherCityX);
+        weatherCity.setTranslateY(weatherCityY);
+        weatherCity.setFill(Color.WHITE);
+        pane.getChildren().addAll(weatherWidget, weatherCity);
+
+        String temp = "1000";
+
+        try{
+            WeatherObject currentweather = new WeatherObject(city);
+            temp = currentweather.getTemp();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        String temperature = "";
+        if(!WeatherObject.isNumeric(temp)){
+            weatherDegree = new Text("Error");
+        }else{
+            double d = Double.parseDouble(temp);
+            double rounded = Math.round(d);
+            int i = (int) rounded;
+            temperature = Integer.toString(i);
+            weatherDegree = new Text(temperature + "'C");
+
+        }
+        weatherDegree.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, weatherDegreeFontSize));
+        weatherDegree.setTranslateX(weatherDegreeX);
+        weatherDegree.setTranslateY(weatherDegreeY);
+        weatherDegree.setFill(Color.WHITE);
+        pane.getChildren().add(weatherDegree);
+
+        GPS = new Image(new FileInputStream("src/assets/GPSpointer.png"));
+        GPSView = new ImageView(GPS);
+        gpsViewerX = weatherWidgetX+weatherWidgetWidth-30;
+        GPSView.setTranslateX(gpsViewerX);
+        GPSView.setTranslateY(gpsViewerY);
+        GPSView.setFitWidth(gpsViewerWidth);
+        GPSView.setFitHeight(gpsViewerHeight);
+        pane.getChildren().add(GPSView);
+
+        currentDate = new Date();
         time = new SimpleDateFormat("HH:mm:ss");
         timeText = new Text(time.format(currentDate));
         timeText.setFont(Font.font("Calibri Light", FontWeight.BOLD,  FontPosture.REGULAR, timeTextFontSize));
@@ -797,7 +796,7 @@ public class Main extends Application {
                 outputImage.setScaleX(0.6);
                 outputImage.setScaleY(0.6);
                 outputImage.setScaleZ(0.6);
-                outputImage.setTranslateX(2);
+                outputImage.setTranslateX(15);
                 outputImage.setPreserveRatio(true);
                 outputImage.setTranslateY(outputMessageHeight - 15);
                 outputImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
