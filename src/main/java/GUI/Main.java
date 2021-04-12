@@ -797,9 +797,9 @@ public class Main extends Application {
                 outputImage.setScaleX(0.6);
                 outputImage.setScaleY(0.6);
                 outputImage.setScaleZ(0.6);
-                outputImage.setTranslateX(-10);
+                outputImage.setTranslateX(2);
                 outputImage.setPreserveRatio(true);
-                outputImage.setTranslateY(outputMessageHeight - 30);
+                outputImage.setTranslateY(outputMessageHeight - 15);
                 outputImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     File file = new File(output.getContent());
                     Desktop dt = Desktop.getDesktop();
@@ -818,7 +818,7 @@ public class Main extends Application {
                 msgTime.setFill(Color.BLACK);
 
                 chatLayout.getChildren().addAll(msgTime, outputImage);
-                outputMessageHeight += outputImage.getImage().getHeight()*outputImage.getScaleY() + 5;
+                outputMessageHeight += outputImage.getImage().getHeight()*outputImage.getScaleY() + 20;
             }
 
             else if(output.getMessageType().equals(MessageType.HYPER_LINK)){ // If the message is a string
