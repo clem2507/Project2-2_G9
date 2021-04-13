@@ -13,7 +13,7 @@ public class ParsingUtils {
 
     public static List<ParsedNode> toNodes(final List<String> tokens) {
         return tokens.stream()
-                .map(LiteralSymbol::new)
+                .map(LeafSymbol::new)
                 .map(ParsedNode::new)
                 .collect(Collectors.toList());
     }
@@ -27,9 +27,10 @@ public class ParsingUtils {
      */
     public static ParsedNode parse(final List<String> tokens, final List<ProductionRule> rules) throws NLPError {
         List<ParsedNode> input = toNodes(tokens);
+        System.out.println("Parsing " + input.toString());
 
         // While the sequence is not reduced to a starting non-terminal symbol.
-        outer_while : while (input.size() > 1) {
+        outer_while : while (input.size() > 1) { // O(n)
 
             // For each legal range of tokens we can analyse per iteration.
             // We start at 1 and finish at |input| (inclusive).
@@ -81,7 +82,7 @@ public class ParsingUtils {
 
         return input.stream().findFirst().orElseThrow();
         // NOTE: In the worst case, assuming that the grammar rules do not make the parser
-        // get stuck forever, the time complexity is O(m*n^2). Where "m" is the number of
+        // get stuck forever, the time complexity is O(m*n^3). Where "m" is the number of
         // grammar rules and "n" is the number of tokens
     }
 

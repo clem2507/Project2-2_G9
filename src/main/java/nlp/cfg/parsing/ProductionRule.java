@@ -3,6 +3,10 @@ package nlp.cfg.parsing;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a production rule of the form S -> EXPR, where EXPR is an arbitrary
+ * combination of non-terminal symbols.
+ */
 public class ProductionRule {
     protected Symbol nonTerminal;
     protected List<Symbol> production;
