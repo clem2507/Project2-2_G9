@@ -35,7 +35,7 @@ public class Camera {
         synchronized (videoCaptures){
 
             if (!videoCaptures.containsKey(channel)){ // If the camera hasn't been open yet
-                Webcam webcam = Webcam.getDefault();
+                Webcam webcam = Webcam.getWebcams().get(channel);
                 webcam.open();
 
                 if(!webcam.isOpen()){

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class StringTokenizer {
     private static final char[] SYMBOLS = new char[]{
-            '.', ',', '/', '\\', '!', '?', '+', '-', '*', '^', '(', ')'
+            '.', ',', '/', '\\', '!', '?', '+', '-', '*', '^', '(', ')', '[', ']', '{', '}'
     };
 
     private static final char[] ALPHABET = ("abcdefghijklmnopqrstuvwxyz".toUpperCase() + "abcdefghijklmnopqrstuvwxyz")

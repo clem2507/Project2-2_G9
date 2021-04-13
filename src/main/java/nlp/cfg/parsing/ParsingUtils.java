@@ -11,14 +11,11 @@ import java.util.stream.Collectors;
 
 public class ParsingUtils {
 
-    public static List<Node> toNodes(final List<String> tokens) {
+    public static List<ParsedNode> toNodes(final List<String> tokens) {
         return tokens.stream()
-                .map(Node::new)
+                .map(LiteralSymbol::new)
+                .map(ParsedNode::new)
                 .collect(Collectors.toList());
-    }
-
-    public static boolean compareTokenWithSymbol(String token, String symbol) {
-        return token.equals(symbol);
     }
 
     /**
@@ -28,8 +25,8 @@ public class ParsingUtils {
      * @return a Node object representing the root of the parse tree
      * @throws NLPError if parsing fails
      */
-    public static Node parse(final List<String> tokens, final List<GrammarRule> rules) throws NLPError {
-        List<Node> input = toNodes(tokens);
+    public static ParsedNode parse(final List<String> tokens, final List<ProductionRule> rules) throws NLPError {
+        List<ParsedNode> input = toNodes(tokens);
 
         // While the sequence is not reduced to a starting non-terminal symbol.
         outer_while : while (input.size() > 1) {
@@ -44,23 +41,23 @@ public class ParsingUtils {
                 // tokens and we only analyse those that are inside of said range.
                  for(int j = 0; j < input.size() - i + 1; j++) { // O(n)
                      // We get the sublist of tokens [j, j + i].
-                     final List<Node> subSeq = input.subList(j, j + i);
-                     System.out.println("Working on subsequence: " + subSeq.toString());
+                     final List<ParsedNode> subSeq = input.subList(j, j + i);
+                     System.out.println("For " + subSeq.toString());
 
                      // Now we try to apply the grammar rules.
-                     for(GrammarRule rule : rules) { // O(m)
+                     for(ProductionRule rule : rules) { // O(m)
 
                          // If the rule can be applied to the sublist of tokens.
                          if(rule.isApplicable(subSeq)) {
                              // Keeps a reference to the old sequence.
-                             final List<Node> oldInput = input;
+                             final List<ParsedNode> oldInput = input;
 
                              // Get all tokens before the sublist.
-                             List<Node> pre = new ArrayList<>(input.subList(0, j));
+                             List<ParsedNode> pre = new ArrayList<>(input.subList(0, j));
                              // Get the production after applying the rule.
-                             Node modified = rule.apply(subSeq);
+                             ParsedNode modified = rule.apply(subSeq);
                              // Get All tokens after the sublist.
-                             List<Node> pos = new ArrayList<>(input.subList(j + i, input.size()));
+                             List<ParsedNode> pos = new ArrayList<>(input.subList(j + i, input.size()));
 
                              // Put them all together such that pre + (sublist becomes modified) + pos.
                              input = new ArrayList<>();
@@ -68,7 +65,7 @@ public class ParsingUtils {
                              input.add(modified);
                              input.addAll(pos);
 
-                             System.out.println(oldInput.toString() + " becomes " + input.toString());
+                             System.out.println("\t\t\t" + oldInput.toString() + " becomes " + input.toString());
                              // Go back up and repeat.
                              continue outer_while;
                          }
@@ -89,22 +86,29 @@ public class ParsingUtils {
     }
 
     public static void main(String[] args) {
-        List<GrammarRule> rules = new ArrayList<>();
-        rules.add(new GrammarRule("S", Collections.singletonList("::numeric::")));
-        rules.add(new GrammarRule("S", Arrays.asList("S", "+", "S")));
-        rules.add(new GrammarRule("S", Arrays.asList("(", "S", ")")));
+        List<ProductionRule> rules = new ArrayList<>();
+
+        Symbol S = new LiteralSymbol("S");
+        Symbol N = new NumericSymbol();
+        Symbol ADD = new LiteralSymbol("+");
+        Symbol RPAR = new LiteralSymbol(")");
+        Symbol LPAR = new LiteralSymbol("(");
+
+        rules.add(new ProductionRule(S, Collections.singletonList(N)));
+        rules.add(new ProductionRule(S, Arrays.asList(S, ADD, S)));
+        rules.add(new ProductionRule(S, Arrays.asList(LPAR, S, RPAR)));
 
         String input = "12 + (3 + 4)";
 
         try {
-            Node output = parse(StringTokenizer.toTokenList(input), rules);
+            ParsedNode output = parse(StringTokenizer.toTokenList(input), rules);
 
             if (output != null){
-                System.out.println(output.flat());
+                System.out.println(output.prettyString());
             }
 
             else
-                System.out.println("The sentence could not be parsed");
+                System.out.println("The sentence could not be parsed.");
 
         } catch (NLPError nlpError) {
             nlpError.printStackTrace();
