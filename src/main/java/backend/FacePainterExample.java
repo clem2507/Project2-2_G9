@@ -16,6 +16,7 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import org.openimaj.image.ImageUtilities;
+import org.openimaj.image.colour.RGBColour;
 import org.openimaj.image.processing.face.detection.DetectedFace;
 import org.openimaj.image.processing.face.detection.HaarCascadeDetector;
 import org.openimaj.math.geometry.shape.Rectangle;
@@ -31,18 +32,15 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
 
     private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
     private static final HaarCascadeDetector detector = new HaarCascadeDetector();
-    private static final Stroke STROKE = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 1.0f }, 0.0f);
 
     private Webcam webcam = null;
     private WebcamPanel.Painter painter = null;
     private List<DetectedFace> faces = null;
-    private BufferedImage greenSquare = null;
+    private boolean faceExists = false;
 
     public FacePainterExample() throws IOException {
 
         super();
-
-        greenSquare = ImageIO.read(getClass().getResourceAsStream("/GreenSquare.png"));
 
         webcam = Webcam.getDefault();
         webcam.setViewSize(WebcamResolution.VGA.getSize());
@@ -68,6 +66,7 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
         setVisible(true);
 
         EXECUTOR.execute(this);
+
     }
 
     @Override
@@ -76,6 +75,7 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
             if (!webcam.isOpen()) {
                 return;
             }
+            System.out.println("faces");
             faces = detector.detectFaces(ImageUtilities.createFImage(webcam.getImage()));
         }
     }
@@ -99,26 +99,21 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
         }
 
         Iterator<DetectedFace> dfi = faces.iterator();
+
         while (dfi.hasNext()) {
-
-            DetectedFace face = dfi.next();
-            Rectangle bounds = face.getBounds();
-
-            int dx = (int) (0.1 * bounds.width);
-            int dy = (int) (0.2 * bounds.height);
-            int x = (int) bounds.x - dx;
-            int y = (int) bounds.y - dy;
-            int w = (int) bounds.width + 2 * dx;
-            int h = (int) bounds.height + dy;
-
-            g2.drawImage(greenSquare, x, y, w, h, null);
-            g2.setStroke(STROKE);
-            g2.setColor(Color.RED);
-            g2.drawRect(x, y, w, h);
+            this.faceExists = true;
+            System.out.println("Face Detected");
+            dfi.next();
         }
+
+    }
+
+    public boolean doesFaceExist(){
+        return this.faceExists;
     }
 
     public static void main(String[] args) throws IOException {
         new FacePainterExample();
+
     }
 }
