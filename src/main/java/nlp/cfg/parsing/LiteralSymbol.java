@@ -1,8 +1,11 @@
 package nlp.cfg.parsing;
 
+import nlp.NLPError;
+
 /**
  * Represents a symbol that seeks to match its content with
- * a token.
+ * an arbitrary token. Effectively equivalent to matching two tokens hat
+ * are the same string.
  */
 public class LiteralSymbol implements Symbol {
     private final String content;
