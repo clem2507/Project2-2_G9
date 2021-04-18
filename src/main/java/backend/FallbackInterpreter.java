@@ -16,7 +16,13 @@ public interface FallbackInterpreter {
     // of predefined fallback patterns
     // You do not have to worry about who calls this method or
     // when this gets called
-    void notifyNewPath(String newPath);
+    void compileTemplate(String newPath);
     // NOTE: This can be called at any point during runtime
+
+    // Return the unique name of this interpreter
+    InterpreterNames getName();
+
+    void reset();
+
 
 }
