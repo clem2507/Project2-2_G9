@@ -25,7 +25,7 @@ public class Assistant {
     private final Set<Domain> domains;
     private final BlockingQueue<AssistantMessage> outputChannel;
     private Set<Thread> runningSkills, backgroundSkills;
-    private FallbackInterpreter[] interpreters;
+    private final FallbackInterpreter[] interpreters;
     private String selectedInterpreter;
 
     public Assistant(){
@@ -281,6 +281,15 @@ public class Assistant {
 
     private String getPathToInterpreterTemplates(final String interpreterName) {
         return TEMPLATES_PATH + interpreterName + "/";
+    }
+
+    public List<String> listInterpreterNames() {
+        return Arrays.stream(interpreters).map(i -> i.getName().toString()).collect(Collectors.toList());
+    }
+
+    public synchronized void selectInterpreter(final String uniqueName) {
+        assert Arrays.stream(interpreters).anyMatch(i -> i.getName().toString().equals(uniqueName));
+        selectedInterpreter = uniqueName;
     }
 
 }
