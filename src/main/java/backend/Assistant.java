@@ -57,7 +57,7 @@ public class Assistant {
     private void loadTemplates(final FallbackInterpreter interpreter) {
 
         try {
-            Path templatesFolder = Paths.get(TEMPLATES_PATH + interpreter.getName() + "/");
+            Path templatesFolder = Paths.get(getPathToInterpreterTemplates(interpreter.getName().toString()));
             Files.createDirectories(templatesFolder);
 
             Files.list(templatesFolder).forEach(p -> {
@@ -241,7 +241,7 @@ public class Assistant {
     synchronized public void notifyOfNewPath(String path){
         Path source = Paths.get(path);
         Path destination = Paths.get(
-                TEMPLATES_PATH + selectedInterpreter + "/" + source.getName(source.getNameCount() - 1).toString()
+                getPathToInterpreterTemplates(selectedInterpreter) + source.getName(source.getNameCount() - 1).toString()
         );
 
         try {
@@ -261,7 +261,7 @@ public class Assistant {
         // A bit of a hack, but still readable -Dennis
 
         try {
-            Files.list(Paths.get(TEMPLATES_PATH + selectedInterpreter + "/")).forEach(p -> {
+            Files.list(Paths.get(getPathToInterpreterTemplates(selectedInterpreter))).forEach(p -> {
                 try {
                     Files.deleteIfExists(p);
                 } catch (IOException e) {
@@ -277,6 +277,10 @@ public class Assistant {
                 .findFirst()
                 .orElseThrow()
                 .reset();
+    }
+
+    private String getPathToInterpreterTemplates(final String interpreterName) {
+        return TEMPLATES_PATH + interpreterName + "/";
     }
 
 }
