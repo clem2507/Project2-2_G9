@@ -20,7 +20,7 @@ public class FallbackMachine implements FallbackInterpreter {
     @Override
     // Takes in a query and checks whether it matches any of the custom patterns
     // Returns either the response corresponding to the matched pattern or a default response if there is not matched pattern
-    public String processQuery(String query) {
+    public Map.Entry<String, Double> processQuery(String query) {
         // Rewrite for custom skills
         if(listOfSkills.size() == 0) {
             return null;
@@ -33,12 +33,11 @@ public class FallbackMachine implements FallbackInterpreter {
         if (match != null) {
             for (CustomSkill skill : listOfSkills) {
                 if (match.getPattern().equals(skill.getPattern())) {
-                    return skill.getResponse(match);
+                    return new AbstractMap.SimpleEntry<>(skill.getResponse(match), match.useRatio());
                 }
             }
         }
         return null;
-
     }
 
     @Override

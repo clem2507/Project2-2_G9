@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 public class Assistant {
     private final String USER_DEFINED_TEMPLATES_PATH = "src/assets/ProjectData/PatternTemplates/";
+    private final double MIN_CONFIDENCE_THRESHOLD = 0.0001;
 
     private final Set<Domain> domains;
     private final BlockingQueue<AssistantMessage> outputChannel;
@@ -69,7 +70,8 @@ public class Assistant {
      */
     synchronized public void processQuery(final String query){
         Domain selectedDomain = null; // Best domain matched so far
-        MatchedSequence obtainedSequence = null; // Best matched sequence so far
+        MatchedSequence domainMatchSequence = null; // Best matched sequence so far
+        Map.Entry<String, Double> bestInterpreterResponse = null; // Best response from custom skills
 
         for(Domain d : domains){ // Iterate ove the domains
             final MatchedSequence sequence = d.matchQuery(query); // Match the query with the 'best' pattern in the domain
@@ -77,35 +79,51 @@ public class Assistant {
             // (i.e. matched tokens / query length ratio) is the highest
 
             // If the sequence is a match and it is a better match than obtainedSequence or it is the first match
-            if(sequence != null && (obtainedSequence == null || sequence.useRatio() > obtainedSequence.useRatio())){
+            if(sequence != null && (domainMatchSequence == null || sequence.useRatio() > domainMatchSequence.useRatio())){
                 selectedDomain = d;
-                obtainedSequence = sequence;
+                domainMatchSequence = sequence;
             }
 
         }
 
-        if(selectedDomain != null){ // If a domain matched
-            Skill skill = selectedDomain.dispatchSkill(obtainedSequence, outputChannel); // Declare skill
+        for(FallbackInterpreter interpreter : new FallbackInterpreter[]{primaryFallbackInterpreter}) {
+            Map.Entry<String, Double> interpreterResponse = interpreter.processQuery(query);
 
-            // Send skill to run in the background
-            Thread thread = new Thread(skill);
-            thread.start();
-            runningSkills.add(thread);
-        }
+            if(interpreterResponse != null) {
 
-        else{
-
-            for(FallbackInterpreter interpreter : new FallbackInterpreter[]{primaryFallbackInterpreter}) {
-                String response = interpreter.processQuery(query);
-
-                if(response != null) {
-                    pushMessage(response);
-                    return;
+                if(bestInterpreterResponse == null || interpreterResponse.getValue() > bestInterpreterResponse.getValue()) {
+                    bestInterpreterResponse = interpreterResponse;
                 }
 
             }
 
+        }
+
+        double domainConfidence = domainMatchSequence != null? domainMatchSequence.useRatio():0;
+        double interpreterConfidence = bestInterpreterResponse != null? bestInterpreterResponse.getValue():0;
+
+        if(domainConfidence < MIN_CONFIDENCE_THRESHOLD && interpreterConfidence < MIN_CONFIDENCE_THRESHOLD) {
             pushMessage("I do not understand");
+        }
+
+        else {
+
+            if (domainConfidence >= interpreterConfidence) {
+                assert selectedDomain != null;
+                Skill skill = selectedDomain.dispatchSkill(domainMatchSequence, outputChannel); // Declare skill
+
+                // Send skill to run in the background
+                Thread thread = new Thread(skill);
+                thread.start();
+                runningSkills.add(thread);
+            } else {
+                assert bestInterpreterResponse != null;
+                String response = bestInterpreterResponse.getKey();
+                double confidence = bestInterpreterResponse.getValue();
+                System.out.println(confidence);
+                pushMessage(response);
+            }
+
         }
 
     }
