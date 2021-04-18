@@ -65,6 +65,9 @@ public class CustomSkill {
                     parameterString = e.getValue();
                     break;
                 }
+                /*if (e.getKey().equals("default")) {
+                    parameterString = e.getValue();
+                }*/
             }
             String placeholder = "@1";
             newResponse = newResponse.replace(placeholder, parameterString);
