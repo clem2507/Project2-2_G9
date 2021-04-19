@@ -20,13 +20,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Assistant {
-    private final String TEMPLATES_PATH = "src/assets/ProjectData/PatternTemplates/";
 
     private final Set<Domain> domains;
     private final BlockingQueue<AssistantMessage> outputChannel;
     private Set<Thread> runningSkills, backgroundSkills;
     private final FallbackInterpreter[] interpreters;
-    private String selectedInterpreter;
+    private FallbackInterpreter selectedInterpreter;
 
     public Assistant(){
         domains = new HashSet<>();
@@ -37,7 +36,7 @@ public class Assistant {
         interpreters = new FallbackInterpreter[]{
                 new RegexSkillsInterpreter()
         };
-        selectedInterpreter = interpreters[0].getName().toString();
+        selectedInterpreter = interpreters[0];
 
         addDomain(new SayThis());
         addDomain(new FindMe());
@@ -57,7 +56,7 @@ public class Assistant {
     private void loadTemplates(final FallbackInterpreter interpreter) {
 
         try {
-            Path templatesFolder = Paths.get(getPathToInterpreterTemplates(interpreter.getName().toString()));
+            Path templatesFolder = Paths.get(getPathToInterpreterTemplates(interpreter));
             Files.createDirectories(templatesFolder);
 
             Files.list(templatesFolder).forEach(p -> {
@@ -247,7 +246,7 @@ public class Assistant {
         try {
             Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
             Arrays.stream(interpreters)
-                    .filter(i -> i.getName().toString().equals(selectedInterpreter))
+                    .filter(i -> i.equals(selectedInterpreter))
                     .findFirst().orElseThrow()
                     .compileTemplate(path);
         } catch (IOException e) {
@@ -273,23 +272,33 @@ public class Assistant {
         }
 
         Arrays.stream(interpreters)
-                .filter(i -> i.getName().toString().equals(selectedInterpreter))
+                .filter(i -> i.equals(selectedInterpreter))
                 .findFirst()
                 .orElseThrow()
                 .reset();
     }
 
-    private String getPathToInterpreterTemplates(final String interpreterName) {
-        return TEMPLATES_PATH + interpreterName + "/";
+    private String getPathToInterpreterTemplates(final FallbackInterpreter interpreter) {
+        final String TEMPLATES_PATH = "src/assets/ProjectData/PatternTemplates/";
+        return TEMPLATES_PATH + interpreter.getName() + "/";
     }
 
+    /**
+     * Returns a list with all active fallback interpreters.
+     * @return List of strings.
+     */
     public List<String> listInterpreterNames() {
         return Arrays.stream(interpreters).map(i -> i.getName().toString()).collect(Collectors.toList());
     }
 
+    /**
+     * Tells the assistant to switch focus to the interpreter specified by name.
+     * @param uniqueName the unique name of the desired interpreter.
+     */
     public synchronized void selectInterpreter(final String uniqueName) {
-        assert Arrays.stream(interpreters).anyMatch(i -> i.getName().toString().equals(uniqueName));
-        selectedInterpreter = uniqueName;
+        selectedInterpreter = Arrays.stream(interpreters)
+                .filter(i -> i.getName().toString().equals(uniqueName))
+                .findFirst().orElseThrow();
     }
 
 }
