@@ -20,13 +20,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Assistant {
-    private final String USER_DEFINED_TEMPLATES_PATH = "src/assets/ProjectData/PatternTemplates/";
-    private final double MIN_CONFIDENCE_THRESHOLD = 0.0001;
+    private final String TEMPLATES_PATH = "src/assets/ProjectData/PatternTemplates/";
 
     private final Set<Domain> domains;
     private final BlockingQueue<AssistantMessage> outputChannel;
     private Set<Thread> runningSkills, backgroundSkills;
-    private FallbackInterpreter primaryFallbackInterpreter;
+    private FallbackInterpreter[] interpreters;
+    private String selectedInterpreter;
 
     public Assistant(){
         domains = new HashSet<>();
@@ -34,7 +34,10 @@ public class Assistant {
         runningSkills = new HashSet<>();
         backgroundSkills = new HashSet<>();
 
-        primaryFallbackInterpreter = new FallbackMachine();
+        interpreters = new FallbackInterpreter[]{
+                new RegexSkillsInterpreter()
+        };
+        selectedInterpreter = interpreters[0].getName().toString();
 
         addDomain(new SayThis());
         addDomain(new FindMe());
@@ -47,17 +50,24 @@ public class Assistant {
         addDomain(new SearchDomain());
 
         // Here we load user defined templates from previous sessions.
+        Arrays.stream(interpreters).forEach(this::loadTemplates);
+
+    }
+
+    private void loadTemplates(final FallbackInterpreter interpreter) {
+
         try {
-            Path templatesFolder = Paths.get(USER_DEFINED_TEMPLATES_PATH);
+            Path templatesFolder = Paths.get(getPathToInterpreterTemplates(interpreter.getName().toString()));
             Files.createDirectories(templatesFolder);
 
             Files.list(templatesFolder).forEach(p -> {
                 String absolutePath = p.toAbsolutePath().toString();
-                primaryFallbackInterpreter.notifyNewPath(absolutePath);
+                interpreter.compileTemplate(absolutePath);
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -86,15 +96,13 @@ public class Assistant {
 
         }
 
-        for(FallbackInterpreter interpreter : new FallbackInterpreter[]{primaryFallbackInterpreter}) {
+        for(FallbackInterpreter interpreter : interpreters) {
             Map.Entry<String, Double> interpreterResponse = interpreter.processQuery(query);
 
-            if(interpreterResponse != null) {
-
-                if(bestInterpreterResponse == null || interpreterResponse.getValue() > bestInterpreterResponse.getValue()) {
-                    bestInterpreterResponse = interpreterResponse;
-                }
-
+            if(interpreterResponse != null
+            && (bestInterpreterResponse == null || interpreterResponse.getValue() > bestInterpreterResponse.getValue())
+            ) {
+                bestInterpreterResponse = interpreterResponse;
             }
 
         }
@@ -102,6 +110,10 @@ public class Assistant {
         double domainConfidence = domainMatchSequence != null? domainMatchSequence.useRatio():0;
         double interpreterConfidence = bestInterpreterResponse != null? bestInterpreterResponse.getValue():0;
 
+        System.out.println("Domain Confidence: " + domainConfidence);
+        System.out.println("Interpreter Confidence: " + interpreterConfidence);
+
+        final double MIN_CONFIDENCE_THRESHOLD = 0.0001;
         if(domainConfidence < MIN_CONFIDENCE_THRESHOLD && interpreterConfidence < MIN_CONFIDENCE_THRESHOLD) {
             pushMessage("I do not understand");
         }
@@ -119,8 +131,6 @@ public class Assistant {
             } else {
                 assert bestInterpreterResponse != null;
                 String response = bestInterpreterResponse.getKey();
-                double confidence = bestInterpreterResponse.getValue();
-                System.out.println(confidence);
                 pushMessage(response);
             }
 
@@ -231,12 +241,15 @@ public class Assistant {
     synchronized public void notifyOfNewPath(String path){
         Path source = Paths.get(path);
         Path destination = Paths.get(
-                USER_DEFINED_TEMPLATES_PATH + source.getName(source.getNameCount() - 1).toString()
+                getPathToInterpreterTemplates(selectedInterpreter) + source.getName(source.getNameCount() - 1).toString()
         );
 
         try {
             Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-            primaryFallbackInterpreter.notifyNewPath(path);
+            Arrays.stream(interpreters)
+                    .filter(i -> i.getName().toString().equals(selectedInterpreter))
+                    .findFirst().orElseThrow()
+                    .compileTemplate(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -248,7 +261,7 @@ public class Assistant {
         // A bit of a hack, but still readable -Dennis
 
         try {
-            Files.list(Paths.get(USER_DEFINED_TEMPLATES_PATH)).forEach(p -> {
+            Files.list(Paths.get(getPathToInterpreterTemplates(selectedInterpreter))).forEach(p -> {
                 try {
                     Files.deleteIfExists(p);
                 } catch (IOException e) {
@@ -259,7 +272,15 @@ public class Assistant {
             e.printStackTrace();
         }
 
-        primaryFallbackInterpreter = new FallbackMachine();
+        Arrays.stream(interpreters)
+                .filter(i -> i.getName().toString().equals(selectedInterpreter))
+                .findFirst()
+                .orElseThrow()
+                .reset();
+    }
+
+    private String getPathToInterpreterTemplates(final String interpreterName) {
+        return TEMPLATES_PATH + interpreterName + "/";
     }
 
 }

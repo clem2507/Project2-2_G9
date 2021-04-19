@@ -32,11 +32,21 @@ public class FallbackCFG implements FallbackInterpreter {
     }
 
     @Override
-    public void notifyNewPath(String newPath) {
+    public void compileTemplate(String newPath) {
         this.path = newPath;
         this.rules = new ArrayList<ProductionRule>();
         this.responses = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
         readPath();
+    }
+
+    @Override
+    public InterpreterNames getName() {
+        return InterpreterNames.CONTEXT_FREE_GRAMMAR;
+    }
+
+    @Override
+    public void reset() {
+        // This is to tell the interpreter to forget all templates in memory.
     }
 
     // Converts text file to production rules and responses

@@ -7,13 +7,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class FallbackMachine implements FallbackInterpreter {
-
-    private String path;
+public class RegexSkillsInterpreter implements FallbackInterpreter {
     // Could just be combined, not sure
     final private List<CustomSkill> listOfSkills;
 
-    public FallbackMachine() {
+    public RegexSkillsInterpreter() {
         listOfSkills = new ArrayList<>();
     }
 
@@ -42,13 +40,12 @@ public class FallbackMachine implements FallbackInterpreter {
 
     @Override
     // Gives the location of the text file with custom skills
-    public void notifyNewPath(String newPath) {
-        this.path = newPath;
-        readPath();
+    public void compileTemplate(String newPath) {
+        readPath(newPath);
     }
 
     // Parses the text file and puts the info into data structures to be used for matching queries
-    private void readPath() {
+    private void readPath(final String path) {
         try {
             File txtFile = new File(path);
             Scanner myReader = new Scanner(txtFile);
@@ -82,5 +79,14 @@ public class FallbackMachine implements FallbackInterpreter {
         return listOfSkills;
     }
 
+    @Override
+    public InterpreterNames getName() {
+        return InterpreterNames.REGEX_SKILLS;
+    }
+
+    @Override
+    public void reset() {
+        listOfSkills.clear();
+    }
 
 }
