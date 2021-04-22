@@ -15,6 +15,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -274,6 +275,11 @@ public class Main extends Application {
 
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
+
+    javafx.scene.control.Menu menu;
+    javafx.scene.control.MenuItem menu1;
+    javafx.scene.control.MenuItem menu2;
+    javafx.scene.control.MenuBar menuBar;
 
     Date currentDate;
 
@@ -650,6 +656,32 @@ public class Main extends Application {
         quote.setTranslateY(quoteY);
         quote.setFill(Color.WHITE);
         pane.getChildren().add(quote);
+
+        menu = new javafx.scene.control.Menu("Menu");
+
+        menu1 = new javafx.scene.control.MenuItem("CFG 1");
+        menu2 = new javafx.scene.control.MenuItem("CFG 2");
+
+        menu1.setOnAction(event -> {
+            System.out.println("CFG 1 selected");
+            // TODO - Link with the method
+        });
+
+        menu2.setOnAction(event -> {
+            System.out.println("CFG 2 selected");
+            // TODO - Link with the method
+        });
+
+        menu.getItems().add(menu1);
+        menu.getItems().add(menu2);
+
+        menuBar = new javafx.scene.control.MenuBar();
+//        final String os = System.getProperty("os.name");
+//        if (os != null && os.startsWith("Mac"))
+            menuBar.useSystemMenuBarProperty().set(true);
+
+        menuBar.getMenus().add(menu);
+        pane.getChildren().add(menuBar);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
 
