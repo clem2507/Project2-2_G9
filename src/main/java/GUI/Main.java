@@ -13,11 +13,14 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -272,6 +275,9 @@ public class Main extends Application {
     int emptyTemplateHeight = dropFileHeight;
     int emptyTemplateX = dropFileX + 170;
     int emptyTemplateY = dropFileY;
+
+    int menubarX = emptyTemplateX + 188;
+    int menubarY = emptyTemplateY + 5;
 
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
@@ -657,6 +663,7 @@ public class Main extends Application {
         quote.setFill(Color.WHITE);
         pane.getChildren().add(quote);
 
+        /**
         menu = new javafx.scene.control.Menu("Menu");
 
         menu1 = new javafx.scene.control.MenuItem("CFG 1");
@@ -681,6 +688,26 @@ public class Main extends Application {
             menuBar.useSystemMenuBarProperty().set(true);
 
         menuBar.getMenus().add(menu);
+        pane.getChildren().add(menuBar);**/
+
+        Menu menu = new Menu("Menu");
+
+        RadioMenuItem choice1Item = new RadioMenuItem("Fallback System 1");
+        choice1Item.setSelected(true);
+        RadioMenuItem choice2Item = new RadioMenuItem("Fallback System 2");
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        toggleGroup.getToggles().add(choice1Item);
+        toggleGroup.getToggles().add(choice2Item);
+
+        menu.getItems().add(choice1Item);
+        menu.getItems().add(choice2Item);
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().add(menu);
+        menuBar.setTranslateX(menubarX);
+        menuBar.setTranslateY(menubarY);
+        menuBar.setStyle("-fx-selection-bar: #636b69;");
         pane.getChildren().add(menuBar);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
