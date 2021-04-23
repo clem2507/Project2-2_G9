@@ -2,9 +2,7 @@ package backend;
 
 import nlp.NLPError;
 import nlp.cfg.StringTokenizer;
-import nlp.cfg.parsing.LiteralSymbol;
-import nlp.cfg.parsing.ProductionRule;
-import nlp.cfg.parsing.Symbol;
+import nlp.cfg.parsing.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,8 +25,29 @@ public class FallbackCFG implements FallbackInterpreter {
     }
 
     @Override
-    public Map.Entry<String, Double> processQuery(String query) {
-        return new AbstractMap.SimpleEntry<String, Double>("todo", 3.1);
+    public Map.Entry<String, Double> processQuery(String query){
+        // Parse query according to the grammar rules
+        ParsedNode parsedQuery = null;
+        try {
+            parsedQuery = ParsingUtils.parse(StringTokenizer.toTokenList(query), rules);
+        } catch (NLPError nlpError) {
+            nlpError.printStackTrace();
+        }
+        ArrayList<ParsedNode> children = new ArrayList<>(parsedQuery.getChildren());
+        AbstractMap.SimpleEntry<String, Double> match = new AbstractMap.SimpleEntry<>("No match found", 0.0);
+        for (AbstractMap.SimpleEntry<String, String> e : responses) {
+            if (parsedQuery.toString().equals(e.getKey())) {
+                match = new AbstractMap.SimpleEntry<>(e.getValue(), 1.0);
+            }
+            else {
+                for (ParsedNode c : children) {
+                    if (c.toString().equals(e.getKey())) {
+                        match = new AbstractMap.SimpleEntry<>(e.getValue(), 0.8);
+                    }
+                }
+            }
+        }
+        return match;
     }
 
     @Override
@@ -108,5 +127,13 @@ public class FallbackCFG implements FallbackInterpreter {
         }
 
     }
+
+    /*TESTING PURPOSES
+    public static void main(String[] args) {
+        FallbackCFG test = new FallbackCFG();
+        test.compileTemplate("C:\\Users\\gebruiker\\Documents\\Project 2-2\\botcfg.txt");
+        System.out.println(test.processQuery("When does the sun come up?").getKey());
+    }*/
+    
 
 }
