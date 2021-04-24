@@ -291,6 +291,10 @@ public class Controller {
                 String emptyTemplateFontSizeStr = "-fx-font-size: " + window.emptyTemplateFontSize/widthScale +"px;";
                 window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
                         " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+
+                window.menuBar.setPrefHeight(window.menuBar.getPrefWidth()/widthScale);
+                window.menuBar.setTranslateX(window.menubarX/widthScale);
+                window.menu.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0); -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr);
             }
         });
 
@@ -403,7 +407,21 @@ public class Controller {
                 String emptyTemplateFontSizeStr = "-fx-font-size: " + window.emptyTemplateFontSize/heightScale +"px;";
                 window.emptyTemplate.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
                         " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
+
+                window.menuBar.setPrefHeight(window.menuBar.getPrefHeight()/heightScale);
+                window.menuBar.setTranslateY(window.menubarY/heightScale);
+                window.menu.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0); -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr);
             }
+        });
+
+        window.choice1Item.setOnAction(event -> {
+            System.out.println("Fallback system 1 selected");
+            // TODO - Link the method with the first fallback system here
+        });
+
+        window.choice2Item.setOnAction(event -> {
+            System.out.println("Fallback system 2 selected");
+            // TODO - Link the method with the second fallback system here
         });
 
         Text target = window.target;

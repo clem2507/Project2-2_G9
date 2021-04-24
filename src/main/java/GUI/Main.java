@@ -276,16 +276,11 @@ public class Main extends Application {
     int emptyTemplateX = dropFileX + 170;
     int emptyTemplateY = dropFileY;
 
-    int menubarX = emptyTemplateX + 188;
-    int menubarY = emptyTemplateY + 5;
+    int menubarX = dropFileX;
+    int menubarY = dropFileY + 70;
 
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
-
-    javafx.scene.control.Menu menu;
-    javafx.scene.control.MenuItem menu1;
-    javafx.scene.control.MenuItem menu2;
-    javafx.scene.control.MenuBar menuBar;
 
     Date currentDate;
 
@@ -299,6 +294,11 @@ public class Main extends Application {
     private int outputMessageHeight = 0;
 
     Thread queryThread;
+
+    Menu menu;
+    MenuBar menuBar;
+    RadioMenuItem choice1Item;
+    RadioMenuItem choice2Item;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -663,38 +663,14 @@ public class Main extends Application {
         quote.setFill(Color.WHITE);
         pane.getChildren().add(quote);
 
-        /**
-        menu = new javafx.scene.control.Menu("Menu");
+        menu = new Menu("MENU");
+        menu.setStyle("-fx-font-family: \"Gadugi\"; -fx-font-size: 15px;");
 
-        menu1 = new javafx.scene.control.MenuItem("CFG 1");
-        menu2 = new javafx.scene.control.MenuItem("CFG 2");
-
-        menu1.setOnAction(event -> {
-            System.out.println("CFG 1 selected");
-            // TODO - Link with the method
-        });
-
-        menu2.setOnAction(event -> {
-            System.out.println("CFG 2 selected");
-            // TODO - Link with the method
-        });
-
-        menu.getItems().add(menu1);
-        menu.getItems().add(menu2);
-
-        menuBar = new javafx.scene.control.MenuBar();
-//        final String os = System.getProperty("os.name");
-//        if (os != null && os.startsWith("Mac"))
-            menuBar.useSystemMenuBarProperty().set(true);
-
-        menuBar.getMenus().add(menu);
-        pane.getChildren().add(menuBar);**/
-
-        Menu menu = new Menu("Menu");
-
-        RadioMenuItem choice1Item = new RadioMenuItem("Fallback System 1");
+        choice1Item = new RadioMenuItem("Fallback System 1");
         choice1Item.setSelected(true);
-        RadioMenuItem choice2Item = new RadioMenuItem("Fallback System 2");
+        choice1Item.setStyle("-fx-text-fill: black;");
+        choice2Item = new RadioMenuItem("Fallback System 2");
+        choice2Item.setStyle("-fx-text-fill: black;");
 
         ToggleGroup toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().add(choice1Item);
@@ -703,14 +679,17 @@ public class Main extends Application {
         menu.getItems().add(choice1Item);
         menu.getItems().add(choice2Item);
 
-        MenuBar menuBar = new MenuBar();
+        menuBar = new MenuBar();
         menuBar.getMenus().add(menu);
         menuBar.setTranslateX(menubarX);
         menuBar.setTranslateY(menubarY);
-        menuBar.setStyle("-fx-selection-bar: #636b69;");
+        menuBar.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+
         pane.getChildren().add(menuBar);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
         this.messageHistory = new ArrayList<>();
 
