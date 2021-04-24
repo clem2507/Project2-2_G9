@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -665,19 +666,28 @@ public class Main extends Application {
 
         menu = new Menu("MENU");
         menu.setStyle("-fx-font-family: \"Gadugi\"; -fx-font-size: 15px;");
-
-        choice1Item = new RadioMenuItem("Fallback System 1");
-        choice1Item.setSelected(true);
-        choice1Item.setStyle("-fx-text-fill: black;");
-        choice2Item = new RadioMenuItem("Fallback System 2");
-        choice2Item.setStyle("-fx-text-fill: black;");
-
         ToggleGroup toggleGroup = new ToggleGroup();
-        toggleGroup.getToggles().add(choice1Item);
-        toggleGroup.getToggles().add(choice2Item);
 
-        menu.getItems().add(choice1Item);
-        menu.getItems().add(choice2Item);
+        List<String> interpreterNames = assistant.listInterpreterNames();
+
+        for(int i = 0; i <  interpreterNames.size(); i++) {
+
+            String name = interpreterNames.get(i);
+
+            RadioMenuItem choiceItem = new RadioMenuItem(name);
+            toggleGroup.getToggles().add(choiceItem);
+            menu.getItems().add(choiceItem);
+
+            choiceItem.setOnAction(event -> {
+                System.out.println("Selected this: " + name);
+                assistant.selectInterpreter(name);
+            });
+            choiceItem.setStyle("-fx-text-fill: black;");
+
+            if(i==0){
+                choiceItem.setSelected(true);
+            }
+        }
 
         menuBar = new MenuBar();
         menuBar.getMenus().add(menu);

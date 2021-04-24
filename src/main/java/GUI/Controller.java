@@ -23,6 +23,8 @@ public class Controller {
     private int historyCount = 0;
     private double heightScale = 1;
     private double widthScale = 1;
+    Assistant assistant = new Assistant();
+
 
 
     /**
@@ -413,17 +415,7 @@ public class Controller {
                 window.menu.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0); -fx-text-fill: white; -fx-font-family: \"Gadugi\";  " + emptyTemplateFontSizeStr);
             }
         });
-
-        window.choice1Item.setOnAction(event -> {
-            System.out.println("Fallback system 1 selected");
-            // TODO - Link the method with the first fallback system here
-        });
-
-        window.choice2Item.setOnAction(event -> {
-            System.out.println("Fallback system 2 selected");
-            // TODO - Link the method with the second fallback system here
-        });
-
+        
         Text target = window.target;
 
         target.setOnDragEntered(new EventHandler <DragEvent>() {
