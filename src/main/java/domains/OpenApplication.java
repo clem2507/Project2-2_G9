@@ -130,7 +130,7 @@ public class OpenApplication extends Domain {
                     // First, let the user know that the search is taking place
                     // and also tell them that we can continue to serve them while they wait
                     pushMessage("Alright", MessageType.STRING);
-                    pushMessage("I will notify you when the full system search finish", MessageType.STRING);
+                    pushMessage("I will notify you when the full system search finishes", MessageType.STRING);
                     pushMessage("How may I help you until then?", MessageType.STRING);
 
                     try{

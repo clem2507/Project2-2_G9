@@ -410,7 +410,7 @@ public class Controller {
 
                 window.menuBar.setPrefHeight(window.menuBar.getPrefHeight()/heightScale);
                 window.menuBar.setTranslateY(window.menubarY/heightScale);
-                window.menu.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0); -fx-text-fill: white; -fx-font-family: \"Gadugi\"; " + emptyTemplateFontSizeStr);
+                window.menu.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0); -fx-text-fill: white; -fx-font-family: \"Gadugi\";  " + emptyTemplateFontSizeStr);
             }
         });
 

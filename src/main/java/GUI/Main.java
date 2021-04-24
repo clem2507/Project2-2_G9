@@ -277,7 +277,7 @@ public class Main extends Application {
     int emptyTemplateY = dropFileY;
 
     int menubarX = dropFileX;
-    int menubarY = dropFileY + 70;
+    int menubarY = dropFileY + 60;
 
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
@@ -684,8 +684,7 @@ public class Main extends Application {
         menuBar.setTranslateX(menubarX);
         menuBar.setTranslateY(menubarY);
         menuBar.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; ");
-
+                " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; -fx-selection-bar: #636b69;");
         pane.getChildren().add(menuBar);
 
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
