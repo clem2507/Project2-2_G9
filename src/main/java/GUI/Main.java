@@ -278,7 +278,7 @@ public class Main extends Application {
     int emptyTemplateY = dropFileY;
 
     int menubarX = dropFileX;
-    int menubarY = dropFileY + 60;
+    int menubarY = dropFileY + 65;
 
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
@@ -298,8 +298,6 @@ public class Main extends Application {
 
     Menu menu;
     MenuBar menuBar;
-    RadioMenuItem choice1Item;
-    RadioMenuItem choice2Item;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -691,6 +689,7 @@ public class Main extends Application {
 
         menuBar = new MenuBar();
         menuBar.getMenus().add(menu);
+        menubarY+=quoteRectangleHeightIndicator*18;
         menuBar.setTranslateX(menubarX);
         menuBar.setTranslateY(menubarY);
         menuBar.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
