@@ -9,18 +9,14 @@ import backend.common.WeatherObject;
 import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -54,10 +50,7 @@ public class Main extends Application {
     final double WINDOW_WIDTH = screenSize.getWidth() - 5;
     final double WINDOW_HEIGHT = screenSize.getHeight() - 70;
 
-    int requestCounter = 0;
-
     boolean flag = true;
-    boolean isAgentFree = true;
 
     Pane pane = new Pane();
 
@@ -102,8 +95,6 @@ public class Main extends Application {
     Text time3city;
     Text time4city;
     Text time5city;
-    Text userText;
-    Text botText;
     Text robotInteractionText;
     Text weatherCity;
     Text weatherDegree;
@@ -293,8 +284,6 @@ public class Main extends Application {
     Assistant assistant = new Assistant();
     BlockingQueue<ConsoleOutput> consoleOutput = new LinkedBlockingQueue<>();
     private int outputMessageHeight = 0;
-
-    Thread queryThread;
 
     Menu menu;
     MenuBar menuBar;
@@ -493,7 +482,7 @@ public class Main extends Application {
         } catch (IOException e){
             e.printStackTrace();
         }
-        String temperature = "";
+        String temperature;
         if(!WeatherObject.isNumeric(temp)){
             weatherDegree = new Text("Error");
         }else{
@@ -705,14 +694,12 @@ public class Main extends Application {
         controller.setChatController();
         controller.setBackgroundController();
 
-        primaryStage.setOnCloseRequest(t -> {
-            exitProgram();
-        });
+        primaryStage.setOnCloseRequest(t -> exitProgram());
 
         // Here we start the tick() process - think of it as the main
         // loop.
         // NOTE: It is asynchronous but sill runs in the main thread.
-        // If this function blocks or delays, then the entire GuI will be delayed.
+        // If this function blocks or delays, then the entire GUI will be delayed.
         // IMPORTANT: This code repeats on every frame/tick
         AnimationTimer tickTimer = new AnimationTimer(){
 
@@ -741,7 +728,6 @@ public class Main extends Application {
      */
     public void updateTime() {
 
-        //wait(980);
         currentDate = new Date();
         timeText.setText(time.format(currentDate));
 
@@ -779,19 +765,6 @@ public class Main extends Application {
         dateFormat.setTimeZone(timezoneJamaica);
         time5 = dateFormat.format(calendarJamaica.getTime());
         timeText5.setText(time5);
-    }
-
-    /**
-     * Method the makes the program wait "time" seconds
-     * @param time to wait
-     */
-    public void wait(int time) {
-
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     /**
@@ -883,9 +856,7 @@ public class Main extends Application {
                 link.setOnAction(t -> {
                     try {
                         Search.open(link.getText());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedOSException e) {
+                    } catch (IOException | UnsupportedOSException e) {
                         e.printStackTrace();
                     }
                 });
@@ -925,93 +896,6 @@ public class Main extends Application {
         // work around them. In other words, they are very very unlikely to happen, so let them be.
 
         updateTime();
-    }
-
-    public void createThread() {
-
-        queryThread = new Thread(() -> {
-            try {
-                boolean image = false;
-                botText = new Text();
-                Text text = new Text();
-                AssistantMessage hi = assistant.getOutputOrWait();
-                if(hi.getMessage().split("-")[0].equals("image"))
-                {
-                    image = true;
-                    System.out.println(hi.getMessage().split("-")[1]);
-                    FileInputStream input = new FileInputStream("src/assets/PhotoTaken/" + hi.getMessage().split("-")[1]);
-                    Image imageFile = new Image(input);
-                    webcam = new ImageView(imageFile);
-                    Platform.runLater(() -> {
-
-                        text.setText("Bot: Smile!");
-                        text.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
-                        text.setFill(Color.WHITE);
-                        text.setTranslateX(50);
-                        text.setTranslateY(userText.getTranslateY() + 20);
-
-                        chatLayout.getChildren().add(text);
-
-                        webcam.setScaleX(0.3);
-                        webcam.setScaleY(0.3);
-                        webcam.setScaleZ(0.3);
-                        webcam.setTranslateX(-172);
-                        webcam.setPreserveRatio(true);
-
-                        webcam.setTranslateY(text.getTranslateY() - 160);
-
-
-                        webcam.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
-                            @Override
-                            public void handle(MouseEvent event) {
-                                File file = new File("src/assets/PhotoTaken/" + hi.getMessage().split("-")[1]);
-                                Desktop dt = Desktop.getDesktop();
-                                try {
-                                    dt.open(file);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                event.consume();
-                            }
-                        });
-
-                        robotInteractionText.setText("Damn\nYou are hot!");
-                        chatLayout.getChildren().add(webcam);
-
-                        botText.setText("Click on the image to have full resolution!");
-                        botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
-                        botText.setFill(Color.WHITE);
-                        botText.setTranslateX(50);
-                        botText.setTranslateY(text.getTranslateY() + 170);
-                        requestCounter += 3;
-                        chatLayout.getChildren().add(botText);
-
-                    });
-                }
-                else if (hi.getMessage().length() > 0) {
-                    botText.setText("Bot: " + hi.getMessage());
-                }
-                else {
-                    botText.setText("Bot: query not understood");
-                }
-                if(!image) {
-                    Platform.runLater(() -> {
-                        botText.setFont(Font.font("Gadugi", FontWeight.BOLD, FontPosture.REGULAR, 16));
-                        botText.setFill(Color.WHITE);
-                        botText.setTranslateX(50);
-                        botText.setTranslateY(userText.getTranslateY() + 20);
-                        robotInteractionText.setText("Anything else?\nI'm free");
-                        chatLayout.getChildren().add(botText);
-                    });
-                }
-                isAgentFree = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        queryThread.setDaemon(false);
-        queryThread.start();
     }
 
     /**

@@ -23,7 +23,6 @@ public class Controller {
     private int historyCount = 0;
     private double heightScale = 1;
     private double widthScale = 1;
-    Assistant assistant = new Assistant();
 
 
 

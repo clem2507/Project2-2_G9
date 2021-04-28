@@ -34,7 +34,8 @@ public class Assistant {
         backgroundSkills = new HashSet<>();
 
         interpreters = new FallbackInterpreter[]{
-                new RegexSkillsInterpreter()
+                new RegexSkillsInterpreter(),
+                new FallbackCFG()
         };
         selectedInterpreter = interpreters[0];
 
