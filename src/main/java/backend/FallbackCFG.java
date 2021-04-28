@@ -20,7 +20,7 @@ public class FallbackCFG implements FallbackInterpreter {
     private List<AbstractMap.SimpleEntry<String, String>> responses;
 
     public FallbackCFG() {
-        this.rules = new ArrayList<ProductionRule>();
+        this.rules = new ArrayList<>();
         this.responses = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
     }
 
@@ -34,15 +34,16 @@ public class FallbackCFG implements FallbackInterpreter {
             nlpError.printStackTrace();
         }
         ArrayList<ParsedNode> children = new ArrayList<>(parsedQuery.getChildren());
-        AbstractMap.SimpleEntry<String, Double> match = new AbstractMap.SimpleEntry<>("No match found", 0.0);
+        AbstractMap.SimpleEntry<String, Double> match = null;
         for (AbstractMap.SimpleEntry<String, String> e : responses) {
             if (parsedQuery.toString().equals(e.getKey())) {
                 match = new AbstractMap.SimpleEntry<>(e.getValue(), 1.0);
             }
+            // There may be certain cases where a rule may be one level down in a tree, just making sure those cases get caught as well
             else {
                 for (ParsedNode c : children) {
                     if (c.toString().equals(e.getKey())) {
-                        match = new AbstractMap.SimpleEntry<>(e.getValue(), 0.8);
+                        match = new AbstractMap.SimpleEntry<>(e.getValue(), 1.0);
                     }
                 }
             }
@@ -53,8 +54,8 @@ public class FallbackCFG implements FallbackInterpreter {
     @Override
     public void compileTemplate(String newPath) {
         this.path = newPath;
-        this.rules = new ArrayList<ProductionRule>();
-        this.responses = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
+        this.rules = new ArrayList<>();
+        this.responses = new ArrayList<>();
         readPath();
     }
 
@@ -86,7 +87,7 @@ public class FallbackCFG implements FallbackInterpreter {
                         // Determine the 'product(s)' of the production rule
                         String[] products = split[1].split("\\|");
 
-                        List<Symbol> symbols = new ArrayList<Symbol>();
+                        List<Symbol> symbols = new ArrayList<>();
                         // Convert to production rules
                         for (String s : products) {
                             symbols.clear();
@@ -96,7 +97,7 @@ public class FallbackCFG implements FallbackInterpreter {
                                 symbols.add(new LiteralSymbol(token));
                             }
                             // Need to make a copy of the list
-                            rules.add(new ProductionRule(NT, new ArrayList<Symbol>(symbols)));
+                            rules.add(new ProductionRule(NT, new ArrayList<>(symbols)));
                         }
                         break;
                     case "action":
