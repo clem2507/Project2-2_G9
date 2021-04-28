@@ -59,7 +59,6 @@ public class Photo extends Domain {
 
     @Override
     public Skill dispatchSkill(MatchedSequence sequence, BlockingQueue<AssistantMessage> outputChannel) {
-        String matchedPattern = sequence.getPattern(); // This is a copy of the pattern matched in the sequence
 
         Optional<Integer> waitTimeSlotIndex = sequence.getSlotIndex("@wait_time"); // Here we try getting the
         // slot tagged as @wait_time - however, if it is not present, we get an empty Optional
@@ -139,19 +138,8 @@ public class Photo extends Domain {
                     // Save the image
                     File outputImage = new File(imagePath);
                     ImageIO.write(image, "png", outputImage);
-                } catch (IOException | UnsatisfiedLinkError e) {
+                } catch (IOException e) {
                     e.printStackTrace();
-                    pushMessage("Something went wrong while taking the picture", MessageType.STRING);
-                    if(!System.getProperty("os.name").startsWith("Windows"))
-                    {
-                        pushMessage("This operating system is not yet supported", MessageType.STRING);
-                    }
-                    else {
-                        if(FixCamera.fix())
-                            pushMessage("Fixed, try again",MessageType.STRING);
-                        else
-                            pushMessage("Fatal camera error",MessageType.STRING);
-                    }
                     return; // Early stop
                 }
 
