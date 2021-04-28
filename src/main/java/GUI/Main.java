@@ -477,8 +477,8 @@ public class Main extends Application {
         String temp = "1000";
 
         try{
-            WeatherObject currentweather = new WeatherObject(city);
-            temp = currentweather.getTemp();
+            WeatherObject currentWeather = new WeatherObject(city);
+            temp = currentWeather.getTemp();
         } catch (IOException e){
             e.printStackTrace();
         }

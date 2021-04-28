@@ -461,16 +461,8 @@ public class Controller {
     }
 
     private void adaptButtonStyle(Button button, String color, int fontSize) {
-
-        if (widthScale > heightScale) {
-            String fontSizeStr = "-fx-font-size: " + fontSize/widthScale +"px;";
-            button.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                    " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
-        }
-        else {
-            String fontSizeStr = "-fx-font-size: " + fontSize/heightScale +"px;";
-            button.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
-                    " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
-        }
+        String fontSizeStr = "-fx-font-size: " + fontSize/Math.max(widthScale, heightScale) +"px;";
+        button.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                " -fx-text-fill: " + color + "; -fx-font-family: \"Gadugi\"; " + fontSizeStr + " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10;  -fx-border-width: 0.6 0.6 0.6 0.6; ");
     }
 }
