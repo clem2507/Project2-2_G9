@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class StringTokenizer {
     private static final char[] SYMBOLS = new char[]{
-            '.', ',', '/', '\\', '!', '?', '+', '-', '*', '^', '(', ')', '[', ']', '{', '}'
+            '.', ',', '/', '\\', '!', '?', '+', '-', '*', '^', '(', ')', '[', ']', '{', '}', '=', ':'
     };
 
     private static final char[] ALPHABET = ("abcdefghijklmnopqrstuvwxyz".toUpperCase() + "abcdefghijklmnopqrstuvwxyz")
@@ -25,7 +25,7 @@ public class StringTokenizer {
     private static final char[] DIGITS = "0123456789".toCharArray();
 
     private static final char[] WHITESPACES = new char[]{
-            ' ', '\t', '\n'
+            ' ', '\t', '\n', '\r'
     };
 
     private enum CharType {
@@ -167,7 +167,7 @@ public class StringTokenizer {
     }
 
     public static void main(String[] args) {
-        String input = "2.4 + 5*4^2**4";
+        String input = "rule S = I want INT burgers, please.";
 
         try {
             List<String> tokens = toTokenList(input);

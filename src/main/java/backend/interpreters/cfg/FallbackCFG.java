@@ -1,5 +1,7 @@
-package backend;
+package backend.interpreters.cfg;
 
+import backend.FallbackInterpreter;
+import backend.InterpreterNames;
 import nlp.NLPError;
 import nlp.cfg.StringTokenizer;
 import nlp.cfg.parsing.*;
@@ -27,6 +29,11 @@ public class FallbackCFG implements FallbackInterpreter {
     @Override
     public Map.Entry<String, Double> processQuery(String query){
         // Parse query according to the grammar rules
+
+        //TODO: Re-write this "if" statement elegantly. This is more of a patch to run and test the code.
+        if(rules.isEmpty())
+            return null;
+
         ParsedNode parsedQuery = null;
         try {
             parsedQuery = ParsingUtils.parse(StringTokenizer.toTokenList(query), rules);

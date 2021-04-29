@@ -1,5 +1,7 @@
-package backend;
+package backend.interpreters.regex;
 
+import backend.FallbackInterpreter;
+import backend.InterpreterNames;
 import nlp.MatchedSequence;
 import nlp.PatternMatcher;
 

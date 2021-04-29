@@ -99,7 +99,7 @@ public class ParsingUtils {
         rules.add(new ProductionRule(S, Arrays.asList(S, ADD, S)));
         rules.add(new ProductionRule(S, Arrays.asList(LPAR, S, RPAR)));
 
-        String input = "12 + (3 + 4)";
+        String input = "I want coke.";
 
         try {
             ParsedNode output = parse(StringTokenizer.toTokenList(input), rules);

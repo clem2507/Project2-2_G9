@@ -35,7 +35,7 @@ public class PreProcessData {
     @return: preprocessed image
      */
     public BufferedImage resizeImage() throws IOException {
-        Image resizeImage = this.image.getScaledInstance(WIDTH,HEIGHT,this.image.SCALE_SMOOTH);
+        Image resizeImage = this.image.getScaledInstance(WIDTH,HEIGHT, Image.SCALE_SMOOTH);
 
         BufferedImage newImage = new BufferedImage(resizeImage.getWidth(null), resizeImage.getHeight(null), BufferedImage.TYPE_3BYTE_BGR);
 

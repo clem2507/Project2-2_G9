@@ -1,4 +1,4 @@
-package backend;
+package backend.interpreters.regex;
 
 import nlp.MatchedSequence;
 
