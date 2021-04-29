@@ -48,7 +48,7 @@ public class Controller {
                     break;
                 case ENTER:
                     if (window.textField.getText().length() > 0) {
-                        window.robotInteractionText.setText("...");
+                        window.setRobotText("...");
                         try {
                             window.pushMessageOrWait(new ConsoleOutput(window.textField.getText(), true, MessageType.STRING));
                         } catch (InterruptedException e) {
@@ -107,7 +107,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg) {
                 window.pane.getChildren().remove(window.imagesScrollPane);
                 window.iv.setImage(window.bg);
-                window.robotInteractionText.setText("Nice background,\nI like it!");
+                window.setRobotText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -116,7 +116,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg1) {
                 window.iv.setImage(window.bg1);
                 window.pane.getChildren().remove(window.imagesScrollPane);
-                window.robotInteractionText.setText("Nice background,\nI like it!");
+                window.setRobotText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -125,7 +125,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg2) {
                 window.iv.setImage(window.bg2);
                 window.pane.getChildren().remove(window.imagesScrollPane);
-                window.robotInteractionText.setText("Nice background,\nI like it!");
+                window.setRobotText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -134,7 +134,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg3) {
                 window.iv.setImage(window.bg3);
                 window.pane.getChildren().remove(window.imagesScrollPane);
-                window.robotInteractionText.setText("Nice background,\nI like it!");
+                window.setRobotText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -143,7 +143,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg4) {
                 window.iv.setImage(window.bg4);
                 window.pane.getChildren().remove(window.imagesScrollPane);
-                window.robotInteractionText.setText("Nice background,\nI like it!");
+                window.setRobotText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -152,7 +152,7 @@ public class Controller {
             if (window.iv.getImage()!=window.bg5) {
                 window.iv.setImage(window.bg5);
                 window.pane.getChildren().remove(window.imagesScrollPane);
-                window.robotInteractionText.setText("Nice background,\nI like it!");
+                window.setRobotText("Nice background,\nI like it!");
                 window.flag = true;
             }
         });
@@ -426,9 +426,11 @@ public class Controller {
                 if(getExtension(db.getFiles().get(0).toString()).equals("txt")){
                     filepath = db.getFiles().get(0);
                     window.assistant.notifyOfNewPath(filepath.toString());
+                    window.setRobotText("Template \n successfully added");
                     System.out.println(filepath);
                 }else{
                     System.out.println("This is not a text file");
+                    window.setRobotText("This is not a txt file");
                 }
                 target.setFill(Color.BLACK);
                 event.consume();
@@ -447,6 +449,7 @@ public class Controller {
 
         clearTemplate.setOnAction(actionEvent ->  {
                 window.assistant.forgetTemplates();
+                window.setRobotText("Templates are \n removed");
         });
     }
 

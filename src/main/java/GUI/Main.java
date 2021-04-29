@@ -919,7 +919,7 @@ public class Main extends Application {
      */
     public String processText(String text) {
 
-        int cutSize = 55;
+        int cutSize = 50;
         int count = 1;
         quoteRectangleHeightIndicator = (int) Math.floor((double) text.length()/cutSize);
         String newLine = "\n";
@@ -954,6 +954,15 @@ public class Main extends Application {
             count++;
         }
         return count;
+    }
+
+    /**
+     * Methode that updates the robot icon text
+     * @param text to change
+     */
+    public void setRobotText(String text) {
+
+        robotInteractionText.setText(text);
     }
 
     /**
