@@ -25,7 +25,6 @@ public class Gradients {
                     xG = Math.abs(pixels[i][j + 1]);
                 } else if (j == pixels[i].length - 1) {
                     xG = Math.abs(pixels[i][j - 1]);
-
                 } else {
                     xG = Math.abs(pixels[i][j - 1] - pixels[i][j + 1]);
                 }
@@ -38,14 +37,12 @@ public class Gradients {
                 } else {
                     yG = Math.abs(pixels[i - 1][j] - pixels[i + 1][j]);
                 }
-
-                    gradientMagnitude[i][j] = Math.sqrt((xG)*(xG) + (yG)*(yG));
-
-                    if(xG==0){
-                        gradientOrientation[i][j] = Math.PI/2;
-                    }else{
-                        gradientOrientation[i][j] = Math.toDegrees(Math.atan((yG / xG)));
-                    }
+                this.gradientMagnitude[i][j] = Math.sqrt((xG)*(xG) + (yG)*(yG));
+                if(xG==0){
+                    this.gradientOrientation[i][j] = Math.toDegrees(Math.PI/2);
+                }else{
+                    this.gradientOrientation[i][j] = Math.toDegrees(Math.atan((yG / xG)));
+                }
             }
         }
     }

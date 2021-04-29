@@ -78,7 +78,8 @@ public class PreProcessData {
         for (int i = 0 ; i < gradientOrientation.length ; i++){
             for(int j = 0 ; j < gradientOrientation[i].length ; j++){
                 int bin = (int) gradientOrientation[i][j]/binSize;
-                histogram[bin] += gradientMagnitude[i][j];
+//                histogram[bin] += gradientMagnitude[i][j];
+                histogram[bin]++;
             }
         }
         return histogram;
@@ -158,21 +159,4 @@ public class PreProcessData {
         }
         return featureVector;
     }
-
-
-//    public static void main (String[] args) throws IOException {
-//        InputStream is = new FileInputStream("/Users/zein/IdeaProjects/Project2-2_G9/hello-world.png");
-//        BufferedImage originalImage = ImageIO.read(is);
-//        PreProcessData hi = new PreProcessData(originalImage);
-//        System.out.println("processing image");
-//        hi.resizeImage();
-//        System.out.println("done processing");
-//
-//        System.out.println("getting features");
-//        List<Double> featureVector = hi.getFeatureVector();
-//        System.out.println(featureVector.size());
-//
-//    }
-
-
 }
