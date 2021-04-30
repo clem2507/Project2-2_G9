@@ -23,7 +23,7 @@ public class FallbackCFG implements FallbackInterpreter {
 
     public FallbackCFG() {
         this.rules = new ArrayList<>();
-        this.responses = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
+        this.responses = new ArrayList<>();
     }
 
     @Override
@@ -61,8 +61,6 @@ public class FallbackCFG implements FallbackInterpreter {
     @Override
     public void compileTemplate(String newPath) {
         this.path = newPath;
-        this.rules = new ArrayList<>();
-        this.responses = new ArrayList<>();
         readPath();
     }
 
@@ -73,7 +71,9 @@ public class FallbackCFG implements FallbackInterpreter {
 
     @Override
     public void reset() {
-        // This is to tell the interpreter to forget all templates in memory.
+        this.path = "";
+        this.rules = new ArrayList<>();
+        this.responses = new ArrayList<>();
     }
 
     // Converts text file to production rules and responses
