@@ -81,10 +81,8 @@ public class CurrentLocation {
                     newstr += "ss";
                 }
             }
-           // System.out.println(newstr);
             return newstr;
         } else {
-           // System.out.println(loc);
             return loc;
         }
     }

@@ -414,7 +414,7 @@ public class Controller {
                 window.menu.setStyle("-fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0); -fx-text-fill: white; -fx-font-family: \"Gadugi\";  " + emptyTemplateFontSizeStr);
             }
         });
-        
+
         Text target = window.target;
 
         target.setOnDragEntered(new EventHandler <DragEvent>() {
