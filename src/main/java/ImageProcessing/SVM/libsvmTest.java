@@ -1,7 +1,6 @@
 package ImageProcessing.SVM;
 import ImageProcessing.HOG;
 import libsvm.*;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -48,8 +47,6 @@ public class libsvmTest {
                 .map(Path::toFile)
                 .collect(Collectors.toList());
 
-
-
 //        double[][] xtrain = new double[1273][3780];
 //        double[][] ytrain = new double[1273][1];
 //
@@ -87,11 +84,8 @@ public class libsvmTest {
         System.out.println("Stopped Training");
 
 
-
-
-
         //Test set with no faces
-        double[][] xtest = new double[545][3780];
+        double[][] xtest = new double[547][3780];
         double[][] ytest = new double[547][1];
         int counter = 0;
         for (File file : testNoFaceFiles){
@@ -213,11 +207,9 @@ public class libsvmTest {
             double[] prob_estimates = new double[totalClasses];
             yPred[k] = svm.svm_predict_probability(model, nodes, prob_estimates);
 
-
         }
 
         return yPred;
     }
-
 
 }

@@ -268,7 +268,7 @@ public class Main extends Application {
     int emptyTemplateX = dropFileX + 170;
     int emptyTemplateY = dropFileY;
 
-    int menubarX = dropFileX;
+    int menubarX = dropFileX + 2;
     int menubarY = dropFileY + 65;
 
     int editBgButtonFontSize = 14;
@@ -659,7 +659,8 @@ public class Main extends Application {
 
         for(int i = 0; i <  interpreterNames.size(); i++) {
 
-            String name = interpreterNames.get(i);
+            String tempName = interpreterNames.get(i);
+            String name = tempName.toLowerCase();
 
             RadioMenuItem choiceItem = new RadioMenuItem(name);
             toggleGroup.getToggles().add(choiceItem);
