@@ -18,12 +18,13 @@ import java.util.*;
 public class FallbackCFG implements FallbackInterpreter {
 
     private String path;
-    private List<ProductionRule> rules;
-    private List<AbstractMap.SimpleEntry<String, String>> responses;
+    private List<ProductionRule> inputRules;
+    private List<AbstractMap.SimpleEntry<ProductionRule, String>> outputRules;
+
 
     public FallbackCFG() {
-        this.rules = new ArrayList<>();
-        this.responses = new ArrayList<>();
+        this.inputRules = new ArrayList<>();
+        this.outputRules = new ArrayList<>();
     }
 
     @Override
@@ -31,29 +32,21 @@ public class FallbackCFG implements FallbackInterpreter {
         // Parse query according to the grammar rules
 
         //TODO: Re-write this "if" statement elegantly. This is more of a patch to run and test the code.
-        if(rules.isEmpty())
+        if(inputRules.isEmpty())
             return null;
 
         ParsedNode parsedQuery = null;
         try {
-            parsedQuery = ParsingUtils.parse(StringTokenizer.toTokenList(query), rules);
+            parsedQuery = ParsingUtils.parse(StringTokenizer.toTokenList(query), inputRules);
         } catch (NLPError nlpError) {
             nlpError.printStackTrace();
         }
-        ArrayList<ParsedNode> children = new ArrayList<>(parsedQuery.getChildren());
+
+        // REWRITE: Use production rules to generate output
+
         AbstractMap.SimpleEntry<String, Double> match = null;
-        for (AbstractMap.SimpleEntry<String, String> e : responses) {
-            if (parsedQuery.toString().equals(e.getKey())) {
-                match = new AbstractMap.SimpleEntry<>(e.getValue(), 1.0);
-            }
-            // There may be certain cases where a rule may be one level down in a tree, just making sure those cases get caught as well
-            else {
-                for (ParsedNode c : children) {
-                    if (c.toString().equals(e.getKey())) {
-                        match = new AbstractMap.SimpleEntry<>(e.getValue(), 1.0);
-                    }
-                }
-            }
+        if (parsedQuery != null) {
+            
         }
         return match;
     }
@@ -72,8 +65,8 @@ public class FallbackCFG implements FallbackInterpreter {
     @Override
     public void reset() {
         this.path = "";
-        this.rules = new ArrayList<>();
-        this.responses = new ArrayList<>();
+        this.inputRules = new ArrayList<>();
+        this.outputRules = new ArrayList<>();
     }
 
     // Converts text file to production rules and responses
@@ -82,20 +75,26 @@ public class FallbackCFG implements FallbackInterpreter {
             File txtFile = new File(path);
             Scanner myReader = new Scanner(txtFile);
             String line;
+            String conditional = "";
             while (myReader.hasNextLine()) {
                 line = myReader.nextLine();
 
-                String[] ruleaction = line.split("::");
-                String[] split = ruleaction[1].split("->");
-                switch (ruleaction[0].toLowerCase()) {
+                String[] ruleAction = line.split("::");
+                String[] ntRule = ruleAction[1].split("->");
+                String[] ntCond = ntRule[0].split("\\*");
+                if (ntCond.length > 1) {
+                    conditional = ntCond[1].trim();
+                }
+
+                LiteralSymbol NT = new LiteralSymbol(ntCond[0].trim());
+
+                // Determine the 'product(s)' of the production rule
+                String[] products = ntRule[1].split("\\|");
+                List<Symbol> symbols = new ArrayList<>();
+                
+                switch (ruleAction[0].toLowerCase()) {
                     case "rule":
-                        LiteralSymbol NT = new LiteralSymbol(split[0]);
-
-                        // Determine the 'product(s)' of the production rule
-                        String[] products = split[1].split("\\|");
-
-                        List<Symbol> symbols = new ArrayList<>();
-                        // Convert to production rules
+                        // Convert to input rules
                         for (String s : products) {
                             symbols.clear();
                             ArrayList<String> tokens = (ArrayList<String>) StringTokenizer.toTokenList(s);
@@ -104,30 +103,36 @@ public class FallbackCFG implements FallbackInterpreter {
                                 symbols.add(new LiteralSymbol(token));
                             }
                             // Need to make a copy of the list
-                            rules.add(new ProductionRule(NT, new ArrayList<>(symbols)));
+                            inputRules.add(new ProductionRule(NT, new ArrayList<>(symbols)));
                         }
                         break;
                     case "action":
-                        // Link NT to response
-                        // In matchquery, we should find the nonterminal that matches with the query
-                        // We should then match the nonterminal content with one of the strings
-                        // in this mapping
-                        responses.add(new AbstractMap.SimpleEntry<>(split[0], split[1]));
+                        // Convert to output rules
+                        for (String s : products) {
+                            symbols.clear();
+                            ArrayList<String> tokens = (ArrayList<String>) StringTokenizer.toTokenList(s);
+                            // For now I'm converting every token to literal symbols
+                            for (String token : tokens) {
+                                symbols.add(new LiteralSymbol(token));
+                            }
+                            // Need to make a copy of the list
+                            outputRules.add(new AbstractMap.SimpleEntry<>(new ProductionRule(NT, new ArrayList<>(symbols)), conditional));
+                        }
                         break;
                     default:
                         // should give an error to the bot, mistake in text file
                 }
             }
-            /* FOR TESTING PURPOSES
+            /*FOR TESTING PURPOSES
 
             System.out.println("Rules:");
-            for (ProductionRule p : rules) {
+            for (ProductionRule p : inputRules) {
                 System.out.println(p);
             }
             System.out.println("----------------------");
             System.out.println("Actions");
-            for (AbstractMap.SimpleEntry<String, String> a : responses) {
-                System.out.println(a.getKey() + " to " + a.getValue());
+            for (AbstractMap.SimpleEntry<ProductionRule, String> a : outputRules) {
+                System.out.println(a.getKey().toString() + " for " + a.getValue());
             }*/
         }
         catch (FileNotFoundException | NLPError e) {
@@ -136,12 +141,12 @@ public class FallbackCFG implements FallbackInterpreter {
 
     }
 
-    /*TESTING PURPOSES
+    //TESTING PURPOSES
     public static void main(String[] args) {
         FallbackCFG test = new FallbackCFG();
         test.compileTemplate("C:\\Users\\gebruiker\\Documents\\Project 2-2\\botcfg.txt");
-        System.out.println(test.processQuery("When does the sun come up?").getKey());
-    }*/
+        //System.out.println(test.processQuery("When do I have lectures?").getKey());
+    }
     
 
 }
