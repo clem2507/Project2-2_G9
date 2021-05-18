@@ -83,7 +83,7 @@ public class RegexSkillsInterpreter implements FallbackInterpreter {
 
     @Override
     public InterpreterNames getName() {
-        return InterpreterNames.REGEX_SKILLS;
+        return InterpreterNames.REGEX;
     }
 
     @Override

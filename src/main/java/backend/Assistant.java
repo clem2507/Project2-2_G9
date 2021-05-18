@@ -1,6 +1,6 @@
 package backend;
 
-import backend.interpreters.cfg.FallbackCFG;
+import backend.interpreters.cfg.CFGInterpreter;
 import backend.interpreters.regex.RegexSkillsInterpreter;
 //import backend.interpreters.unofficial_cfg.CFGUnofficialInterpreter;
 import domains.Calendar.Calendar;
@@ -38,7 +38,7 @@ public class Assistant {
 
         interpreters = new FallbackInterpreter[]{
                 new RegexSkillsInterpreter(),
-                new FallbackCFG(),
+                new CFGInterpreter(),
                 //new CFGUnofficialInterpreter()
         };
         selectedInterpreter = interpreters[0];

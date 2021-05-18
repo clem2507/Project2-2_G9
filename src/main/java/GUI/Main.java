@@ -659,8 +659,15 @@ public class Main extends Application {
 
         for(int i = 0; i <  interpreterNames.size(); i++) {
 
-            String tempName = interpreterNames.get(i);
-            String name = tempName.toLowerCase();
+            /*String tempName = interpreterNames.get(i);
+            String name = tempName.toLowerCase();*/
+
+            String name = interpreterNames.get(i);
+
+            //IMPORTANT: If you want to show these names in lower case, you can't just make them lower case like that.
+            // You can create a dictionary and store the original name in there while adding the lower case name
+            // in the drop-down menu. Then, whenever the user clicks on the drop-down menu, you look read the lower
+            // case name and lookup the original name in the dictionary and THEN select the interpreter by name.
 
             RadioMenuItem choiceItem = new RadioMenuItem(name);
             toggleGroup.getToggles().add(choiceItem);
