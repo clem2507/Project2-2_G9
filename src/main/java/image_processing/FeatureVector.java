@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class FeatureVector {
 
-    private double[] vector;
-    private ArrayList<Double> vectorList = new ArrayList<>();
+    private final double[] vector;
+    private final ArrayList<Double> vectorList = new ArrayList<>();
     private double squaredSum;
 
 

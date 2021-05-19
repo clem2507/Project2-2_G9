@@ -57,7 +57,7 @@ public class FaceClassifier {
     params: image to be classified
     return: double ie. either a 1 or 0 indicating face or not face respectively
      */
-    public double predict(BufferedImage image) throws IOException {
+    public double predict(BufferedImage image) {
         double[][] xtest = new double[1][3780];
         HOG hog = new HOG(image);
         xtest[0] = hog.getFeatureArray();
@@ -69,7 +69,7 @@ public class FaceClassifier {
     params: An array of all the paths to the images.
     return: the predicted labels for each image.
     */
-    public double[] predict(BufferedImage[] images) throws IOException {
+    public double[] predict(BufferedImage[] images) {
 
         double[][] xtest = new double[images.length][3780];
         int count = 0;
