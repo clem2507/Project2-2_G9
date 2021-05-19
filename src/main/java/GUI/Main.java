@@ -9,6 +9,9 @@ import backend.common.WeatherObject;
 import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -288,9 +291,12 @@ public class Main extends Application {
     Menu menu;
     MenuBar menuBar;
 
+    Stage primStage;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
 
+        primStage = primaryStage;
         String quoteText = Quote.getQuote();
         quoteText = processText(quoteText);
 
