@@ -245,7 +245,7 @@ public class Assistant {
     synchronized public void notifyOfNewPath(String path){
         Path source = Paths.get(path);
         Path destination = Paths.get(
-                getPathToInterpreterTemplates(selectedInterpreter) + source.getName(source.getNameCount() - 1).toString()
+                getPathToInterpreterTemplates(selectedInterpreter) + source.getName(source.getNameCount() - 1)
         );
 
         try {

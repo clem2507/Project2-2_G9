@@ -1,4 +1,4 @@
-package ImageProcessing;
+package image_processing;
 
 public class Gradients {
 

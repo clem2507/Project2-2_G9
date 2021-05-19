@@ -1,6 +1,5 @@
 package domains;
 
-import GUI.Main;
 import backend.*;
 import nlp.MatchedSequence;
 

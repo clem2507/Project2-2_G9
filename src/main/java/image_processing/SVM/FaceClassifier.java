@@ -1,5 +1,5 @@
-package ImageProcessing.SVM;
-import ImageProcessing.HOG;
+package image_processing.SVM;
+import image_processing.HOG;
 import libsvm.*;
 
 import javax.imageio.ImageIO;

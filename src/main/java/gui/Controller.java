@@ -1,6 +1,5 @@
-package GUI;
+package gui;
 
-import backend.Assistant;
 import backend.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

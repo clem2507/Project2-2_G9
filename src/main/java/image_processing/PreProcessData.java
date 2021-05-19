@@ -1,4 +1,4 @@
-package ImageProcessing;
+package image_processing;
 
 /*
 Takes in an image then brings down the width to height ratio to 1:2

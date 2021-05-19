@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import backend.Assistant;
 import backend.AssistantMessage;

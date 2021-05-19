@@ -1,5 +1,5 @@
-package ImageProcessing.SVM;
-import ImageProcessing.HOG;
+package image_processing.SVM;
+import image_processing.HOG;
 import libsvm.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
