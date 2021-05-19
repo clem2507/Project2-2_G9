@@ -85,8 +85,7 @@ public class Camera {
                 throw new IOException("An error occurred while trying to read from camera");
             }
 
-            BufferedImage image =webcam.getImage();
-            return image;
+            return webcam.getImage();
         }
 
     }

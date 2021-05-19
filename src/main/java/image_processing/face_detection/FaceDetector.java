@@ -4,12 +4,16 @@ import backend.common.camera.Camera;
 import image_processing.SVM.FaceClassifier;
 import image_processing.SuperGlobalConstants;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class FaceDetector {
 
@@ -20,7 +24,7 @@ public class FaceDetector {
             final FaceClassifier classifier) {
         assert image.getHeight() == image.getWidth();
 
-        return scalars.parallelStream()
+        return scalars.stream()
                 .map(s -> scaleWindowSize(scannerWindowSize, s))
                 .flatMap(r -> detectFaces(r, classifier, image).stream())
                 .collect(Collectors.toList());
@@ -112,16 +116,52 @@ public class FaceDetector {
     }
 
     public static void main(String[] args) {
+        System.out.println("Start face detection test.");
         try {
-            Camera.openCamera();
+            FaceClassifier classifier = new FaceClassifier();
+            classifier.loadModel();
+            System.out.println("Classifier loaded.");
+
+            List<Double> scalars = IntStream.rangeClosed(0, 4)
+                    .asDoubleStream()
+                    .map(i -> 1.0 + 1.15*i)
+                    .boxed()
+                    .collect(Collectors.toList());
+            System.out.println("Scalars generated. " + scalars.toString());
+
+            Point2D windowSize = new Point2D(64, 128);
+            System.out.println("Window size declared." + windowSize.toString());
 
             while (true) {
+                System.out.println("In loop...");
 
+                Camera.openCamera();
+                System.out.println("Camera opened.");
+                BufferedImage frame = Camera.getFrame();
+
+                assert frame != null;
+                frame = preProcessCameraFeed(frame, SuperGlobalConstants.CAMERA_FEED_SIZE);
+                System.out.println("Frame ready.");
+
+                ImageIO.write(frame,"PNG", new File("frame.png"));
+                System.out.println("Frame saved.");
+
+                List<Rectangle> faces = findAllFaces(
+                        frame,
+                        windowSize,
+                        scalars,
+                        classifier
+                );
+
+                System.out.println("Faces: " + faces.toString());
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Camera.closeCamera();
+        System.out.println("Camera closed.");
     }
 
 }
