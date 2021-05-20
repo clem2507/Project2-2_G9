@@ -9,6 +9,7 @@ import backend.common.WeatherObject;
 import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -735,6 +736,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
         primaryStage.show();
+        Platform.setImplicitExit(false);
     }
 
     /**
@@ -985,7 +987,7 @@ public class Main extends Application {
     public void exitProgram() {
 
         assistant.interruptAndWait();
-        System.exit(0);
+        Platform.exit();
     }
 
     public static void main(String[] args) {

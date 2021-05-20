@@ -469,7 +469,7 @@ public class Controller {
     }
 
     public void hideWindow() {
-        window.primStage.getScene().getWindow().hide();
+        window.primStage.hide();
     }
 
     public void showWindow() {
