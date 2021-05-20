@@ -1,10 +1,15 @@
 package backend.common.camera;
 
 import com.github.sarxos.webcam.Webcam;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Handles the camera feed
@@ -29,6 +34,10 @@ public class Camera {
 
             if (!videoCaptures.containsKey(channel)){ // If the camera hasn't been open yet
                 Webcam webcam = Webcam.getWebcams().get(channel);
+                Dimension largestViewSize = Stream.of(webcam.getViewSizes())
+                        .max(Comparator.comparingInt(a -> (int) a.getWidth()))
+                        .orElseThrow();
+                webcam.setViewSize(largestViewSize);
                 webcam.open();
 
                 if(!webcam.isOpen()){

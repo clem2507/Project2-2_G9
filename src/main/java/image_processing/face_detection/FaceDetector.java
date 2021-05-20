@@ -1,16 +1,17 @@
 package image_processing.face_detection;
 
 import backend.common.camera.Camera;
+import image_processing.QuickImageDisplay;
 import image_processing.SVM.FaceClassifier;
 import image_processing.SuperGlobalConstants;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -24,7 +25,6 @@ public class FaceDetector {
             final FaceClassifier classifier,
             final double relativeStepSize
     ) {
-        System.out.println("Searching faces...");
         assert image.getHeight() == image.getWidth();
 
         return scalars.stream()
@@ -126,35 +126,31 @@ public class FaceDetector {
     }
 
     public static void main(String[] args) {
-        System.out.println("Start face detection test.");
+
         try {
+            JFrame displayFrame = new JFrame();
+            QuickImageDisplay imagePanel = new QuickImageDisplay();
+            displayFrame.add(imagePanel);
+            displayFrame.setVisible(true);
+            displayFrame.setSize(SuperGlobalConstants.DETECTOR_WINDOW_WIDTH, SuperGlobalConstants.DETECTOR_WINDOW_HEIGHT);
+
             FaceClassifier classifier = new FaceClassifier();
             classifier.loadModel();
-            System.out.println("Classifier loaded.");
 
             List<Double> scalars = IntStream.rangeClosed(0, 4)
                     .asDoubleStream()
                     .map(i -> 1.0 + 1.15*i)
                     .boxed()
                     .collect(Collectors.toList());
-            System.out.println("Scalars generated. " + scalars);
 
             Point2D windowSize = new Point2D(64, 128);
-            System.out.println("Window size declared." + windowSize);
 
             while (true) {
-                System.out.println("In loop...");
-
                 Camera.openCamera();
-                System.out.println("Camera opened.");
                 BufferedImage frame = Camera.getFrame();
 
                 assert frame != null;
                 frame = preProcessCameraFeed(frame, SuperGlobalConstants.CAMERA_FEED_SIZE);
-                System.out.println("Frame ready.");
-
-                ImageIO.write(frame,"PNG", new File("frame.png"));
-                System.out.println("Frame saved.");
 
                 List<Rectangle> faces = findAllFaces(
                         frame,
@@ -164,11 +160,12 @@ public class FaceDetector {
                         0.5
                 );
 
-                System.out.println("Faces: " + faces.size());
+                System.out.println("Detected " + faces.size() + " faces.");
+                Optional<Rectangle> maxFace = faces.stream().max(Comparator.comparingInt(Rectangle::getArea));
 
-                for(Rectangle r : faces) {
-                    BufferedImage f = r.getImageRegion(frame);
-                    ImageIO.write(f,"PNG", new File("face" + faces.indexOf(r) + ".png"));
+                if(maxFace.isPresent()) {
+                    imagePanel.setImage(maxFace.get().getImageRegion(frame));
+                    displayFrame.getContentPane().repaint();
                 }
 
             }

@@ -19,6 +19,10 @@ public class Rectangle {
         );
     }
 
+    public int getArea() {
+        return (pointB.getX() - pointA.getX()) * (pointB.getY() - pointA.getY());
+    }
+
     @Override
     public String toString() {
         return pointA.toString() + " -> " + pointB.toString();
