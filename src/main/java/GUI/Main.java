@@ -10,9 +10,6 @@ import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -290,6 +287,10 @@ public class Main extends Application {
     private int outputMessageHeight = 0;
 
     Menu menu;
+    Menu interpretersMenu;
+    Menu faceDetectorMenu;
+    RadioMenuItem faceDetectionMenuItem1;
+    RadioMenuItem faceDetectionMenuItem2;
     MenuBar menuBar;
 
     Stage primStage;
@@ -662,6 +663,9 @@ public class Main extends Application {
         menu.setStyle("-fx-font-family: \"Gadugi\"; -fx-font-size: 15px;");
         ToggleGroup toggleGroup = new ToggleGroup();
 
+        interpretersMenu = new Menu("Interpreters");
+        interpretersMenu.setStyle("-fx-text-fill: black;");
+
         List<String> interpreterNames = assistant.listInterpreterNames();
 
         for(int i = 0; i <  interpreterNames.size(); i++) {
@@ -678,7 +682,7 @@ public class Main extends Application {
 
             RadioMenuItem choiceItem = new RadioMenuItem(name);
             toggleGroup.getToggles().add(choiceItem);
-            menu.getItems().add(choiceItem);
+            interpretersMenu.getItems().add(choiceItem);
 
             choiceItem.setOnAction(event -> {
                 System.out.println("Selected this: " + name);
@@ -690,6 +694,21 @@ public class Main extends Application {
                 choiceItem.setSelected(true);
             }
         }
+
+        faceDetectorMenu = new Menu("Face Detectors");
+        faceDetectorMenu.setStyle("-fx-text-fill: black;");
+
+        ToggleGroup toggleGroup1 = new ToggleGroup();
+
+        faceDetectionMenuItem1 = new RadioMenuItem("HOG Face Detector");
+        faceDetectionMenuItem1.setStyle("-fx-text-fill: black;");
+        faceDetectionMenuItem2 = new RadioMenuItem("Haar Cascade Face Detector");
+        faceDetectionMenuItem2.setStyle("-fx-text-fill: black;");
+        faceDetectionMenuItem1.setSelected(true);
+
+        toggleGroup1.getToggles().addAll(faceDetectionMenuItem1, faceDetectionMenuItem2);
+        faceDetectorMenu.getItems().addAll(faceDetectionMenuItem1, faceDetectionMenuItem2);
+        menu.getItems().addAll(interpretersMenu, faceDetectorMenu);
 
         menuBar = new MenuBar();
         menuBar.getMenus().add(menu);
@@ -988,6 +1007,16 @@ public class Main extends Application {
 
         assistant.interruptAndWait();
         Platform.exit();
+    }
+
+    public int getSwitchState() {
+
+        if (faceDetectionMenuItem1.isSelected()) {
+            return 1;
+        }
+        else {
+            return 2;
+        }
     }
 
     public static void main(String[] args) {

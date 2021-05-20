@@ -447,8 +447,8 @@ public class Controller {
         Button clearTemplate = window.emptyTemplate;
 
         clearTemplate.setOnAction(actionEvent ->  {
-                window.assistant.forgetTemplates();
-                window.setRobotText("Templates are \n removed");
+            window.assistant.forgetTemplates();
+            window.setRobotText("Templates are \n removed");
         });
     }
 
