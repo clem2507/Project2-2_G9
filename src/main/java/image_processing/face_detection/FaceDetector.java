@@ -21,12 +21,15 @@ public class FaceDetector {
             final BufferedImage image,
             final Point2D scannerWindowSize,
             final List<Double> scalars,
-            final FaceClassifier classifier) {
+            final FaceClassifier classifier,
+            final double relativeStepSize
+    ) {
+        System.out.println("Searching faces...");
         assert image.getHeight() == image.getWidth();
 
         return scalars.stream()
                 .map(s -> scaleWindowSize(scannerWindowSize, s))
-                .flatMap(r -> detectFaces(r, classifier, image).stream())
+                .flatMap(r -> detectFaces(r, classifier, image, relativeStepSize).stream())
                 .collect(Collectors.toList());
     }
 
@@ -90,19 +93,26 @@ public class FaceDetector {
         );
     }
 
-    private static List<Rectangle> detectFaces(final Point2D windowSize, final FaceClassifier classifier, final BufferedImage image) {
+    private static List<Rectangle> detectFaces(
+            final Point2D windowSize,
+            final FaceClassifier classifier,
+            final BufferedImage image,
+            final double relativeStepSize
+    ) {
         final int MAX_X = image.getWidth() - windowSize.getX();
         final int MAX_Y = image.getHeight() - windowSize.getY();
         final List<Rectangle> regions = new LinkedList<>();
 
-        for(int x = 0; x < MAX_X; x++) {
+        for(int x = 0; x < MAX_X; x += (int) (relativeStepSize*windowSize.getX())) {
 
-            for(int y = 0; y < MAX_Y; y++) {
+            for(int y = 0; y < MAX_Y; y += (int) (relativeStepSize*windowSize.getY())) {
                 final Rectangle window = new Rectangle(
                         new Point2D(x, y),
                         new Point2D(x + windowSize.getX(), y + windowSize.getY())
                 );
                 final BufferedImage section = window.getImageRegion(image);
+
+                //System.out.println("Checking for a face in " + window);
 
                 if(classifier.predict(section) >= 0.9) {
                     regions.add(window);
@@ -127,10 +137,10 @@ public class FaceDetector {
                     .map(i -> 1.0 + 1.15*i)
                     .boxed()
                     .collect(Collectors.toList());
-            System.out.println("Scalars generated. " + scalars.toString());
+            System.out.println("Scalars generated. " + scalars);
 
             Point2D windowSize = new Point2D(64, 128);
-            System.out.println("Window size declared." + windowSize.toString());
+            System.out.println("Window size declared." + windowSize);
 
             while (true) {
                 System.out.println("In loop...");
@@ -150,10 +160,17 @@ public class FaceDetector {
                         frame,
                         windowSize,
                         scalars,
-                        classifier
+                        classifier,
+                        0.5
                 );
 
-                System.out.println("Faces: " + faces.toString());
+                System.out.println("Faces: " + faces.size());
+
+                for(Rectangle r : faces) {
+                    BufferedImage f = r.getImageRegion(frame);
+                    ImageIO.write(f,"PNG", new File("face" + faces.indexOf(r) + ".png"));
+                }
+
             }
 
         } catch (IOException e) {
