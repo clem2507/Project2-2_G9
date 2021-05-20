@@ -1,11 +1,13 @@
 package image_processing;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FeatureVector {
 
     private final double[] vector;
-    private final ArrayList<Double> vectorList = new ArrayList<>();
+    private final List<Double> vectorList = new LinkedList<>();
     private double squaredSum;
 
 
@@ -25,7 +27,7 @@ public class FeatureVector {
         }
     }
 
-    public ArrayList<Double> getVectorList() {
+    public List<Double> getVectorList() {
         return vectorList;
     }
 

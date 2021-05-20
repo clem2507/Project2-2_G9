@@ -4,12 +4,11 @@ import backend.common.camera.Camera;
 import image_processing.QuickImageDisplay;
 import image_processing.SVM.FaceClassifier;
 import image_processing.SuperGlobalConstants;
+import org.w3c.dom.css.Rect;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -19,18 +18,17 @@ import java.util.stream.IntStream;
 public class FaceDetector {
 
     public static List<Rectangle> findAllFaces(
+            final List<Rectangle> windows,
             final BufferedImage image,
-            final Point2D scannerWindowSize,
-            final List<Double> scalars,
-            final FaceClassifier classifier,
-            final double relativeStepSize
+            final FaceClassifier classifier
     ) {
         assert image.getHeight() == image.getWidth();
 
-        return scalars.stream()
-                .map(s -> scaleWindowSize(scannerWindowSize, s))
-                .flatMap(r -> detectFaces(r, classifier, image, relativeStepSize).stream())
-                .collect(Collectors.toList());
+        return windows.parallelStream().filter(w -> isFace(w, image, classifier)).collect(Collectors.toList());
+    }
+
+    public static boolean isFace(final Rectangle rect, final BufferedImage image, final FaceClassifier classifier) {
+        return classifier.predict(rect.getImageRegion(image)) == 1.0;
     }
 
     public static BufferedImage preProcessCameraFeed(final BufferedImage image, final int size) {
@@ -93,14 +91,17 @@ public class FaceDetector {
         );
     }
 
-    private static List<Rectangle> detectFaces(
+    private static List<Rectangle> createWindows(
             final Point2D windowSize,
-            final FaceClassifier classifier,
-            final BufferedImage image,
-            final double relativeStepSize
+            final double relativeStepSize,
+            final int imageWidth, final int imageHeight
     ) {
-        final int MAX_X = image.getWidth() - windowSize.getX();
-        final int MAX_Y = image.getHeight() - windowSize.getY();
+        final int MAX_X = imageWidth - windowSize.getX();
+        final int MAX_Y = imageHeight - windowSize.getY();
+
+        assert MAX_X >= 0;
+        assert MAX_Y >= 0;
+
         final List<Rectangle> regions = new LinkedList<>();
 
         for(int x = 0; x < MAX_X; x += (int) (relativeStepSize*windowSize.getX())) {
@@ -110,14 +111,7 @@ public class FaceDetector {
                         new Point2D(x, y),
                         new Point2D(x + windowSize.getX(), y + windowSize.getY())
                 );
-                final BufferedImage section = window.getImageRegion(image);
-
-                //System.out.println("Checking for a face in " + window);
-
-                if(classifier.predict(section) >= 0.9) {
-                    regions.add(window);
-                }
-
+                regions.add(window);
             }
 
         }
@@ -128,43 +122,50 @@ public class FaceDetector {
     public static void main(String[] args) {
 
         try {
-            JFrame displayFrame = new JFrame();
-            QuickImageDisplay imagePanel = new QuickImageDisplay();
+            final JFrame displayFrame = new JFrame();
+            final QuickImageDisplay imagePanel = new QuickImageDisplay();
             displayFrame.add(imagePanel);
             displayFrame.setVisible(true);
-            displayFrame.setSize(SuperGlobalConstants.DETECTOR_WINDOW_WIDTH, SuperGlobalConstants.DETECTOR_WINDOW_HEIGHT);
+            displayFrame.setSize(800, 800);
 
-            FaceClassifier classifier = new FaceClassifier();
+            final FaceClassifier classifier = new FaceClassifier();
             classifier.loadModel();
 
-            List<Double> scalars = IntStream.rangeClosed(0, 4)
+            final List<Double> scalars = IntStream.rangeClosed(0, 4)
                     .asDoubleStream()
                     .map(i -> 1.0 + 1.15*i)
                     .boxed()
                     .collect(Collectors.toList());
+            final Point2D windowSize = new Point2D(64, 128);
 
-            Point2D windowSize = new Point2D(64, 128);
+            final List<Rectangle> windows = scalars.stream()
+                    .map(s -> scaleWindowSize(windowSize, s))
+                    .flatMap(
+                            w -> createWindows(
+                                    w,
+                                    0.5,
+                                    SuperGlobalConstants.CAMERA_FEED_SIZE,
+                                    SuperGlobalConstants.CAMERA_FEED_SIZE
+                            ).stream()
+                    ).collect(Collectors.toList());
+
+            Camera.openCamera();
+
+            System.out.println("Windows: " + windows.size());
 
             while (true) {
-                Camera.openCamera();
-                BufferedImage frame = Camera.getFrame();
+                BufferedImage cameraFeed = Camera.getFrame();
+                assert cameraFeed != null;
+                cameraFeed = preProcessCameraFeed(cameraFeed, SuperGlobalConstants.CAMERA_FEED_SIZE);
 
-                assert frame != null;
-                frame = preProcessCameraFeed(frame, SuperGlobalConstants.CAMERA_FEED_SIZE);
+                final List<Rectangle> detectedFaces = findAllFaces(windows, cameraFeed, classifier);
+                System.out.println("Faces: " + detectedFaces.size());
 
-                List<Rectangle> faces = findAllFaces(
-                        frame,
-                        windowSize,
-                        scalars,
-                        classifier,
-                        0.5
-                );
+                final Optional<Rectangle> maxRect = detectedFaces.stream()
+                        .max(Comparator.comparingInt(Rectangle::getArea));
 
-                System.out.println("Detected " + faces.size() + " faces.");
-                Optional<Rectangle> maxFace = faces.stream().max(Comparator.comparingInt(Rectangle::getArea));
-
-                if(maxFace.isPresent()) {
-                    imagePanel.setImage(maxFace.get().getImageRegion(frame));
+                if(maxRect.isPresent()) {
+                    imagePanel.setImage(maxRect.get().getImageRegion(cameraFeed));
                     displayFrame.getContentPane().repaint();
                 }
 
@@ -172,10 +173,9 @@ public class FaceDetector {
 
         } catch (IOException e) {
             e.printStackTrace();
+            Camera.closeCamera();
         }
 
-        Camera.closeCamera();
-        System.out.println("Camera closed.");
     }
 
 }
