@@ -5,6 +5,7 @@ import org.openimaj.image.FImage;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,14 +49,9 @@ public class PreProcessData {
      * @return a matrix float[][] with all the pixels in the image.
      */
     private float[][] findPixels(){
-        FImage images = createFImage(this.image);
-        float[][] pixels = images.pixels;
-        for (int i = 0; i < pixels.length ; i++){
-            for(int j = 0; j < pixels[i].length ; j++){
-                pixels[i][j] = pixels[i][j]*255;
-            }
-        }
-        return pixels;
+        FImage image = createFImage(this.image);
+        image.multiplyInplace(255);
+        return image.pixels;
     }
 
 
@@ -130,11 +126,11 @@ public class PreProcessData {
     public  List<Double>  getFeatureVector(){
 
         FeatureVector[][] smallFeatures = get8x8Patches();
-        List<Double> featureVector = new ArrayList<>();
+        List<Double> featureVector = new LinkedList<>();
 
         for (int i = 0 ; i <smallFeatures.length && i+2 <=smallFeatures.length; i++){
             for(int j = 0 ; j < smallFeatures[0].length&& j+2 <=smallFeatures[0].length ; j++){
-                ArrayList<Double> smallF = new ArrayList<>();
+                List<Double> smallF = new LinkedList<>();
                 double sum = 0;
                 for(int x = i; x < i+2 && x<smallFeatures.length ; x++ ) {
                     for (int y = j; y < j + 2 && y<smallFeatures[0].length; y++) {

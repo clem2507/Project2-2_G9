@@ -83,19 +83,6 @@ public class SVMFunctions {
 
             double[] prob_estimates = new double[totalClasses];
             yPred[k] = svm.svm_predict_probability(model, nodes, prob_estimates);
-
-            for (int i = 0; i < totalClasses; i++){
-                System.out.print("(" + labels[i] + ":" + prob_estimates[i] + ") ");
-            }
-            System.out.println();
-
-            //TODO: SET A THRESHOLD
-            double threshold = 0;
-//            if(yPred[k] > threshold){
-//                yPred[k] = 1;
-//            }
-
-            System.out.println("Final Prediction = " + yPred[k]);
         }
         return yPred;
     }
