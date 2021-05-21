@@ -758,6 +758,10 @@ public class Main extends Application {
         Platform.setImplicitExit(false);
     }
 
+    public void hideWindow() { primStage.getScene().getWindow().hide(); }
+
+    public void showWindow() { primStage.show(); }
+
     /**
      * Update the seconds for the time display
      */
