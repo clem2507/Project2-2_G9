@@ -4,7 +4,6 @@ import org.openimaj.image.FImage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,8 +37,6 @@ public class PreProcessData {
         graphics2D.drawImage(resizedImage, 0, 0, null);
         graphics2D.dispose();
 
-        //NOTE: This was slowing down everything. Avoid writing to disk in procedures that need to be fast.
-        //ImageIO.write(newImage,"PNG", new File("resized.png"));
         return newImage;
     }
 
@@ -67,8 +64,7 @@ public class PreProcessData {
         for (int i = 0 ; i < gradientOrientation.length ; i++){
             for(int j = 0 ; j < gradientOrientation[i].length ; j++){
                 int bin = (int) gradientOrientation[i][j]/binSize;
-                //TODO: Double check this. We are not using it.
-                //histogram[bin] += gradientMagnitude[i][j];
+
                 histogram[bin]++;
             }
         }

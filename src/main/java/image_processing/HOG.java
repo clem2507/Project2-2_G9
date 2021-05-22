@@ -1,6 +1,5 @@
 package image_processing;
 
-import org.apache.commons.math.util.DoubleArray;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
