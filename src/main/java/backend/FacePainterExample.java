@@ -40,15 +40,15 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
     public FacePainterExample() throws IOException {
 
         super();
-
         webcam = Webcam.getDefault();
-        //webcam.setViewSize(WebcamResolution.VGA.getSize());
+        webcam.setViewSize(WebcamResolution.VGA.getSize());
 
+        /*
         Dimension largestViewSize = Stream.of(webcam.getViewSizes())
                 .max(Comparator.comparingInt(a -> (int) a.getWidth()))
                 .orElseThrow();
         webcam.setViewSize(largestViewSize);
-
+        */
         webcam.open(true);
 
         WebcamPanel panel = new WebcamPanel(webcam, false);

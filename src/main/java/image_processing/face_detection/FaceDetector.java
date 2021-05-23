@@ -1,19 +1,12 @@
 package image_processing.face_detection;
 
-import backend.common.camera.Camera;
-import image_processing.QuickImageDisplay;
 import image_processing.SVM.FaceClassifier;
-import image_processing.SuperGlobalConstants;
-import org.w3c.dom.css.Rect;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class FaceDetector {
 

@@ -4,6 +4,8 @@ import backend.*;
 import backend.common.OS.UnsupportedOSException;
 import backend.common.Quote;
 import backend.common.WeatherObject;
+import backend.common.face_detection_api.DetectionHandler;
+import backend.common.face_detection_api.DetectionResults;
 import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -44,7 +46,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main extends Application {
-    FaceDetectionHandler faceDetectionHandler;
+    DetectionHandler detectionHandler;
     private boolean isHidden = false;
     private int lastSwitchState = 0;
 
@@ -736,7 +738,7 @@ public class Main extends Application {
         // NOTE: It is asynchronous but sill runs in the main thread.
         // If this function blocks or delays, then the entire GUI will be delayed.
         // IMPORTANT: This code repeats on every frame/tick
-        faceDetectionHandler = new FaceDetectionHandler(0, 0);
+        detectionHandler = new DetectionHandler(0, 0);
 
         AnimationTimer tickTimer = new AnimationTimer(){
 
@@ -941,36 +943,36 @@ public class Main extends Application {
     }
 
     private void pullAndProcessFaceDetectionResults() {
-        System.out.println("Detection tick");
-        final int currentSwitchState = getSwitchState();
 
-        if(faceDetectionHandler.hasMoreResults()) {
-            System.out.println("Results are queued");
-            Optional<FaceDetectionResult> result = faceDetectionHandler.getDetectionsAndContinue();
+        if(detectionHandler.isReady()) {
+            final Optional<DetectionResults> results = detectionHandler.getResults();
 
-            if(result.isPresent()) {
+            if(results.isPresent()) {
 
-                if(lastSwitchState != currentSwitchState) {
-                    lastSwitchState = currentSwitchState;
-                    faceDetectionHandler.setSelectedDetector(currentSwitchState);
+                if (!results.get().getAABBs().isEmpty()) {
+                    System.out.println("Face Detected!");
+
+                    if(isHidden) {
+                        isHidden = false;
+                        showWindow();
+                    }
+
                 }
 
-                faceDetectionHandler.runDetection();
+                if (results.get().getAABBs().isEmpty()) {
+                    System.out.println("No Face Detected!");
 
-                if(result.get().aabbs.isEmpty() && !isHidden){
-                    System.out.println("Hide");
-                    isHidden = true;
-                    hideWindow();
-                }
+                    if(!isHidden) {
+                        isHidden = true;
+                        hideWindow();
+                    }
 
-                if(!result.get().aabbs.isEmpty() && isHidden) {
-                    System.out.println("Show");
-                    isHidden = false;
-                    showWindow();
                 }
 
             }
 
+            detectionHandler.setDetector(getSwitchState());
+            detectionHandler.detect();
         }
 
     }

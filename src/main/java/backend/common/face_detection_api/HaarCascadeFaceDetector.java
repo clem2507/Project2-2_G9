@@ -1,6 +1,7 @@
 package backend.common.face_detection_api;
 
 import backend.common.camera.Camera;
+import image_processing.SuperGlobalConstants;
 import image_processing.face_detection.Point2D;
 import image_processing.face_detection.Rectangle;
 import org.openimaj.image.ImageUtilities;
