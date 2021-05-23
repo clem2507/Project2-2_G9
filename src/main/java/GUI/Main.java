@@ -115,8 +115,10 @@ public class Main extends Application {
     Image robot;
     Image robotInteraction;
     Image GPS;
+    Image detectorImage;
 
     ImageView iv;
+    ImageView detectorView;
     ImageView imgView;
     ImageView imgView1;
     ImageView imgView2;
@@ -761,6 +763,16 @@ public class Main extends Application {
         primaryStage.centerOnScreen();
         primaryStage.show();
         Platform.setImplicitExit(false);
+    }
+
+    public void dispDetectorImage(Image img){
+        detectorImage = img;
+        detectorView = new ImageView(detectorImage);
+        detectorView.setTranslateX(menubarX + 100);
+        detectorView.setTranslateY(menubarY);
+        detectorView.setFitWidth(160);
+        detectorView.setFitHeight(160);
+        pane.getChildren().add(detectorView);
     }
 
     public void hideWindow() { primStage.hide(); }
