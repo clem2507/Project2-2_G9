@@ -1,5 +1,6 @@
 package image_processing.face_detection;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Rectangle {
@@ -21,6 +22,15 @@ public class Rectangle {
 
     public int getArea() {
         return (pointB.getX() - pointA.getX()) * (pointB.getY() - pointA.getY());
+    }
+
+    public void draw(final BufferedImage image) {
+        Graphics2D g = image.createGraphics();
+
+        g.setStroke(new BasicStroke(2.0f));
+        g.setColor(Color.red);
+        g.drawRect(pointA.getX(), pointA.getY(), pointB.getX() - pointA.getX(), pointB.getY() - pointA.getY());
+        g.dispose();
     }
 
     @Override

@@ -41,14 +41,14 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
 
         super();
         webcam = Webcam.getDefault();
-        webcam.setViewSize(WebcamResolution.VGA.getSize());
+        //webcam.setViewSize(WebcamResolution.VGA.getSize());
 
-        /*
+
         Dimension largestViewSize = Stream.of(webcam.getViewSizes())
                 .max(Comparator.comparingInt(a -> (int) a.getWidth()))
                 .orElseThrow();
         webcam.setViewSize(largestViewSize);
-        */
+
         webcam.open(true);
 
         WebcamPanel panel = new WebcamPanel(webcam, false);
@@ -105,6 +105,12 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
 
         for (DetectedFace face : faces) {
             this.faceExists = true;
+            g2.drawRect(
+                    (int) face.getBounds().x,
+                    (int) face.getBounds().y,
+                    (int) face.getBounds().width,
+                    (int) face.getBounds().height
+            );
             System.out.println("Face Detected");
         }
 

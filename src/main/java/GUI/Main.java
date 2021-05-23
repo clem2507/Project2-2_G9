@@ -10,6 +10,7 @@ import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -31,6 +32,7 @@ import javafx.scene.text.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -960,13 +962,19 @@ public class Main extends Application {
             final Optional<DetectionResults> results = detectionHandler.getResults();
 
             if(results.isPresent()) {
+                final BufferedImage cameraFrame = results.get().getImage();
 
                 if (!results.get().getAABBs().isEmpty()) {
+
+                    for(var aabb : results.get().getAABBs()) {
+                        aabb.draw(cameraFrame);
+                    }
+
                     System.out.println("Face Detected!");
 
                     if(isHidden) {
                         isHidden = false;
-                        showWindow();
+                        //showWindow();
                     }
 
                 }
@@ -976,11 +984,12 @@ public class Main extends Application {
 
                     if(!isHidden) {
                         isHidden = true;
-                        hideWindow();
+                        //hideWindow();
                     }
 
                 }
 
+                dispDetectorImage(SwingFXUtils.toFXImage(cameraFrame, null));
             }
 
             detectionHandler.setDetector(getSwitchState());
