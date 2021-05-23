@@ -5,7 +5,6 @@ import com.github.sarxos.webcam.Webcam;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +27,7 @@ public class Camera {
      * @param channel the camera you want to open
      * @throws IOException if the camera cannot be opened
      */
-    public static void openCamera(int channel) throws IOException {
+    public static void openCamera(final int channel) throws IOException {
 
         synchronized (videoCaptures){
 

@@ -1,15 +1,14 @@
 package backend;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import com.github.sarxos.webcam.Webcam;
@@ -43,7 +42,13 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
         super();
 
         webcam = Webcam.getDefault();
-        webcam.setViewSize(WebcamResolution.VGA.getSize());
+        //webcam.setViewSize(WebcamResolution.VGA.getSize());
+
+        Dimension largestViewSize = Stream.of(webcam.getViewSizes())
+                .max(Comparator.comparingInt(a -> (int) a.getWidth()))
+                .orElseThrow();
+        webcam.setViewSize(largestViewSize);
+
         webcam.open(true);
 
         WebcamPanel panel = new WebcamPanel(webcam, false);
@@ -98,12 +103,9 @@ public class FacePainterExample extends JFrame implements Runnable, WebcamPanel.
             return;
         }
 
-        Iterator<DetectedFace> dfi = faces.iterator();
-
-        while (dfi.hasNext()) {
+        for (DetectedFace face : faces) {
             this.faceExists = true;
             System.out.println("Face Detected");
-            dfi.next();
         }
 
     }

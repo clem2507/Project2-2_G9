@@ -1,8 +1,6 @@
 package GUI;
 
-import backend.Assistant;
-import backend.AssistantMessage;
-import backend.MessageType;
+import backend.*;
 import backend.common.OS.UnsupportedOSException;
 import backend.common.Quote;
 import backend.common.WeatherObject;
@@ -46,6 +44,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main extends Application {
+    FaceDetectionHandler faceDetectionHandler;
+    private boolean isHidden = false;
+    private int lastSwitchState = 0;
 
     Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     final double WINDOW_WIDTH = screenSize.getWidth() - 5;
@@ -677,7 +678,7 @@ public class Main extends Application {
 
             //IMPORTANT: If you want to show these names in lower case, you can't just make them lower case like that.
             // You can create a dictionary and store the original name in there while adding the lower case name
-            // in the drop-down menu. Then, whenever the user clicks on the drop-down menu, you look read the lower
+            // in the drop-down menu. Then, whenever the user clicks on the drop-down menu, you read the lower
             // case name and lookup the original name in the dictionary and THEN select the interpreter by name.
 
             RadioMenuItem choiceItem = new RadioMenuItem(name);
@@ -735,6 +736,8 @@ public class Main extends Application {
         // NOTE: It is asynchronous but sill runs in the main thread.
         // If this function blocks or delays, then the entire GUI will be delayed.
         // IMPORTANT: This code repeats on every frame/tick
+        faceDetectionHandler = new FaceDetectionHandler(0, 0);
+
         AnimationTimer tickTimer = new AnimationTimer(){
 
             @Override
@@ -758,7 +761,7 @@ public class Main extends Application {
         Platform.setImplicitExit(false);
     }
 
-    public void hideWindow() { primStage.getScene().getWindow().hide(); }
+    public void hideWindow() { primStage.hide(); }
 
     public void showWindow() { primStage.show(); }
 
@@ -933,8 +936,43 @@ public class Main extends Application {
         //      b) The user spams with messages every frame
         // Since both cases are expected to be avoided (if we code carefully), I do not see a reason to
         // work around them. In other words, they are very very unlikely to happen, so let them be.
-
         updateTime();
+        pullAndProcessFaceDetectionResults();
+    }
+
+    private void pullAndProcessFaceDetectionResults() {
+        System.out.println("Detection tick");
+        final int currentSwitchState = getSwitchState();
+
+        if(faceDetectionHandler.hasMoreResults()) {
+            System.out.println("Results are queued");
+            Optional<FaceDetectionResult> result = faceDetectionHandler.getDetectionsAndContinue();
+
+            if(result.isPresent()) {
+
+                if(lastSwitchState != currentSwitchState) {
+                    lastSwitchState = currentSwitchState;
+                    faceDetectionHandler.setSelectedDetector(currentSwitchState);
+                }
+
+                faceDetectionHandler.runDetection();
+
+                if(result.get().aabbs.isEmpty() && !isHidden){
+                    System.out.println("Hide");
+                    isHidden = true;
+                    hideWindow();
+                }
+
+                if(!result.get().aabbs.isEmpty() && isHidden) {
+                    System.out.println("Show");
+                    isHidden = false;
+                    showWindow();
+                }
+
+            }
+
+        }
+
     }
 
     /**
@@ -1008,18 +1046,20 @@ public class Main extends Application {
      * Method that interrupts the threads and then exit the program
      */
     public void exitProgram() {
-
         assistant.interruptAndWait();
         Platform.exit();
     }
 
     public int getSwitchState() {
+        //NOTE: I took the liberty to change the return values 1 and 2 with 0 and 1.
+        // This will make my life a lot easier.
+        // -Dennis
 
         if (faceDetectionMenuItem1.isSelected()) {
-            return 1;
+            return 0;
         }
         else {
-            return 2;
+            return 1;
         }
     }
 

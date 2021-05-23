@@ -35,7 +35,7 @@ public class FaceDetector {
         return resizeRegion(getCentralRegion(image), size);
     }
 
-    private static Point2D scaleWindowSize(final Point2D original, final double scale) {
+    public static Point2D scaleWindowSize(final Point2D original, final double scale) {
         final double x = original.getX();
         final double y = original.getY();
 
@@ -45,7 +45,7 @@ public class FaceDetector {
         );
     }
 
-    private static BufferedImage resizeRegion(final BufferedImage image, final int size) {
+    public static BufferedImage resizeRegion(final BufferedImage image, final int size) {
         assert image.getWidth() == image.getHeight();
 
         Image resizedImage = image.getScaledInstance(
@@ -66,7 +66,7 @@ public class FaceDetector {
         return newImage;
     }
 
-    private static BufferedImage getCentralRegion(final BufferedImage image) {
+    public static BufferedImage getCentralRegion(final BufferedImage image) {
 
         if(image.getHeight() <= image.getWidth()) {
             final double height = image.getHeight();
@@ -91,7 +91,7 @@ public class FaceDetector {
         );
     }
 
-    private static List<Rectangle> createWindows(
+    public static List<Rectangle> createWindows(
             final Point2D windowSize,
             final double relativeStepSize,
             final int imageWidth, final int imageHeight
@@ -117,65 +117,6 @@ public class FaceDetector {
         }
 
         return regions;
-    }
-
-    public static void main(String[] args) {
-
-        try {
-            final JFrame displayFrame = new JFrame();
-            final QuickImageDisplay imagePanel = new QuickImageDisplay();
-            displayFrame.add(imagePanel);
-            displayFrame.setVisible(true);
-            displayFrame.setSize(800, 800);
-
-            final FaceClassifier classifier = new FaceClassifier();
-            classifier.loadModel();
-
-            final List<Double> scalars = IntStream.rangeClosed(0, 4)
-                    .asDoubleStream()
-                    .map(i -> 1.0 + 1.15*i)
-                    .boxed()
-                    .collect(Collectors.toList());
-            final Point2D windowSize = new Point2D(64, 128);
-
-            final List<Rectangle> windows = scalars.stream()
-                    .map(s -> scaleWindowSize(windowSize, s))
-                    .flatMap(
-                            w -> createWindows(
-                                    w,
-                                    0.5,
-                                    SuperGlobalConstants.CAMERA_FEED_SIZE,
-                                    SuperGlobalConstants.CAMERA_FEED_SIZE
-                            ).stream()
-                    ).collect(Collectors.toList());
-
-            Camera.openCamera();
-
-            System.out.println("Windows: " + windows.size());
-
-            while (true) {
-                BufferedImage cameraFeed = Camera.getFrame();
-                assert cameraFeed != null;
-                cameraFeed = preProcessCameraFeed(cameraFeed, SuperGlobalConstants.CAMERA_FEED_SIZE);
-
-                final List<Rectangle> detectedFaces = findAllFaces(windows, cameraFeed, classifier);
-                System.out.println("Faces: " + detectedFaces.size());
-
-                final Optional<Rectangle> maxRect = detectedFaces.stream()
-                        .max(Comparator.comparingInt(Rectangle::getArea));
-
-                if(maxRect.isPresent()) {
-                    imagePanel.setImage(maxRect.get().getImageRegion(cameraFeed));
-                    displayFrame.getContentPane().repaint();
-                }
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Camera.closeCamera();
-        }
-
     }
 
 }
