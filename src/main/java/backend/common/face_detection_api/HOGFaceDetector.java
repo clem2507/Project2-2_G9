@@ -27,7 +27,7 @@ public class HOGFaceDetector implements FaceDetectorAPI {
         classifier = new FaceClassifier();
         classifier.loadModel();
 
-        final List<Double> scalars = IntStream.rangeClosed(0, 4)
+        final List<Double> scalars = IntStream.rangeClosed(2, 4)
                 .asDoubleStream()
                 .map(i -> 1.0 + 1.15*i)
                 .boxed()

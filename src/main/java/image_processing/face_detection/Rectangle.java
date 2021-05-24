@@ -46,7 +46,7 @@ public class Rectangle {
 
         if(label != null) {
             g.setColor(Color.green);
-            g.setFont(g.getFont().deriveFont(35.0f));
+            g.setFont(g.getFont().deriveFont(50.0f));
             g.drawString(label, pointA.getX(), pointA.getY());
         }
 
