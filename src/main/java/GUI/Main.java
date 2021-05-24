@@ -130,7 +130,6 @@ public class Main extends Application {
     ImageView robotViewer;
     ImageView robotInteractionViewer;
     ImageView GPSView;
-    ImageView webcam;
 
     int editBgButtonWidth = 130;
     int editBgButtonHeight = 20;
@@ -251,7 +250,7 @@ public class Main extends Application {
     int dropFileWidth = 143;
     int dropFileHeight = 35;
     int dropFileX = 30;
-    int dropFileY = 440;
+    int dropFileY = 425;
 
     int targetFontSize = 15;
     int targetX = dropFileX+18;
@@ -277,7 +276,13 @@ public class Main extends Application {
     int emptyTemplateY = dropFileY;
 
     int menubarX = dropFileX + 2;
-    int menubarY = dropFileY + 65;
+    int menubarY = dropFileY + 55;
+
+    int detectorViewX = menubarX + 120;
+    int detectorViewY = menubarY + 33;
+
+    int detectorTextX = detectorViewX;
+    int detectorTextY = menubarY + 29;
 
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
@@ -770,11 +775,18 @@ public class Main extends Application {
     public void dispDetectorImage(Image img){
         detectorImage = img;
         detectorView = new ImageView(detectorImage);
-        detectorView.setTranslateX(menubarX + 100);
-        detectorView.setTranslateY(menubarY);
-        detectorView.setFitWidth(160);
-        detectorView.setFitHeight(160);
+        detectorView.setTranslateX(detectorViewX);
+        detectorView.setTranslateY(detectorViewY);
+        detectorView.setFitWidth(155);
+        detectorView.setFitHeight(155);
         pane.getChildren().add(detectorView);
+
+        Text detectorText = new Text("Face Detection");
+        detectorText.setTranslateX(detectorTextX);
+        detectorText.setTranslateY(detectorTextY);
+        detectorText.setFill(Color.WHITE);
+        detectorText.setStyle(" -fx-font: 11 Calibri; ");
+        pane.getChildren().add(detectorText);
     }
 
     public void hideWindow() { primStage.hide(); }
