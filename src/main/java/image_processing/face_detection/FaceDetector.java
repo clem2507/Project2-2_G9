@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FaceDetector {
+    private static final double MIN_DETECTION_THRESHOLD = 0.5;
 
     public static List<Rectangle> findAllFaces(
             final List<Rectangle> windows,
@@ -21,7 +22,9 @@ public class FaceDetector {
     }
 
     public static boolean isFace(final Rectangle rect, final BufferedImage image, final FaceClassifier classifier) {
-        return classifier.predict(rect.getImageRegion(image)) == 1.0;
+        final double prob = classifier.predict(rect.getImageRegion(image));
+        rect.setLabel(Double.toString(prob));
+        return prob >= MIN_DETECTION_THRESHOLD;
     }
 
     public static BufferedImage preProcessCameraFeed(final BufferedImage image, final int size) {

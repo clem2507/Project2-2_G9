@@ -76,6 +76,10 @@ public class SVMFunctions {
             double[] prob_estimates = new double[2];
             yPred[k] = svm.svm_predict_probability(model, nodes, prob_estimates);
 
+            for(int j = 0; j < yPred.length; j++) {
+                yPred[j] *= prob_estimates[j];
+            }
+
         }
 
         return yPred;
