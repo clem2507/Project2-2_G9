@@ -34,7 +34,7 @@ public class HOGvsHaarPerformanceTest {
             this.image = ImageIO.read(imgFile);
         }
         catch (IOException e){
-
+            System.out.println("Image not processed");
         }
     }
 
@@ -65,6 +65,50 @@ public class HOGvsHaarPerformanceTest {
 
 
     public static void main(String[] args) {
-        HOGvsHaarPerformanceTest experiment = new HOGvsHaarPerformanceTest("path");
+        String path = "C:\\Users\\gebruiker\\Documents\\Project 2-2\\Code\\src\\assets\\ExperimentPictures\\1_face01.jpeg";
+
+        HOGvsHaarPerformanceTest experiment = new HOGvsHaarPerformanceTest(path);
+        long[] tempTimes = experiment.runExperiment();
+        long averageTimeHogOne = tempTimes[0];
+        long averageTimeHaarOne = tempTimes[0];
+        for (int i = 0; i < 30; i++) {
+            tempTimes = experiment.runExperiment();
+            averageTimeHogOne = averageTimeHogOne + tempTimes[0];
+            averageTimeHaarOne = averageTimeHaarOne + tempTimes[1];
+        }
+        averageTimeHogOne = averageTimeHogOne / 30;
+        averageTimeHaarOne = averageTimeHaarOne / 30;
+        System.out.println(averageTimeHogOne + " and " + averageTimeHaarOne);
+
+        experiment.setImage("C:\\Users\\gebruiker\\Documents\\Project 2-2\\Code\\src\\assets\\ExperimentPictures\\10_face01.jpeg");
+
+        tempTimes = experiment.runExperiment();
+        long averageTimeHogTen = tempTimes[0];
+        long averageTimeHaarTen = tempTimes[0];
+        for (int i = 0; i < 30; i++) {
+            tempTimes = experiment.runExperiment();
+            averageTimeHogTen = averageTimeHogTen + tempTimes[0];
+            averageTimeHaarTen = averageTimeHaarTen + tempTimes[1];
+        }
+
+        averageTimeHogTen = averageTimeHogTen / 30;
+        averageTimeHaarTen = averageTimeHaarTen / 30;
+
+        System.out.println(averageTimeHogTen + " and " + averageTimeHaarTen);
+
+        experiment.setImage("C:\\Users\\gebruiker\\Documents\\Project 2-2\\Code\\src\\assets\\ExperimentPictures\\46_face01.jpeg");
+        tempTimes = experiment.runExperiment();
+
+        long averageTimeHogFifty = tempTimes[0];
+        long averageTimeHaarFifty = tempTimes[0];
+        for (int i = 0; i < 30; i++) {
+            tempTimes = experiment.runExperiment();
+            averageTimeHogFifty = averageTimeHogFifty + tempTimes[0];
+            averageTimeHaarFifty = averageTimeHaarFifty + tempTimes[1];
+        }
+
+        averageTimeHogFifty = averageTimeHogFifty / 30;
+        averageTimeHaarFifty = averageTimeHaarFifty / 30;
+        System.out.println(averageTimeHogFifty + " and " + averageTimeHaarFifty);
     }
 }
