@@ -25,7 +25,7 @@ public class HOGvsHaarPerformanceTest {
         catch (IOException e) {
 
         }
-        haarDetector = new HaarCascadeFaceDetector(1);
+        haarDetector = new HaarCascadeFaceDetector(0);
     }
 
     public void setImage(String path) {
@@ -39,25 +39,27 @@ public class HOGvsHaarPerformanceTest {
     }
 
     // Runs experiment for both classifiers
-    public double[] runExperiment() {
-        double[] times = new double[2];
+    public long[] runExperiment() {
+        long[] times = new long[2];
         times[0] = runHOGExperiment();
         times[1] = runHaarExperiment();
         return times;
     }
 
     // Runs the experiment with the HOG classifier
-    public double runHOGExperiment() {
-        //TODO time this
+    public long runHOGExperiment() {
+        long startTime = System.currentTimeMillis();
         hogDetector.findAABBs(image);
-        return 0.0;
+        long endTime = System.currentTimeMillis();
+        return endTime-startTime;
     }
 
     // Runs the experiment with the Haar classifier
-    public double runHaarExperiment() {
-        //TODO time this
+    public long runHaarExperiment() {
+        long startTime = System.currentTimeMillis();
         haarDetector.findAABBs(image);
-        return 0.0;
+        long endTime = System.currentTimeMillis();
+        return endTime-startTime;
     }
 
 
