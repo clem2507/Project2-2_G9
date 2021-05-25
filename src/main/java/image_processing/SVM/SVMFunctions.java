@@ -1,6 +1,18 @@
 package image_processing.SVM;
+import image_processing.HOG;
 import libsvm.*;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class SVMFunctions {
@@ -44,7 +56,7 @@ public class SVMFunctions {
         }
 
         svm_model model = svm.svm_train(p, param);
-//        UNCOMMENT WHEN WE WANT TO SAVE A MODEL
+        /**UNCOMMENT WHEN YOU WANT TO SAVE THE NEW TRAINED MODEL*/
 //        svm.svm_save_model("model.model", model);
         return model;
     }
@@ -85,4 +97,107 @@ public class SVMFunctions {
         return yPred;
     }
 
+        public static void main(String [] args) throws IOException {
+//            For loop through image file and for each, call HOG constructor then get its feature vector
+//                   1 --> FACE | 0 --> NOT FACE
+            String TrainFace = "src/assets/SVM Data/FaceTrain";
+            List<File> trainFacefiles;
+            trainFacefiles = Files.list(Paths.get(TrainFace))
+                    .filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
+
+            String TrainNoFace = "src/assets/SVM Data/NoFaceTrain";
+            List<File> trainNoFacefiles;
+            trainNoFacefiles = Files.list(Paths.get(TrainNoFace))
+                    .filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
+
+            String testFace = "src/assets/SVM Data/FaceTest";
+            List<File> testFaceFiles;
+            testFaceFiles = Files.list(Paths.get(testFace))
+                    .filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
+
+            String testNoFace = "src/assets/SVM Data/NoFaceTest";
+            List<File> testNoFaceFiles;
+            testNoFaceFiles = Files.list(Paths.get(testNoFace))
+                    .filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
+
+            double[][] xtrain = new double[1273][3780];
+            double[][] ytrain = new double[1273][1];
+
+            //Training set with faces
+            int count = 0;
+            for (File file : trainFacefiles){
+                if(file.isFile() && (file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg"))){
+                    InputStream f = new FileInputStream(file);
+                    BufferedImage image = ImageIO.read(f);
+                    HOG hog = new HOG(image);
+                    xtrain[count]= hog.getFeatureArray();
+                    ytrain[count]= new double[]{1.0};
+                    count++;
+                }
+            }
+
+            //Training set without faces
+            for (File file : trainNoFacefiles){
+                if(file.isFile() && (file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg") )){
+
+                    InputStream f = new FileInputStream(file);
+                    BufferedImage image = ImageIO.read(f);
+                    HOG hog = new HOG(image);
+                    xtrain[count]= hog.getFeatureArray();
+                    ytrain[count]= new double[]{0.0};
+                    count++;
+                }
+
+            }
+
+            System.out.println("Start Training");
+            /** If you wish to train the model uncomment the line below, otherwise comment it and uncomment the line below it which
+             * will load the model that is saved.*/
+            svm_model m = svmTrain(xtrain,ytrain);
+//            svm_model m = svm.svm_load_model("model.model");
+            System.out.println("Stopped Training");
+
+            //Test set with no faces
+            double[][] xtest = new double[547][3780];
+            double[][] ytest = new double[547][1];
+            int counter = 0;
+            for (File file : testNoFaceFiles){
+                if(file.isFile() && (file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg"))) {
+
+                    InputStream f = new FileInputStream(file);
+                    BufferedImage image = ImageIO.read(f);
+                    HOG hog = new HOG(image);
+                    xtest[counter] = hog.getFeatureArray();
+                    ytest[counter] = new double[]{0.0};
+                    counter++;
+
+                }
+
+            }
+
+            //Test set with faces
+            for (File file : testFaceFiles){
+                if(file.isFile() && (file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg"))){
+                    InputStream f = new FileInputStream(file);
+                    BufferedImage image = ImageIO.read(f);
+                    HOG hog = new HOG(image);
+                    xtest[counter]= hog.getFeatureArray();
+                    ytest[counter]= new double[]{1.0};
+                    counter++;
+                }
+            }
+
+            double[] ypred = svmPredict(xtest, m);
+            for (int i = 0; i < xtest.length; i++){
+                System.out.println("(Actual:" + ytest[i][0] + " Prediction:" + ypred[i] + ")");
+            }
+        }
 }
