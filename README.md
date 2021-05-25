@@ -62,4 +62,4 @@ The assistant will remember previously defined custom skills, to get rid of them
   8) You now can copy the link and use the command "set calendar" to set it up in the application
  
 ### The Datasets
-The datasets used for training and testing the SVM can be found here in this google folder https://drive.google.com/drive/folders/19uIjx2ooVHe4f38JwmGSdULnZAOCvBsR?usp=sharing . To train the model, add the folder SVM Data which is in the link provided and add it to the folder 'assets'. Then you can run the main method found in SVMFunctions.java .
+The datasets used for training and testing the SVM can be found here in this google folder https://drive.google.com/drive/folders/19uIjx2ooVHe4f38JwmGSdULnZAOCvBsR?usp=sharing . To train the model, add the folder 'SVM Data' which is in the link provided and add it to the folder 'assets'. Then you can run the main method found in SVMFunctions.java .
