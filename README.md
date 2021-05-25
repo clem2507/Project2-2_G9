@@ -60,3 +60,6 @@ The assistant will remember previously defined custom skills, to get rid of them
   6) Click the "Connect calendar" button on the top right of the page (next to the download calendar button)
   7) Click the "other" options
   8) You now can copy the link and use the command "set calendar" to set it up in the application
+ 
+### The Datasets
+The datasets used for training and testing the SVM can be found here in this google folder https://drive.google.com/drive/folders/19uIjx2ooVHe4f38JwmGSdULnZAOCvBsR?usp=sharing .
