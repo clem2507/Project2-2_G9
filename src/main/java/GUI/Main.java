@@ -1030,7 +1030,7 @@ public class Main extends Application {
                     if(!isHidden) {
                         isHidden = true;
 
-                        if(getCheckboxState()) {
+                        /*if(getCheckboxState()) {
                             try {
                                 pushMessageOrWait(new ConsoleOutput(
                                         "See you soon!",
@@ -1040,7 +1040,7 @@ public class Main extends Application {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        }
+                        }*/
 
                         //hideWindow();
                     }
