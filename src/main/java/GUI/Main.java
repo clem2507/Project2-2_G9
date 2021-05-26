@@ -738,7 +738,7 @@ public class Main extends Application {
                 " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; -fx-selection-bar: #636b69;");
         pane.getChildren().add(menuBar);
 
-        checkBox1 = new CheckBox("Unable Face Detector");
+        checkBox1 = new CheckBox("Greet When Sees Face");
         checkBox1.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
                 " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; ");
         HBox hbox = new HBox(checkBox1);
@@ -788,12 +788,8 @@ public class Main extends Application {
         Platform.setImplicitExit(false);
     }
 
-    public boolean unableCheckBox(){
-        if (this.checkBox1.isSelected() ){
-            return true;
-        } else {
-            return false;
-        }
+    public boolean getCheckboxState(){
+        return this.checkBox1.isSelected();
     }
 
     public void dispDetectorImage(Image img){
@@ -1010,6 +1006,19 @@ public class Main extends Application {
 
                     if(isHidden) {
                         isHidden = false;
+
+                        if(getCheckboxState()) {
+                            try {
+                                pushMessageOrWait(new ConsoleOutput(
+                                        "Hello, wonderful person.",
+                                        false,
+                                        MessageType.STRING
+                                ));
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                         //showWindow();
                     }
 
@@ -1020,6 +1029,19 @@ public class Main extends Application {
 
                     if(!isHidden) {
                         isHidden = true;
+
+                        if(getCheckboxState()) {
+                            try {
+                                pushMessageOrWait(new ConsoleOutput(
+                                        "See you soon!",
+                                        false,
+                                        MessageType.STRING
+                                ));
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                         //hideWindow();
                     }
 
