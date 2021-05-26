@@ -10,6 +10,8 @@ import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -22,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -279,10 +282,10 @@ public class Main extends Application {
     int menubarY = dropFileY + 55;
 
     int detectorViewX = menubarX + 120;
-    int detectorViewY = menubarY + 33;
+    int detectorViewY = menubarY + 15;
 
     int detectorTextX = detectorViewX;
-    int detectorTextY = menubarY + 29;
+    int detectorTextY = menubarY + 11;
 
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
@@ -304,6 +307,7 @@ public class Main extends Application {
     RadioMenuItem faceDetectionMenuItem1;
     RadioMenuItem faceDetectionMenuItem2;
     MenuBar menuBar;
+    CheckBox checkBox1;
 
     Stage primStage;
 
@@ -313,6 +317,9 @@ public class Main extends Application {
         primStage = primaryStage;
         String quoteText = Quote.getQuote();
         quoteText = processText(quoteText);
+
+        this.detectorViewY +=quoteRectangleHeightIndicator*18;
+        this.detectorTextY+=quoteRectangleHeightIndicator*18;
 
         //Default Background
         bg = new Image(new FileInputStream("src/assets/cliff-background.jpg"));
@@ -731,6 +738,15 @@ public class Main extends Application {
                 " -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; -fx-selection-bar: #636b69;");
         pane.getChildren().add(menuBar);
 
+        checkBox1 = new CheckBox("Unable Face Detector");
+        checkBox1.setStyle(" -fx-background-color: #000000; -fx-background-color:rgba(0, 0, 0, 0.2); -fx-background-radius: 15px; -fx-background-insets: 0,1,1;" +
+                " -fx-text-fill: white; -fx-font-family: \"Gadugi\"; -fx-font-size: 14px; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); -fx-border-color: #F5F5F5; -fx-border-radius: 10; -fx-border-width: 0.6 0.6 0.6 0.6; ");
+        HBox hbox = new HBox(checkBox1);
+        hbox.setTranslateX(editBgButtonX - 175);
+        hbox.setTranslateY(editBgButtonY + 3);
+        hbox.setPrefWidth(270.6);
+        pane.getChildren().add(hbox);
+
         scene = new Scene(pane, WINDOW_WIDTH, WINDOW_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
@@ -772,11 +788,19 @@ public class Main extends Application {
         Platform.setImplicitExit(false);
     }
 
+    public boolean unableCheckBox(){
+        if (this.checkBox1.isSelected() ){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void dispDetectorImage(Image img){
         detectorImage = img;
         detectorView = new ImageView(detectorImage);
         detectorView.setTranslateX(detectorViewX);
-        detectorView.setTranslateY(detectorViewY);
+        detectorView.setTranslateY(detectorViewY );
         detectorView.setFitWidth(155);
         detectorView.setFitHeight(155);
         pane.getChildren().add(detectorView);
