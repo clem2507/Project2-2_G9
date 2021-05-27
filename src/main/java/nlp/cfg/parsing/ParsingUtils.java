@@ -30,12 +30,12 @@ public class ParsingUtils {
         System.out.println("Parsing " + input.toString());
 
         // While the sequence is not reduced to a starting non-terminal symbol.
-        outer_while : while (input.size() > 1) { // O(n)
+        outer_while : while (input.size() > 1) { // O(n - 1)
 
             // For each legal range of tokens we can analyse per iteration.
             // We start at 1 and finish at |input| (inclusive).
             // This is known as lookahead.
-            for(int i = 1; i <= input.size(); i++) { // O(n)
+            for(int i = 1; i <= input.size(); i++) { // O(n + 1)
 
                 // For each legal starting position to analyze a sublist of tokens.
                 // Imagine we slide a window [j, j + i] alongside the sequence of
@@ -82,7 +82,7 @@ public class ParsingUtils {
 
         return input.stream().findFirst().orElseThrow();
         // NOTE: In the worst case, assuming that the grammar rules do not make the parser
-        // get stuck forever, the time complexity is O(m*n^3). Where "m" is the number of
+        // get stuck forever, the time complexity is O(m*n^3 - m*n). Where "m" is the number of
         // grammar rules and "n" is the number of tokens
     }
 
