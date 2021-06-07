@@ -19,7 +19,7 @@ public class FaceClassifier {
     To load a saved svm Model.
      */
     public void loadModel() throws IOException {
-        this.model = svm.svm_load_model("model.model");
+        this.model = svm.svm_load_model("grayScale.model");
     }
 
     /**

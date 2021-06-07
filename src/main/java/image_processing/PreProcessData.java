@@ -31,7 +31,7 @@ public class PreProcessData {
     private static BufferedImage resizeImage(final BufferedImage image) {
         Image resizedImage = image.getScaledInstance(WIDTH,HEIGHT, Image.SCALE_SMOOTH);
 
-        BufferedImage newImage = new BufferedImage(resizedImage.getWidth(null), resizedImage.getHeight(null), BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage newImage = new BufferedImage(resizedImage.getWidth(null), resizedImage.getHeight(null), BufferedImage.TYPE_BYTE_GRAY);
 
         Graphics2D graphics2D = newImage.createGraphics();
         graphics2D.drawImage(resizedImage, 0, 0, null);

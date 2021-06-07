@@ -57,7 +57,7 @@ public class SVMFunctions {
 
         svm_model model = svm.svm_train(p, param);
         /**UNCOMMENT WHEN YOU WANT TO SAVE THE NEW TRAINED MODEL*/
-//        svm.svm_save_model("model.model", model);
+//        svm.svm_save_model("grayScale.model", model);
         return model;
     }
 
@@ -127,9 +127,11 @@ public class SVMFunctions {
                     .filter(Files::isRegularFile)
                     .map(Path::toFile)
                     .collect(Collectors.toList());
-
-            double[][] xtrain = new double[1273][3780];
-            double[][] ytrain = new double[1273][1];
+//
+//            double[][] xtrain = new double[1273][3780];
+//            double[][] ytrain = new double[1273][1];
+            double[][] xtrain = new double[1318][3780];
+            double[][] ytrain = new double[1318][1];
 
             //Training set with faces
             int count = 0;
@@ -143,7 +145,7 @@ public class SVMFunctions {
                     count++;
                 }
             }
-
+            System.out.println(count);
             //Training set without faces
             for (File file : trainNoFacefiles){
                 if(file.isFile() && (file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg") )){
@@ -161,13 +163,13 @@ public class SVMFunctions {
             System.out.println("Start Training");
             /** If you wish to train the model uncomment the line below, otherwise comment it and uncomment the line below it which
              * will load the model that is saved.*/
-            svm_model m = svmTrain(xtrain,ytrain);
-//            svm_model m = svm.svm_load_model("model.model");
+//            svm_model m = svmTrain(xtrain,ytrain);
+            svm_model m = svm.svm_load_model("grayScale.model");
             System.out.println("Stopped Training");
 
             //Test set with no faces
-            double[][] xtest = new double[547][3780];
-            double[][] ytest = new double[547][1];
+            double[][] xtest = new double[548][3780];
+            double[][] ytest = new double[548][1];
             int counter = 0;
             for (File file : testNoFaceFiles){
                 if(file.isFile() && (file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg"))) {
