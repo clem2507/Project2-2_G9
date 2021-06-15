@@ -1,11 +1,16 @@
 package nlp;
 
+import nlp.cfg.parsing.LiteralSymbol;
+import nlp.cfg.parsing.NumericSymbol;
+import nlp.cfg.parsing.ProductionRule;
+import nlp.cfg.parsing.Symbol;
+
 import java.util.*;
 
 public class sentenceGenerator {
 
 
-    private List<String> parseRules;
+    private List<ProductionRule> parseRules;
     private int max;
     ArrayList<String> roots = new ArrayList<>();
     ArrayList<String> keys = new ArrayList<>();
@@ -14,8 +19,9 @@ public class sentenceGenerator {
     List<String> generatedSentAsString = new ArrayList<>();
 
 
-    public sentenceGenerator(List<String> parseRules, int maxSentences) {
-        this.max = maxSentences;
+
+    public sentenceGenerator(List<ProductionRule> parseRules, int max) {
+        this.max = max;
         this.parseRules = parseRules;
         getRoots();
         System.out.println("roots = " +roots);
@@ -25,23 +31,36 @@ public class sentenceGenerator {
     }
 
 
+    /**
+     * function to extract the keys, bodies, and roots.
+     * also a dictionary with keys as 'keys' and values as 'bodies' is created here
+     */
     public void getRoots(){
-        for (String rule : parseRules) {
 
-            String [] words = rule.split(" ");
-            List<String> wordsList = Arrays.asList(words).subList(3,words.length);
+        for (ProductionRule rule: parseRules){
+            String key = rule.getNonTerminal().toString();
+            List <Symbol> body = rule.getProduction();
+            List <String> bodys = new ArrayList<>();
             List<List<String>> valueList =  new ArrayList<>();
 
-            if (keyToBody.containsKey(words[1])){
-                List<List<String>> curr =  keyToBody.get(words[1]);
-                curr.add(wordsList);
-                keyToBody.put(words[1],curr);
-            }else{
-                valueList.add(wordsList);
-                keyToBody.put(words[1],valueList);
+            for (Symbol r: body){
+                bodys.add(r.toString());
             }
-            if (!roots.contains(words[1])){
-                roots.add(words[1]);
+
+            if (!this.keys.contains(key)){
+                keys.add(key);
+            }
+            if (!roots.contains(key)){
+                roots.add(key);
+            }
+
+            if(keyToBody.containsKey(key)){
+                List<List<String>> curr =  keyToBody.get(key);
+                curr.add(bodys);
+                keyToBody.put(key,curr);
+            }else{
+                valueList.add(bodys);
+                keyToBody.put(key,valueList);
             }
         }
 
@@ -70,6 +89,10 @@ public class sentenceGenerator {
     }
 
 
+    /**
+     * This is the main function that generates sentences
+     * @return generated sentences
+     */
     public List<String> generateSentences(){
         for (String root : roots){
             List<List<String>> currChildren = keyToBody.get(root);
@@ -85,7 +108,6 @@ public class sentenceGenerator {
                     }
                 }
             }
-
         }
         List<String> genSent = new ArrayList<>();
         for (List<String> sent : generatedSentences){
@@ -99,6 +121,7 @@ public class sentenceGenerator {
         return genSent;
     }
 
+
     /**
      * function that recursively replaces keys found in a sentence and returns all possible valid sentences
      * @param child ; sentence
@@ -108,14 +131,11 @@ public class sentenceGenerator {
     public ArrayList<List<String>> replaceKey(List<String> child, String key){
         ArrayList<List<String>> generatedSentencess = new ArrayList<>();
 
-        //Find the position of the key
-        //find the possible children of the key
         int index = child.indexOf(key);
         List<List<String>> possibleBody = keyToBody.get(key);
 
         for (List<String> body : possibleBody){
             List<String> genString = possibleChild(body,child,index);
-            //check if it contains any key and still less than the max
             int count = 0;
             for (String k : keys){
                 if (genString.contains(k) && genString.size()<=max){
@@ -128,8 +148,6 @@ public class sentenceGenerator {
                 }else if( genString.size()<=max) {
                     if (count == keys.size()-1 ){
                         if (containsKey(genString)){
-                            //find which key
-                            //if this key has any body without any keys in
                             for (String x : keys){
                                 if(genString.contains(x)){
                                     List<List<String>> bodies = keyToBody.get(x);
@@ -140,7 +158,6 @@ public class sentenceGenerator {
                                         }
                                     }
                                     if (keylessBods.size()>0){
-                                        //then create function for this final replacement
                                         ArrayList<List<String>> xx = finalRep(genString, x, keylessBods);
                                         for(List<String> str: xx){
                                             if(!containsKey(str)){
@@ -159,7 +176,6 @@ public class sentenceGenerator {
                 }
                 count += 1;
             }
-
         }
         return generatedSentencess;
     }
@@ -189,11 +205,17 @@ public class sentenceGenerator {
         return generatedSentencess;
     }
 
+
+    /**
+     * This function returns a sentence generated after replacement of a symbol
+     * @param body ;  the body to be added
+     * @param child ; text to be changed
+     * @param index ;  index of the symbol to be removed
+     * @return
+     */
     public List<String> possibleChild(List<String> body, List<String> child, int index) {
         List<String> temp = new ArrayList<>(child);
-
         temp.remove(index);
-
         for (String word : body){
             temp.add(index, word);
             index+=1;
@@ -215,24 +237,50 @@ public class sentenceGenerator {
     }
 
 
+
+
     public static void main (String[] args){
 
-        List<String> parseRules = new ArrayList<>();
-        parseRules.add("parse E as exams");
-        parseRules.add("parse E as lectures");
-        parseRules.add("parse S as When do I have E");
-        parseRules.add("parse S as S and E");
-        parseRules.add("parse X as S and training");
 
-        sentenceGenerator gg = new sentenceGenerator(parseRules, 9);
+//        List<String> parseRules = new ArrayList<>();
+//        parseRules.add("parse E as exams");
+//        parseRules.add("parse E as lectures");
+//        parseRules.add("parse S as When do I have E");
+//        parseRules.add("parse S as S and E");
+//        parseRules.add("parse X as S and training");
 
+        /**
+         *         These rules are parsed below
+         */
+        List<ProductionRule> rules = new ArrayList<>();
+        Symbol S = new LiteralSymbol("S");
+        Symbol X = new LiteralSymbol("X");
+        Symbol E = new LiteralSymbol("E");
+        Symbol exams = new LiteralSymbol("exams");
+        Symbol lectures = new LiteralSymbol("lectures");
+        Symbol when = new LiteralSymbol("when");
+        Symbol doo = new LiteralSymbol("do");
+        Symbol I = new LiteralSymbol("I");
+        Symbol have = new LiteralSymbol("have");
+        Symbol and = new LiteralSymbol("and");
+        Symbol training = new LiteralSymbol("training");
+
+        rules.add(new ProductionRule(E, Arrays.asList(exams)));
+        rules.add(new ProductionRule(E, Arrays.asList(lectures)));
+        rules.add(new ProductionRule(S, Arrays.asList(when, doo, I, have, E)));
+        rules.add(new ProductionRule(S, Arrays.asList(S, and, E)));
+        rules.add(new ProductionRule(X, Arrays.asList(S, and, training)));
+
+
+        /**
+         * Generate sentences: Simply create a function of the class and then call the function
+         * 'generateSentences' which will return a
+         * list of the generated strings
+         */
+        sentenceGenerator gg = new sentenceGenerator(rules, 9);
         List<String> x = gg.generateSentences();
+
         System.out.println(x);
         System.out.println(x.size());
-
-
-
-
-
     }
 }

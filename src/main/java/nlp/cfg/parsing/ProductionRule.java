@@ -50,4 +50,12 @@ public class ProductionRule {
                 .map(Object::toString)
                 .reduce((a, b) -> a + " " + b).orElseThrow();
     }
+
+    public Symbol getNonTerminal() {
+        return nonTerminal;
+    }
+
+    public List<Symbol> getProduction() {
+        return production;
+    }
 }
