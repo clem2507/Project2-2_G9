@@ -273,9 +273,8 @@ public class sentenceGenerator {
 
 
         /**
-         * Generate sentences: Simply create a function of the class and then call the function
-         * 'generateSentences' which will return a
-         * list of the generated strings
+         * Generate sentences: Simply create an object of the class and then call the function
+         * 'generateSentences' which will return a list of the generated strings
          */
         sentenceGenerator gg = new sentenceGenerator(rules, 9);
         List<String> x = gg.generateSentences();
