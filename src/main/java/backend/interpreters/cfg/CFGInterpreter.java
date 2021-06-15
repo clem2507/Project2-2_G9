@@ -145,6 +145,7 @@ public class CFGInterpreter implements FallbackInterpreter {
         throw new NLPError("Output rule key opening symbol " + OUTPUT_KEY_OPEN + " not found. Instead got " + tokens.get(2));
     }
 
+
     @Override
     public InterpreterNames getName() {
         return InterpreterNames.CFG;
@@ -154,6 +155,10 @@ public class CFGInterpreter implements FallbackInterpreter {
     public void reset() {
         outputRules.clear();
         parseRules.clear();
+    }
+
+    public List<ProductionRule> getParseRules() {
+        return parseRules;
     }
 
     public static void main(String[] args) {
