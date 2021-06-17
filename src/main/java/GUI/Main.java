@@ -306,6 +306,7 @@ public class Main extends Application {
     Menu faceDetectorMenu;
     RadioMenuItem faceDetectionMenuItem1;
     RadioMenuItem faceDetectionMenuItem2;
+    RadioMenuItem faceRecognitionMenuItem;
     MenuBar menuBar;
     CheckBox checkBox1;
 
@@ -714,7 +715,7 @@ public class Main extends Application {
             }
         }
 
-        faceDetectorMenu = new Menu("Face Detectors");
+        faceDetectorMenu = new Menu("Face Detection & Recognition");
         faceDetectorMenu.setStyle("-fx-text-fill: black;");
 
         ToggleGroup toggleGroup1 = new ToggleGroup();
@@ -723,10 +724,14 @@ public class Main extends Application {
         faceDetectionMenuItem1.setStyle("-fx-text-fill: black;");
         faceDetectionMenuItem2 = new RadioMenuItem("Haar Cascade Face Detector");
         faceDetectionMenuItem2.setStyle("-fx-text-fill: black;");
+        faceRecognitionMenuItem = new RadioMenuItem("PCA & MLP");
+        faceRecognitionMenuItem.setStyle("-fx-text-fill: black;");
+
         faceDetectionMenuItem1.setSelected(true);
 
-        toggleGroup1.getToggles().addAll(faceDetectionMenuItem1, faceDetectionMenuItem2);
-        faceDetectorMenu.getItems().addAll(faceDetectionMenuItem1, faceDetectionMenuItem2);
+        toggleGroup1.getToggles().addAll(faceDetectionMenuItem1, faceDetectionMenuItem2, faceRecognitionMenuItem);
+        faceDetectorMenu.getItems().addAll(faceDetectionMenuItem1, faceDetectionMenuItem2, faceRecognitionMenuItem);
+
         menu.getItems().addAll(interpretersMenu, faceDetectorMenu);
 
         menuBar = new MenuBar();
@@ -1046,7 +1051,7 @@ public class Main extends Application {
 
                 }
 
-                dispDetectorImage(SwingFXUtils.toFXImage(cameraFrame, null));
+               // dispDetectorImage(SwingFXUtils.toFXImage(cameraFrame, null));
             }
 
             detectionHandler.setDetector(getSwitchState());

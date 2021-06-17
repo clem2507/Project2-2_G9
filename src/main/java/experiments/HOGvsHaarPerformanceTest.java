@@ -65,7 +65,7 @@ public class HOGvsHaarPerformanceTest {
 
 
     public static void main(String[] args) {
-        String path = "C:\\Users\\gebruiker\\Documents\\Project 2-2\\Code\\src\\assets\\ExperimentPictures\\1_face01.jpeg";
+        String path = "C:\\Users\\aysen\\Downloads\\n1.jpeg";
 
         HOGvsHaarPerformanceTest experiment = new HOGvsHaarPerformanceTest(path);
         long[] tempTimes = experiment.runExperiment();
@@ -80,7 +80,7 @@ public class HOGvsHaarPerformanceTest {
         averageTimeHaarOne = averageTimeHaarOne / 30;
         System.out.println(averageTimeHogOne + " and " + averageTimeHaarOne);
 
-        experiment.setImage("C:\\Users\\gebruiker\\Documents\\Project 2-2\\Code\\src\\assets\\ExperimentPictures\\10_face01.jpeg");
+        experiment.setImage("C:\\Users\\aysen\\Downloads\\n10.jpeg");
 
         tempTimes = experiment.runExperiment();
         long averageTimeHogTen = tempTimes[0];
@@ -96,7 +96,7 @@ public class HOGvsHaarPerformanceTest {
 
         System.out.println(averageTimeHogTen + " and " + averageTimeHaarTen);
 
-        experiment.setImage("C:\\Users\\gebruiker\\Documents\\Project 2-2\\Code\\src\\assets\\ExperimentPictures\\46_face01.jpeg");
+        experiment.setImage("C:\\Users\\aysen\\Downloads\\n46.jpeg");
         tempTimes = experiment.runExperiment();
 
         long averageTimeHogFifty = tempTimes[0];
