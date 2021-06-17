@@ -4,6 +4,7 @@ import backend.*;
 import backend.common.OS.UnsupportedOSException;
 import backend.common.Quote;
 import backend.common.WeatherObject;
+import backend.common.camera.Camera;
 import backend.common.face_detection_api.DetectionHandler;
 import backend.common.face_detection_api.DetectionResults;
 import domains.Search.Search;
@@ -767,7 +768,12 @@ public class Main extends Application {
         // NOTE: It is asynchronous but sill runs in the main thread.
         // If this function blocks or delays, then the entire GUI will be delayed.
         // IMPORTANT: This code repeats on every frame/tick
+
         detectionHandler = new DetectionHandler(0, 0);
+
+        if ((faceDetectionMenuItem1.isSelected() || faceDetectionMenuItem2.isSelected()) && !System.getProperty("os.name").equals("Mac OS X")) {
+            Camera.openCamera(detectionHandler.getChannel());
+        }
 
         AnimationTimer tickTimer = new AnimationTimer(){
 
@@ -989,7 +995,10 @@ public class Main extends Application {
         // Since both cases are expected to be avoided (if we code carefully), I do not see a reason to
         // work around them. In other words, they are very very unlikely to happen, so let them be.
         updateTime();
-        pullAndProcessFaceDetectionResults();
+
+        if (!System.getProperty("os.name").equals("Mac OS X")) {
+            pullAndProcessFaceDetectionResults();
+        }
     }
 
     private void pullAndProcessFaceDetectionResults() {

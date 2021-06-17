@@ -31,7 +31,6 @@ public class DetectionHandler {
         assert defaultDetectorIndex < detectors.length;
 
         state = DetectorState.INERT;
-        Camera.openCamera(channel);
     }
 
     public void detect() {
@@ -68,4 +67,7 @@ public class DetectionHandler {
         this.selectedDetectorIndex = index;
     }
 
+    public int getChannel() {
+        return channel;
+    }
 }

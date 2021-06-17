@@ -1,6 +1,7 @@
 package GUI;
 
 import backend.MessageType;
+import backend.common.camera.Camera;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -15,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Controller {
 
@@ -449,6 +451,32 @@ public class Controller {
         clearTemplate.setOnAction(actionEvent ->  {
             window.assistant.forgetTemplates();
             window.setRobotText("Templates are \n removed");
+        });
+
+        window.faceRecognitionMenuItem.setOnAction(actionEvent -> {
+            if (!System.getProperty("os.name").equals("Mac OS X")) {
+                Camera.closeCamera(window.detectionHandler.getChannel());
+            }
+        });
+
+        window.faceDetectionMenuItem1.setOnAction(actionEvent -> {
+            try {
+                if (!System.getProperty("os.name").equals("Mac OS X")) {
+                    Camera.openCamera(window.detectionHandler.getChannel());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        window.faceDetectionMenuItem2.setOnAction(actionEvent -> {
+            try {
+                if (!System.getProperty("os.name").equals("Mac OS X")) {
+                    Camera.openCamera(window.detectionHandler.getChannel());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
