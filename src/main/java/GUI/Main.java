@@ -721,11 +721,11 @@ public class Main extends Application {
 
         ToggleGroup toggleGroup1 = new ToggleGroup();
 
-        faceDetectionMenuItem1 = new RadioMenuItem("HOG Face Detector");
+        faceDetectionMenuItem1 = new RadioMenuItem("HOG: Detection");
         faceDetectionMenuItem1.setStyle("-fx-text-fill: black;");
-        faceDetectionMenuItem2 = new RadioMenuItem("Haar Cascade Face Detector");
+        faceDetectionMenuItem2 = new RadioMenuItem("Haar Cascade: Detection");
         faceDetectionMenuItem2.setStyle("-fx-text-fill: black;");
-        faceRecognitionMenuItem = new RadioMenuItem("PCA & MLP");
+        faceRecognitionMenuItem = new RadioMenuItem("PCA & MLP: Recognition");
         faceRecognitionMenuItem.setStyle("-fx-text-fill: black;");
 
         faceDetectionMenuItem1.setSelected(true);
