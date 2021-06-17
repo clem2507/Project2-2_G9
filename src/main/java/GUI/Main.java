@@ -1003,6 +1003,13 @@ public class Main extends Application {
 
     private void pullAndProcessFaceDetectionResults() {
 
+        if (faceDetectionMenuItem1.isSelected() || faceDetectionMenuItem2.isSelected()) {
+            try {
+                Camera.openCamera(detectionHandler.getChannel());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if(detectionHandler.isReady()) {
             final Optional<DetectionResults> results = detectionHandler.getResults();
 
