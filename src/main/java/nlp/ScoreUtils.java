@@ -9,7 +9,7 @@ public class ScoreUtils {
      *
      * @return Amount of tokens to be added to Q to get to S
      */
-    public int tokenScore(String query, String sentence) {
+    public static int scoreSentence(String query, String sentence) {
         ArrayList<String> queryTokens = new ArrayList<>(Tokenizer.asTokenList(query));
         ArrayList<String> sentenceTokens = new ArrayList<>(Tokenizer.asTokenList(sentence));
         int i = 0;

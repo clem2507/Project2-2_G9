@@ -42,12 +42,12 @@ public class RegexSkillsInterpreter implements FallbackInterpreter {
 
     @Override
     // Gives the location of the text file with custom skills
-    public void compileTemplate(String newPath) {
-        readPath(newPath);
+    public boolean compileTemplate(String newPath) {
+        return readPath(newPath);
     }
 
     // Parses the text file and puts the info into data structures to be used for matching queries
-    private void readPath(final String path) {
+    private boolean readPath(final String path) {
         try {
             File txtFile = new File(path);
             Scanner myReader = new Scanner(txtFile);
@@ -59,6 +59,7 @@ public class RegexSkillsInterpreter implements FallbackInterpreter {
                 if (parts.length == 1) {
                     // problem with the txt file, should always be at least a pattern and a response
                     // Send message to bot
+                    return false;
                 }
                 else if (parts.length == 2) {
                     newSkill = new CustomSkill(parts[0], parts[1]);
@@ -74,6 +75,8 @@ public class RegexSkillsInterpreter implements FallbackInterpreter {
             System.out.println("The file could not be found");
             // Probably ask the user to enter a new path?
         }
+
+        return true;
     }
 
     // Mainly for testing
