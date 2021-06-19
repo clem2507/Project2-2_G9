@@ -51,6 +51,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.python.core.PyObject;
+import org.python.core.PyString;
+import org.python.util.PythonInterpreter;
+
 public class Main extends Application {
     DetectionHandler detectionHandler;
     private boolean isHidden = false;
@@ -290,6 +294,8 @@ public class Main extends Application {
 
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
+
+    boolean isFaceRecognitionReady = true;
 
     Date currentDate;
 
@@ -781,7 +787,7 @@ public class Main extends Application {
             public void handle(long now) {
                 try {
                     tick();
-                } catch (InterruptedException | FileNotFoundException e) {
+                } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -986,7 +992,7 @@ public class Main extends Application {
 
     }
 
-    public void tick() throws InterruptedException, FileNotFoundException {
+    public void tick() throws InterruptedException, IOException {
         moveFromAssistantToQueue(); // Get assistant messages from the assistant queue to the queue in the main thread
         moveFromQueueToConsole(); // Move stacking messages from the queue in the main thread to the output console
         // NOTE: This code will breaks if
@@ -997,19 +1003,18 @@ public class Main extends Application {
         updateTime();
 
         if (!System.getProperty("os.name").equals("Mac OS X")) {
-            pullAndProcessFaceDetectionResults();
+            if (faceDetectionMenuItem1.isSelected() || faceDetectionMenuItem2.isSelected()) {
+                pullAndProcessFaceDetectionResults();
+            }
+            else {
+                pullAndProcessFaceRecognitionResults();
+            }
         }
     }
 
-    private void pullAndProcessFaceDetectionResults() {
+    private void pullAndProcessFaceDetectionResults() throws IOException {
 
-        if (faceDetectionMenuItem1.isSelected() || faceDetectionMenuItem2.isSelected()) {
-            try {
-                Camera.openCamera(detectionHandler.getChannel());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        Camera.openCamera(detectionHandler.getChannel());
         if(detectionHandler.isReady()) {
             final Optional<DetectionResults> results = detectionHandler.getResults();
 
@@ -1074,6 +1079,31 @@ public class Main extends Application {
             detectionHandler.detect();
         }
 
+    }
+
+    private void pullAndProcessFaceRecognitionResults() {
+
+        if (isFaceRecognitionReady) {
+            Thread recognitionThread = new Thread(() -> {
+                isFaceRecognitionReady = false;
+                PythonInterpreter interpreter = new PythonInterpreter();
+                interpreter.execfile("src/main/java/face_recognition/main.py");
+                PyObject pyObj = interpreter.get("main");
+                PyObject result = pyObj.__call__();
+                String name = (String) result.__tojava__(String.class);
+                try {
+                    pushMessageOrWait(new ConsoleOutput(
+                            "Hello, " + name,
+                            false,
+                            MessageType.STRING
+                    ));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                isFaceRecognitionReady = true;
+            });
+            recognitionThread.start();
+        }
     }
 
     /**
