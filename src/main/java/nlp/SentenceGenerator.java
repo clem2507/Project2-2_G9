@@ -1,13 +1,12 @@
 package nlp;
 
 import nlp.cfg.parsing.LiteralSymbol;
-import nlp.cfg.parsing.NumericSymbol;
 import nlp.cfg.parsing.ProductionRule;
 import nlp.cfg.parsing.Symbol;
 
 import java.util.*;
 
-public class sentenceGenerator {
+public class SentenceGenerator {
 
 
     private List<ProductionRule> parseRules;
@@ -20,7 +19,7 @@ public class sentenceGenerator {
 
 
 
-    public sentenceGenerator(List<ProductionRule> parseRules, int max) {
+    public SentenceGenerator(List<ProductionRule> parseRules, int max) {
         this.max = max;
         this.parseRules = parseRules;
         getRoots();
@@ -276,7 +275,7 @@ public class sentenceGenerator {
          * Generate sentences: Simply create an object of the class and then call the function
          * 'generateSentences' which will return a list of the generated strings
          */
-        sentenceGenerator gg = new sentenceGenerator(rules, 9);
+        SentenceGenerator gg = new SentenceGenerator(rules, 9);
         List<String> x = gg.generateSentences();
 
         System.out.println(x);

@@ -456,26 +456,41 @@ public class Controller {
         window.faceRecognitionMenuItem.setOnAction(actionEvent -> {
             if (!System.getProperty("os.name").equals("Mac OS X")) {
                 Camera.closeCamera(window.detectionHandler.getChannel());
+                if (window.isFaceRecognitionDone) {
+                    window.isFaceRecognitionPushed = true;
+                }
             }
         });
 
         window.faceDetectionMenuItem1.setOnAction(actionEvent -> {
-            try {
-                if (!System.getProperty("os.name").equals("Mac OS X")) {
-                    Camera.openCamera(window.detectionHandler.getChannel());
+            if (window.isFaceRecognitionDone) {
+                try {
+                    if (!System.getProperty("os.name").equals("Mac OS X")) {
+                        Camera.openCamera(window.detectionHandler.getChannel());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+            else {
+                window.faceDetectionMenuItem1.setSelected(false);
+                System.out.println("Face recognition is running");
             }
         });
 
         window.faceDetectionMenuItem2.setOnAction(actionEvent -> {
-            try {
-                if (!System.getProperty("os.name").equals("Mac OS X")) {
-                    Camera.openCamera(window.detectionHandler.getChannel());
+            if (window.isFaceRecognitionDone) {
+                try {
+                    if (!System.getProperty("os.name").equals("Mac OS X")) {
+                        Camera.openCamera(window.detectionHandler.getChannel());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+            else {
+                window.faceDetectionMenuItem2.setSelected(false);
+                System.out.println("Face recognition is running");
             }
         });
     }

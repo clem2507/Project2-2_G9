@@ -243,6 +243,7 @@ public class Assistant {
      * @param path String representing the new path
      */
     synchronized public void notifyOfNewPath(String path){
+        forgetTemplates();
         Path source = Paths.get(path);
         Path destination = Paths.get(
                 getPathToInterpreterTemplates(selectedInterpreter) + source.getName(source.getNameCount() - 1)
@@ -250,10 +251,16 @@ public class Assistant {
 
         try {
             Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-            Arrays.stream(interpreters)
+            FallbackInterpreter interpreter = Arrays.stream(interpreters)
                     .filter(i -> i.equals(selectedInterpreter))
-                    .findFirst().orElseThrow()
-                    .compileTemplate(path);
+                    .findFirst().orElseThrow();
+
+            if(!interpreter.compileTemplate(path)) {
+                forgetTemplates();
+                interpreter.reset();
+                Popup.message("There is a problem with template: " + path);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

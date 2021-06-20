@@ -31,7 +31,7 @@ public interface FallbackInterpreter {
      * Reads and compiles a template file specified in newPath.
      * @param newPath path to template file.
      */
-    void compileTemplate(String newPath);
+    boolean compileTemplate(String newPath);
     // NOTE: This can be called at any point during runtime
 
     /**
