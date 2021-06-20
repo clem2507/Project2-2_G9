@@ -1004,9 +1004,9 @@ public class Main extends Application {
             if (faceDetectionMenuItem1.isSelected() || faceDetectionMenuItem2.isSelected()) {
                 pullAndProcessFaceDetectionResults();
             }
-            else {
-                pullAndProcessFaceRecognitionResults();
-            }
+        }
+        if (faceRecognitionMenuItem.isSelected()) {
+            pullAndProcessFaceRecognitionResults();
         }
     }
 

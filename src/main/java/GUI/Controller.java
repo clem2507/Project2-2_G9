@@ -456,9 +456,9 @@ public class Controller {
         window.faceRecognitionMenuItem.setOnAction(actionEvent -> {
             if (!System.getProperty("os.name").equals("Mac OS X")) {
                 Camera.closeCamera(window.detectionHandler.getChannel());
-                if (window.isFaceRecognitionDone) {
-                    window.isFaceRecognitionPushed = true;
-                }
+            }
+            if (window.isFaceRecognitionDone) {
+                window.isFaceRecognitionPushed = true;
             }
         });
 
