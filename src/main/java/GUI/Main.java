@@ -34,10 +34,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -47,9 +44,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.python.core.PyObject;
-import org.python.util.PythonInterpreter;
 
 public class Main extends Application {
     DetectionHandler detectionHandler;
@@ -1070,7 +1064,7 @@ public class Main extends Application {
 
                 }
 
-               // dispDetectorImage(SwingFXUtils.toFXImage(cameraFrame, null));
+                // dispDetectorImage(SwingFXUtils.toFXImage(cameraFrame, null));
             }
 
             detectionHandler.setDetector(getSwitchState());
@@ -1081,15 +1075,25 @@ public class Main extends Application {
 
     private void pullAndProcessFaceRecognitionResults() {
 
+
         if (isFaceRecognitionPushed) {
             faceRecognitionThread = new Thread(() -> {
                 isFaceRecognitionPushed = false;
                 isFaceRecognitionDone = false;
-                PythonInterpreter interpreter = new PythonInterpreter();
-                interpreter.execfile("src/main/java/face_recognition/main.py");
-                PyObject pyObj = interpreter.get("main");
-                PyObject result = pyObj.__call__();
-                String name = (String) result.__tojava__(String.class);
+                String name = "";
+                Process process;
+                try {
+                    if (System.getProperty("os.name").equals("Mac OS X")) {
+                        process = Runtime.getRuntime().exec("python3 main.py", null, new File("src/main/java/face_recognition"));
+                    }
+                    else {
+                        process = Runtime.getRuntime().exec("python main.py", null, new File("src/main/java/face_recognition"));
+                    }
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    name = reader.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 try {
                     pushMessageOrWait(new ConsoleOutput(
                             "Hello, " + name + "! How can I help you?",
