@@ -63,3 +63,6 @@ The assistant will remember previously defined custom skills, to get rid of them
  
 ### The Datasets
 The datasets used for training and testing the SVM can be found here in this google folder https://drive.google.com/drive/folders/19uIjx2ooVHe4f38JwmGSdULnZAOCvBsR?usp=sharing . To train the model, add the folder 'SVM Data' which is in the link provided and add it to the folder 'assets'. Then you can run the main method found in SVMFunctions.java .
+
+### Adding people to the dataset
+Adding people to the dataset making them recognizable from the program is very easy. You will need about 100/150 pictures of your face in different light conditions and moods. To feed the dataset those need to be transformed into 250x250 grayscales images and needed to be added into a specific directory inside the dataset folder. It is very important that there is only one directory per person and that the said directory contains only one person. To help you out with this we created a python code able to "optimize" all images into a specific folder. This script can be found inside ReadMeStuff.
