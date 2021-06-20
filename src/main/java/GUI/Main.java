@@ -1092,7 +1092,7 @@ public class Main extends Application {
                 String name = (String) result.__tojava__(String.class);
                 try {
                     pushMessageOrWait(new ConsoleOutput(
-                            "Hello, " + name + "! I recognised you",
+                            "Hello, " + name + "! How can I help you?",
                             false,
                             MessageType.STRING
                     ));
