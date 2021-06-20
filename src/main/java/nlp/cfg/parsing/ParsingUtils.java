@@ -27,16 +27,22 @@ public class ParsingUtils {
      */
     public static ParsedNode parse(final List<String> tokens, final List<ProductionRule> rules) throws NLPError {
         List<ParsedNode> input = toNodes(tokens);
+        boolean lengthOne = false;
+        if (input.size() == 1) {
+            lengthOne = true;
+        }
         System.out.println("Parsing " + input.toString());
 
         // While the sequence is not reduced to a starting non-terminal symbol.
-        outer_while : while (input.size() > 1) { // O(n - 1)
-
+        outer_while : while (input.size() > 1 || lengthOne) { // O(n - 1)
             // For each legal range of tokens we can analyse per iteration.
             // We start at 1 and finish at |input| (inclusive).
             // This is known as lookahead.
             for(int i = 1; i <= input.size(); i++) { // O(n + 1)
-
+                if (lengthOne) {
+                    i = 0;
+                    lengthOne = false;
+                }
                 // For each legal starting position to analyze a sublist of tokens.
                 // Imagine we slide a window [j, j + i] alongside the sequence of
                 // tokens and we only analyse those that are inside of said range.
