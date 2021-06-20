@@ -293,6 +293,7 @@ public class Main extends Application {
 
     boolean isFaceRecognitionDone = true;
     boolean isFaceRecognitionPushed = false;
+    Thread faceRecognitionThread;
 
     Date currentDate;
 
@@ -1081,9 +1082,9 @@ public class Main extends Application {
     private void pullAndProcessFaceRecognitionResults() {
 
         if (isFaceRecognitionPushed) {
-            isFaceRecognitionPushed = false;
-            isFaceRecognitionDone = false;
-            Thread recognitionThread = new Thread(() -> {
+            faceRecognitionThread = new Thread(() -> {
+                isFaceRecognitionPushed = false;
+                isFaceRecognitionDone = false;
                 PythonInterpreter interpreter = new PythonInterpreter();
                 interpreter.execfile("src/main/java/face_recognition/main.py");
                 PyObject pyObj = interpreter.get("main");
@@ -1100,7 +1101,7 @@ public class Main extends Application {
                 }
                 isFaceRecognitionDone = true;
             });
-            recognitionThread.start();
+            faceRecognitionThread.start();
         }
     }
 

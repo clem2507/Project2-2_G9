@@ -463,34 +463,30 @@ public class Controller {
         });
 
         window.faceDetectionMenuItem1.setOnAction(actionEvent -> {
-            if (window.isFaceRecognitionDone) {
-                try {
-                    if (!System.getProperty("os.name").equals("Mac OS X")) {
-                        Camera.openCamera(window.detectionHandler.getChannel());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (!window.isFaceRecognitionDone) {
+                window.faceRecognitionThread.interrupt();
+                window.isFaceRecognitionDone = true;
             }
-            else {
-                window.faceDetectionMenuItem1.setSelected(false);
-                System.out.println("Face recognition is running");
+            try {
+                if (!System.getProperty("os.name").equals("Mac OS X")) {
+                    Camera.openCamera(window.detectionHandler.getChannel());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 
         window.faceDetectionMenuItem2.setOnAction(actionEvent -> {
-            if (window.isFaceRecognitionDone) {
-                try {
-                    if (!System.getProperty("os.name").equals("Mac OS X")) {
-                        Camera.openCamera(window.detectionHandler.getChannel());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (!window.isFaceRecognitionDone) {
+                window.faceRecognitionThread.interrupt();
+                window.isFaceRecognitionDone = true;
             }
-            else {
-                window.faceDetectionMenuItem2.setSelected(false);
-                System.out.println("Face recognition is running");
+            try {
+                if (!System.getProperty("os.name").equals("Mac OS X")) {
+                    Camera.openCamera(window.detectionHandler.getChannel());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }
