@@ -11,9 +11,6 @@ import domains.Search.Search;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -52,7 +49,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.python.core.PyObject;
-import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 
 public class Main extends Application {
@@ -295,7 +291,8 @@ public class Main extends Application {
     int editBgButtonFontSize = 14;
     int emptyTemplateFontSize = 15;
 
-    boolean isFaceRecognitionReady = true;
+    boolean isFaceRecognitionDone = true;
+    boolean isFaceRecognitionPushed = false;
 
     Date currentDate;
 
@@ -1083,9 +1080,10 @@ public class Main extends Application {
 
     private void pullAndProcessFaceRecognitionResults() {
 
-        if (isFaceRecognitionReady) {
+        if (isFaceRecognitionPushed) {
+            isFaceRecognitionPushed = false;
+            isFaceRecognitionDone = false;
             Thread recognitionThread = new Thread(() -> {
-                isFaceRecognitionReady = false;
                 PythonInterpreter interpreter = new PythonInterpreter();
                 interpreter.execfile("src/main/java/face_recognition/main.py");
                 PyObject pyObj = interpreter.get("main");
@@ -1093,14 +1091,14 @@ public class Main extends Application {
                 String name = (String) result.__tojava__(String.class);
                 try {
                     pushMessageOrWait(new ConsoleOutput(
-                            "Hello, " + name,
+                            "Hello, " + name + "! I recognised you",
                             false,
                             MessageType.STRING
                     ));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                isFaceRecognitionReady = true;
+                isFaceRecognitionDone = true;
             });
             recognitionThread.start();
         }

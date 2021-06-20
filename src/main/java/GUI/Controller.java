@@ -456,11 +456,14 @@ public class Controller {
         window.faceRecognitionMenuItem.setOnAction(actionEvent -> {
             if (!System.getProperty("os.name").equals("Mac OS X")) {
                 Camera.closeCamera(window.detectionHandler.getChannel());
+                if (window.isFaceRecognitionDone) {
+                    window.isFaceRecognitionPushed = true;
+                }
             }
         });
 
         window.faceDetectionMenuItem1.setOnAction(actionEvent -> {
-            if (window.isFaceRecognitionReady) {
+            if (window.isFaceRecognitionDone) {
                 try {
                     if (!System.getProperty("os.name").equals("Mac OS X")) {
                         Camera.openCamera(window.detectionHandler.getChannel());
@@ -476,7 +479,7 @@ public class Controller {
         });
 
         window.faceDetectionMenuItem2.setOnAction(actionEvent -> {
-            if (window.isFaceRecognitionReady) {
+            if (window.isFaceRecognitionDone) {
                 try {
                     if (!System.getProperty("os.name").equals("Mac OS X")) {
                         Camera.openCamera(window.detectionHandler.getChannel());
@@ -488,12 +491,6 @@ public class Controller {
             else {
                 window.faceDetectionMenuItem2.setSelected(false);
                 System.out.println("Face recognition is running");
-            }
-        });
-
-        window.faceRecognitionMenuItem.setOnAction(actionEvent -> {
-            if (!window.isFaceRecognitionReady) {
-                window.faceRecognitionMenuItem.setSelected(false);
             }
         });
     }

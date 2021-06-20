@@ -107,7 +107,7 @@ def main():
     plt.title("Image Taken")
     plt.show()
     out = imageRec(lfw_dataset, image)
-    print(out)
+    return out
 
 
 if __name__ == "__main__":
