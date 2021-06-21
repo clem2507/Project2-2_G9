@@ -1,6 +1,7 @@
 package GUI;
 
 import backend.*;
+import backend.common.CurrentLocation;
 import backend.common.OS.UnsupportedOSException;
 import backend.common.Quote;
 import backend.common.WeatherObject;
@@ -481,16 +482,14 @@ public class Main extends Application {
         LinearGradient lg = new LinearGradient(0, 0, 0, 2.5, true, CycleMethod.NO_CYCLE, stops);
         weatherWidget.setFill(lg);
 
-        //TODO: Comment this out when submitting
-        /**
          try {
          city = CurrentLocation.getLocation();
          } catch (IOException e){
          e.printStackTrace();
          city = "Unknown";
-         }**/
+         }
 
-        city = "Maastricht";
+        //city = "Maastricht";
         weatherCity = new Text(city);
         weatherCity.setFont(Font.font("Calibri Light", FontWeight.BOLD, FontPosture.REGULAR, weatherCityFontSize));
         weatherWidgetWidth = findBestWeatherWidgetWidth(city);
@@ -1091,6 +1090,7 @@ public class Main extends Application {
                     }
                     BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                     name = reader.readLine();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
