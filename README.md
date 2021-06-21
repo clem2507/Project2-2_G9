@@ -29,8 +29,6 @@ Seeking to elucidate; this loop-like interaction is broken either by closing the
 
 [CFG Models](Readmestuff/CFG_Language.pdf)
 
-[CFG Models](Readmestuff/
-
 [How to build a domain?](./Readmestuff/howto_build_domain.pdf)
 
 #### How to define custom skills?
