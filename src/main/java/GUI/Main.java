@@ -486,7 +486,7 @@ public class Main extends Application {
          city = CurrentLocation.getLocation();
          } catch (IOException e){
          e.printStackTrace();
-         city = "Unknown";
+         city = "Maastricht";
          }
 
         //city = "Maastricht";
