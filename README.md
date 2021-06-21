@@ -41,7 +41,12 @@ The assistant will remember previously defined custom skills, to get rid of them
 
 ### Dependencies:
 
-[OpenCV](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html) (OpenCV dependent skills will not run on MacOS for the time being)
+[Python](https://www.python.org/)
+[Numpy](https://numpy.org/)
+[Python OpenCV](https://anaconda.org/conda-forge/opencv)
+[Imutils](https://pypi.org/project/imutils/)
+[Skleanr](https://scikit-learn.org/stable/)
+[Java Webcam](https://github.com/sarxos/webcam-capture)
 
 ### External Resources:
 
